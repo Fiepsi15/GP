@@ -1,0 +1,30 @@
+import numpy as np
+
+#Eingabe:
+d = np.loadtxt('csv_data.txt', skiprows=1, delimiter=',')
+d = d.transpose()
+quantities_and_units = [['$\\Delta h$', '$\\Delta U$'], ['m', 'V']]
+data = np.array(d)
+err = np.array([[0.01/1e3 for _ in range(d.shape[1])], [0.01 for _ in range(d.shape[1])]])
+caption = 'Tiefendruck in Kochsalzlösung'
+label = 'Tabelle 4'
+
+
+#Verarbeitung
+s = '\\begin{table}[h] \n\\centering \n\\caption{' + caption + '}\n\\begin{tabular}{|c||'
+for i in range(data.shape[1]):
+    s += 'c|'
+s += '}\n\\hline\n'
+for i in range(data.shape[0]):
+    s += quantities_and_units[0][i] + '(' + quantities_and_units[1][i] + ') '
+    for j in range(data.shape[1]):
+        s += '& \\SI{' + str(data[i][j]) + ' \\pm ' + str(err[i][j]) + '}{} '
+    s += '\\\\\n\\hline\n'
+s += '\\end{tabular}\\label{tab: ' + label + '}\n'
+s += '\\end{table}'
+
+#Ausgabe
+print(s)
+text_file = open('tex_data.txt', "w")
+text_file.write(s)
+text_file.close()
