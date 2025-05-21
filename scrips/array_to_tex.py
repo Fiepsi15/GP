@@ -3,11 +3,11 @@ import numpy as np
 #Eingabe:
 d = np.loadtxt('csv_data.txt', skiprows=1, delimiter=',')
 d = d.transpose()
-quantities_and_units = [['$\\Delta h$', '$\\Delta U$'], ['m', 'V']]
+quantities_and_units = [['$T$', '$\\eta$', '$\\tau$'], ['°C', 'mPas', 'Pa']]
 data = np.array(d)
-err = np.array([[0.01/1e3 for _ in range(d.shape[1])], [0.01 for _ in range(d.shape[1])]])
-caption = 'Tiefendruck in Kochsalzlösung'
-label = 'Tabelle 4'
+err = np.array([[0.1 for _ in range(d.shape[1])], [0.1 for _ in range(d.shape[1])], [0.1 for _ in range(d.shape[1])]])
+caption = 'Änderung der Viskosität bei Temperaturerhöhung'
+label = 'Tabelle 1'
 
 
 #Verarbeitung
