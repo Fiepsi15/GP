@@ -8,11 +8,6 @@ def round_up(n, decimals=0):
     n = math.ceil(n)
     return n * 10 ** -decimals
 
-def getg():
-    data = np.loadtxt("Raw Data.csv", delimiter=",", skiprows=1)
-    return np.mean(data[:, 3]), np.std(data[:, 3])
-
-
 
 #Hey there
 def prep_params(calibration_data, g, dg, rho_w):
@@ -27,7 +22,6 @@ def prep_params(calibration_data, g, dg, rho_w):
 
 
 def calibrate(calibration_data):
-    # g = getg()[0]
     g = 9.766
     dg = 0.006
     rho_w = 1000
