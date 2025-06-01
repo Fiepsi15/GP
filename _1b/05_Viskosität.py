@@ -45,7 +45,7 @@ def Arrheniusreg(Temperatur, Viskosität, dTemp, dVis):
 
     return E_A, dE_A, B, d_B
 
-data = np.loadtxt('../scrips/csv_data.txt', skiprows=1, delimiter=',').transpose()
+data = np.loadtxt('../scrips/csv_data.csv', skiprows=1, delimiter=',').transpose()
 Temperature = data[0] + 273.55
 Viscosity = data[1]
 dTemp, dVis = 0.1, 0.1

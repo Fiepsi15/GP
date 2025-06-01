@@ -1,7 +1,7 @@
 import numpy as np
 
 #Eingabe:
-d = np.loadtxt('csv_data.txt', skiprows=1, delimiter=',')
+d = np.loadtxt('csv_data.csv', skiprows=1, delimiter=',')
 d = d.transpose()
 quantities_and_units = [['$T$', '$\\eta$', '$\\tau$'], ['°C', 'mPas', 'Pa']]
 data = np.array(d)
