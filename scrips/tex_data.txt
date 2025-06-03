@@ -1,20 +1,16 @@
 \begin{table}[h] 
 \centering 
-\caption{Änderung der Viskosität bei Temperaturerhöhung}
+\caption{Amplitude bei Luftdämpfung}
 \begin{tabular}{|c||c|c|c|c|}
 \hline
-\$T$(°C) & \SI{20.0 \pm 0.1}{} & \SI{25.0 \pm 0.1}{} & \SI{30.0 \pm 0.1}{} & \SI{35.0 \pm 0.1}{} \\
+$t$(s) & \SI{0.0 \pm 0.15}{} & \SI{4.0 \pm 0.15}{} & \SI{8.0 \pm 0.15}{} & \SI{11.9 \pm 0.15}{} \\
 \hline
-$\eta$(mPas) & \SI{64.0 \pm 0.1}{} & \SI{55.4 \pm 0.1}{} & \SI{46.8 \pm 0.1}{} & \SI{39.1 \pm 0.1}{} \\
-\hline
-$\tau$(Pa) & \SI{123.0 \pm 0.1}{} & \SI{107.0 \pm 0.1}{} & \SI{90.5 \pm 0.1}{} & \SI{75.8 \pm 0.1}{} \\
+$U$(mV) & \SI{316.0 \pm 2.9}{} & \SI{304.0 \pm 2.9}{} & \SI{340.0 \pm 2.9}{} & \SI{280.0 \pm 2.9}{} \\
 \hline
 \hline
-\$T$(°C) & \SI{40.0 \pm 0.1}{} & \SI{45.0 \pm 0.1}{} & \SI{50.0 \pm 0.1}{} & \SI{55.0 \pm 0.1}{} \\
+$t$(s) & \SI{15.9 \pm 0.15}{} & \SI{19.8 \pm 0.15}{} & \SI{23.8 \pm 0.15}{} & \SI{43.7 \pm 0.15}{} \\
 \hline
-$\eta$(mPas) & \SI{32.2 \pm 0.1}{} & \SI{28.2 \pm 0.1}{} & \SI{24.1 \pm 0.1}{} & \SI{21.2 \pm 0.1}{} \\
-\hline
-$\tau$(Pa) & \SI{64.0 \pm 0.1}{} & \SI{54.4 \pm 0.1}{} & \SI{47.0 \pm 0.1}{} & \SI{40.8 \pm 0.1}{} \\
+$U$(mV) & \SI{270.0 \pm 2.9}{} & \SI{262.0 \pm 2.9}{} & \SI{250.0 \pm 2.9}{} & \SI{200.0 \pm 2.9}{} \\
 \hline
 \end{tabular}\label{tab: Tabelle 1}
 \end{table}

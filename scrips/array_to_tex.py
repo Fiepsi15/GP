@@ -1,15 +1,17 @@
 import numpy as np
+from tools import round_up
 
 #Eingabe:
 d = np.loadtxt('csv_data.csv', skiprows=1, delimiter=',')
-quant_len = d.shape[0]
-list_len = d.shape[1]
 data = d.transpose()
-quantities_and_units = [['$T$', '$\\eta$', '$\\tau$'], ['°C', 'mPas', 'Pa']]
-err = np.array([[0.1 for _ in range(d.shape[1])], [0.1 for _ in range(d.shape[1])], [0.1 for _ in range(d.shape[1])]])
-caption = 'Änderung der Viskosität bei Temperaturerhöhung'
+quant_len = data.shape[0]
+list_len = data.shape[1]
+quantities_and_units = [['$t$', '$U$'], ['s', 'mV']]
+err = np.array([[round_up(0.1 * np.sqrt(2), 2) for _ in range(data.shape[1])], [round_up(np.sqrt(8), 1) for _ in range(data.shape[1])]])
+caption = 'Amplitude bei Luftdämpfung'
 label = 'Tabelle 1'
 
+data[1] = data[1] / 2
 
 #Verarbeitung
 def find_row_len():
@@ -25,13 +27,13 @@ row_len = find_row_len()
 col_len = list_len // row_len * quant_len
 folds = list_len // row_len + (list_len % row_len > 0)
 
-s = '\\begin{table}[h] \n\\centering \n\\caption{' + caption + '}\n\\begin{tabular}{|c||'
+s = '\\begin{table}[H] \n\\centering \n\\caption{' + caption + '}\n\\begin{tabular}{|c||'
 for i in range(row_len):
     s += 'c|'
 s += '}\n'
 
 for i in range(folds):
-    s += '\\hline\n\\'
+    s += '\\hline\n'
     for j in range(quant_len):
         s += quantities_and_units[0][j] + '(' + quantities_and_units[1][j] + ') '
         for k in range(row_len):
