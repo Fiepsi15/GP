@@ -49,26 +49,18 @@ def reg_gamma(data, error):
     return gamma, dgamma
 
 
-def log_dec_gamma(data, error):
+def log_dec_gamma(data, T, error, dT):
     log_dec = []
     for i in range(data.shape[1] - 1):
-        log_dec.append(logarithmic_decrement(data[1][i], data[1][i + 1]))
+        log = logarithmic_decrement(data[1][i], data[1][i + 1])
+        log = log / ((data[0][i + 1] - data[0][i]) / T)
+        log_dec.append(log)
     log_dec = np.array(log_dec)
-    log_dec[-1] = log_dec[-1] / 5
-
-    T = []
-    for i in range(data.shape[1] - 2):
-        T.append(data[0][i + 1] - data[0][i])
-    T = np.array(T) / 2
-
-    dT = np.std(T)
-    T = np.mean(T)
-    print(f'\nT = {T} +/- {dT}')
 
     log_dec_bar = np.mean(log_dec)
     log_dec_err = np.std(log_dec)
 
-    gamma = log_dec_bar / (2 * T)
+    gamma = log_dec_bar / T
     dgamma = np.sqrt((log_dec_err / T) ** 2
                      + (log_dec_bar / (T ** 2) * dT) ** 2)
 
@@ -83,48 +75,40 @@ def log_dec_gamma(data, error):
              linestyle='--')
     plt.legend()
     plt.show()
-    return
+    return log_dec_bar, log_dec_err
 
 
 
+print("Just air dampening:\n--------------------\n")
 thingy = np.loadtxt('03_daten/Free_Airdampened.csv', skiprows=1, delimiter=',').transpose()  # read the .csv
 thingy[1] = thingy[1] / 2  # Peak \\Delta to Amplitude
 err = np.array([[round_up(0.1 * np.sqrt(2), 2) for _ in range(thingy.shape[1])],
                 [round_up(np.sqrt(8), 1) for _ in range(thingy.shape[1])]])
+TA, dTA = 1.992, 0.001
 
-print("Just air dampening:\n--------------------\n")
 gammaAir, dgammaAir = reg_gamma(thingy, err)
-LambdaAir = 1.992 * gammaAir
-dLambdaAir = np.sqrt((gammaAir * 0.001) ** 2 + (1.992 * dgammaAir) ** 2)
-print(f'logdec = {LambdaAir} +/- {dLambdaAir}')
-log_dec_gamma(thingy, err)
+LambdaAir, dLambdaAir = log_dec_gamma(thingy, TA, err, dTA)
 
 
 print('\n\n300mA eddy current Brake:\n--------------------\n')
 thingy_300mA = np.loadtxt('03_daten/Free_300_mA.csv', skiprows=1, delimiter=',').transpose()
 err_300 = np.array([[round_up(0.04 * np.sqrt(2), 2) for _ in range(thingy_300mA.shape[1])],
                 [round_up(np.sqrt(32), 0) for _ in range(thingy_300mA.shape[1])]])
+T3, dT3 = 1.925, 0.001
 
-#TODO Add the logarithmic decrement to the 300 and 600 mAmp cases
 gamma3, dgamma3 = reg_gamma(thingy_300mA, err_300)
-Lambda3 = 1.925 * gamma3
-dLambda3 = np.sqrt((gamma3 * 0.001) ** 2 + (1.995 * dgamma3) ** 2)
-print(f'logdec = {Lambda3} +/- {dLambda3}')
-plt.legend()
-plt.show()
+log_dec_gamma(thingy_300mA, T3, err_300, dT3)
 
 
 print('\n\n600mA eddy current Brake:\n--------------------\n')
 thingy_600mA = np.loadtxt('03_daten/Free_600_mA.csv', skiprows=1, delimiter=',').transpose()
 err_600 = np.array([[round_up(0.04 * np.sqrt(2), 2) for _ in range(thingy_600mA.shape[1])],
                     [round_up(np.sqrt(32), 0) for _ in range(thingy_600mA.shape[1])]])
+T6, dT6 = 2.03, 0.01
 
 gamma6, dgamma6 = reg_gamma(thingy_600mA, err_600)
-Lambda6 = 2.03 * gamma6
-dLambda6 = np.sqrt((gamma6 * 0.01) ** 2 + (2.03 * dgamma6) ** 2)
-print(f'logdec = {Lambda6} +/- {dLambda6}')
-plt.legend()
-plt.show()
+Lambda6, dLambda6 = log_dec_gamma(thingy_600mA, T6, err_600, dT6)
+
 
 
 
