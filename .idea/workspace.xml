@@ -4,20 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7606580c-2153-4aa2-8339-3139625c714b" name="Changes" comment="fixed logarithmic decrement">
+    <list default="true" id="7606580c-2153-4aa2-8339-3139625c714b" name="Changes" comment="seperated some stuff">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/1a/Fadenpendel.py" beforeDir="false" afterPath="$PROJECT_DIR$/_1a/Fadenpendel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/1a/G-Modul(statisch).py" beforeDir="false" afterPath="$PROJECT_DIR$/_1a/G-Modul(statisch).py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/1a/Rollschwingung.py" beforeDir="false" afterPath="$PROJECT_DIR$/_1a/Rollschwingung.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/1a/Statistik am PC(wurf).py" beforeDir="false" afterPath="$PROJECT_DIR$/_1a/Statistik am PC(wurf).py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/1a/Statistik am PC.py" beforeDir="false" afterPath="$PROJECT_DIR$/_1a/Statistik am PC.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/1a/Viskosität.py" beforeDir="false" afterPath="$PROJECT_DIR$/_1a/Viskosität.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/_1b/03_Drehpendel.py" beforeDir="false" afterPath="$PROJECT_DIR$/_1b/03_Drehpendel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_1b/03_daten/Free_300_mA.csv" beforeDir="false" afterPath="$PROJECT_DIR$/_1b/_03_daten/Free_300_mA.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_1b/03_daten/Free_600_mA.csv" beforeDir="false" afterPath="$PROJECT_DIR$/_1b/_03_daten/Free_600_mA.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_1b/03_daten/Free_Airdampened.csv" beforeDir="false" afterPath="$PROJECT_DIR$/_1b/_03_daten/Free_Airdampened.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scrips/array_to_tex.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrips/array_to_tex.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scrips/tex_data.txt" beforeDir="false" afterPath="$PROJECT_DIR$/scrips/tex_data.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_1b/_03_subscripts/funcs.py" beforeDir="false" afterPath="$PROJECT_DIR$/_1b/_03_subscripts/funcs.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,6 +29,18 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Fiepsi15&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Fiepsi15/GP&quot;,
+    &quot;accountId&quot;: &quot;ec98d062-ebfe-4b23-94f8-5149da7c5a2d&quot;
+  }
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
 }</component>
@@ -50,25 +52,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.03_Drehpendel.executor&quot;: &quot;Run&quot;,
-    &quot;Python.05_Viskosität.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Oberflaechenspannung.executor&quot;: &quot;Run&quot;,
-    &quot;Python.array_to_tex.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/sebas/PycharmProjects/GP/_1b/03_daten&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.03_Drehpendel.executor": "Run",
+    "Python.05_Viskosität.executor": "Run",
+    "Python.Drehpendel.executor": "Run",
+    "Python.Erzwungene_schwingung.executor": "Run",
+    "Python.Oberflaechenspannung.executor": "Run",
+    "Python.array_to_tex.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/sebas/PycharmProjects/GP/_1b",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\sebas\PycharmProjects\GP\_1b\03_daten" />
@@ -78,6 +83,32 @@
       <recent name="C:\Users\sebas\PycharmProjects\GP\_1b\_03_subscripts" />
       <recent name="C:\Users\sebas\PycharmProjects\GP\_1b\_03_subscripts\fu" />
     </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="Drehpendel" type="PythonConfigurationType" factoryName="Python">
+      <module name="GP" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="Python 3.12 (GP)" />
+      <option name="WORKING_DIRECTORY" value="C:\Users\sebas\PycharmProjects\GP\_1b" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/_1b/03_Drehpendel.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -105,7 +136,9 @@
       <workItem from="1748853647621" duration="5385000" />
       <workItem from="1748949636644" duration="1190000" />
       <workItem from="1748950879322" duration="17005000" />
-      <workItem from="1749041687497" duration="4313000" />
+      <workItem from="1749041687497" duration="5466000" />
+      <workItem from="1749048138138" duration="1010000" />
+      <workItem from="1749050209377" duration="5384000" />
     </task>
     <task id="LOCAL-00001" summary="Init">
       <option name="closed" value="true" />
@@ -163,7 +196,15 @@
       <option name="project" value="LOCAL" />
       <updated>1749044546111</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="seperated some stuff">
+      <option name="closed" value="true" />
+      <created>1749046388184</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1749046388184</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -188,11 +229,14 @@
     <MESSAGE value="array_to_tex.py checkpoint" />
     <MESSAGE value="Did most of the free dampened rotational Pendulum" />
     <MESSAGE value="fixed logarithmic decrement" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed logarithmic decrement" />
+    <MESSAGE value="seperated some stuff" />
+    <option name="LAST_COMMIT_MESSAGE" value="seperated some stuff" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/GP$Drehpendel.coverage" NAME="Drehpendel Coverage Results" MODIFIED="1749055622878" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/GP$Erzwungene_schwingung.coverage" NAME="Erzwungene_schwingung Coverage Results" MODIFIED="1749055536789" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/_1b/_03_subscripts" />
     <SUITE FILE_PATH="coverage/GP$Oberflaechenspannung.coverage" NAME="Oberflaechenspannung Coverage Results" MODIFIED="1747503465378" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/_1b" />
-    <SUITE FILE_PATH="coverage/GP$03_Drehpendel.coverage" NAME="03_Drehpendel Coverage Results" MODIFIED="1749045951097" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/_1b" />
+    <SUITE FILE_PATH="coverage/GP$03_Drehpendel.coverage" NAME="03_Drehpendel Coverage Results" MODIFIED="1749055523202" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/_1b" />
     <SUITE FILE_PATH="coverage/GP$array_to_tex.coverage" NAME="array_to_tex Coverage Results" MODIFIED="1749044954706" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scrips" />
     <SUITE FILE_PATH="coverage/GP$05_Viskosität.coverage" NAME="05_Viskosität Coverage Results" MODIFIED="1747855349044" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/_1b" />
   </component>
