@@ -1,0 +1,5 @@
+# GP
+## Inhalt:
+* Daten aus dem **Grundpraktikum** *Physik* der `Uni Ulm`
+* Python scripts zur auswertung dieser daten
+> ;)
