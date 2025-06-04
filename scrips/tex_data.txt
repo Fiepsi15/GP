@@ -1,11 +1,11 @@
-\begin{table}[h] 
+\begin{table}[H] 
 \centering 
 \caption{Amplitude bei Luftdämpfung}
 \begin{tabular}{|c||c|c|c|c|}
 \hline
 $t$(s) & \SI{0.0 \pm 0.15}{} & \SI{4.0 \pm 0.15}{} & \SI{8.0 \pm 0.15}{} & \SI{11.9 \pm 0.15}{} \\
 \hline
-$U$(mV) & \SI{316.0 \pm 2.9}{} & \SI{304.0 \pm 2.9}{} & \SI{340.0 \pm 2.9}{} & \SI{280.0 \pm 2.9}{} \\
+$U$(mV) & \SI{316.0 \pm 2.9}{} & \SI{304.0 \pm 2.9}{} & \SI{290.0 \pm 2.9}{} & \SI{280.0 \pm 2.9}{} \\
 \hline
 \hline
 $t$(s) & \SI{15.9 \pm 0.15}{} & \SI{19.8 \pm 0.15}{} & \SI{23.8 \pm 0.15}{} & \SI{43.7 \pm 0.15}{} \\
