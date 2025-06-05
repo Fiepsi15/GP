@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
-from funcs import resonanzfrequenz_omega0
+from _1b._03_subscripts.funcs import resonanzfrequenz_omega0
 
 
 def alpha_omega_plot(data, error):
@@ -41,7 +41,9 @@ def alpha_fit(data, error):
     omega0 = popt[1]
     gamma = popt[2]
 
-    omega = np.linspace(np.min(omega), np.max(omega),200)
+    if(np.min(omega)>2):
+        omega = np.linspace(2, np.max(omega),200)
+    else: omega = np.linspace(2, np.max(omega),200)
     A = model(omega,F_m,omega0,gamma)
 
 
@@ -113,8 +115,6 @@ def phi_fit(data,error):
 
     omega_max, domega_max = resonanzfrequenz_omega0(gamma_calc,0,omega_0,0)
 
-    print(f"omega_max = {omega_max} ± {domega_max} ")
-
 
 
 
@@ -146,14 +146,5 @@ def whereEquals(x,y,y_target):
 
 
 
-forced_300mA = np.loadtxt("_1b/_03_daten/Erzwungen_300_mA.csv", skiprows=1, delimiter=',').transpose()
-forced_300mA[1] = forced_300mA[1] * 1e-3  # mA to A
-forced_300mA[0] = forced_300mA[0] * 2 * np.pi #F to omega
-err_f_300 = np.array([[0.001 for _ in range(forced_300mA.shape[1])],
-                    [0.001 for _ in range(forced_300mA.shape[1])],
-                    [1 for _ in range(forced_300mA.shape[1])]])
 
-#alpha_omega_plot(forced_300mA, err_f_300)
-#popt = alpha_fit(forced_300mA, err_f_300)
-phi_fit(forced_300mA,err_f_300)
 
