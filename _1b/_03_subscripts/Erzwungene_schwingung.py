@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
+from funcs import resonanzfrequenz_omega0
 
 
 def alpha_omega_plot(data, error):
@@ -50,16 +51,10 @@ def alpha_fit(data, error):
     omega_max = omega[max]
 
 
-
-    #TODO: überarbeiten; funktioniert nicht
+    #Berechnen der -Wertsbreite
     A_halb = A_max/np.sqrt(2) # unsere Wertsbreite
-    omega_halb = np.array([])
-    A_delta = A-A_halb
-    for i in range(len(A)-1):
-        if(A_delta[i]*A_delta[i+1]<0):
-            if(np.abs(A_delta[i])< np.abs(A_delta[i+1])):
-                omega_halb = np.append(omega_halb,omega[i])
-            else: omega_halb = np.append(omega_halb,omega[i+1])
+
+    omega_halb = whereEquals(omega,A,A_halb)
 
     print(f"A_max = {A_max}, omega_max = {omega_max}")
     print(f"A_halb = {A_halb}, omega_halb = {omega_halb}")
@@ -84,25 +79,81 @@ def alpha_fit(data, error):
 
 def phi_fit(data,error):
     def model(omega,omega0,gamma):
-        return(np.arctan((2*gamma*omega)/(omega0**2-omega**2)))
+        errorcause = np.where(omega> omega0)
+        phi = np.arctan((2*gamma*omega)/(omega0**2-omega**2))
+        phi[np.where((omega-omega0)> 0)] = phi[np.where((omega-omega0)> 0)] + np.pi
+        return(phi)
     
     omega = data[0]
-    phi = data[2]
+    phi = np.deg2rad(data[2])
     omega_err = error[0]
     phi_err = error[2]
+    
 
     popt, pcov = curve_fit(model, omega, phi, sigma=phi_err, absolute_sigma=True)
+    omega0 = popt[0]
+    gamma = popt[1]
+    dgamma = np.sqrt(pcov[1][1])
+    print(f"gamma = {gamma} ± {dgamma}")
 
-    omega = np.linspace(np.min(omega), np.max(omega),200)
+    omega_plot = np.linspace(np.min(omega), np.max(omega),200)
+    phi_plot = model(omega_plot, omega0, gamma)
+
+    omega_0 = whereEquals(omega_plot, phi_plot, np.pi/2)
+    print(f"omega0 = {omega_0}")
+
+
+    omega_0_where = np.where(omega_0 == omega_plot)
+
+    a= 0
+    steigung = (phi_plot[omega_0_where[0]+1+a]-phi_plot[omega_0_where[0]-1+a])/(omega_plot[omega_0_where[0]+1+a]-omega_plot[omega_0_where[0]-1+a])
+    plt.scatter([omega_plot[omega_0_where[0]+1+a],omega_plot[omega_0_where[0]-1+a]], np.rad2deg([phi_plot[omega_0_where[0]+1+a],phi_plot[omega_0_where[0]-1+a]]))
+    gamma_calc = np.sqrt(1/steigung)
+    print(f"gamma = {gamma_calc}")
+
+    omega_max, domega_max = resonanzfrequenz_omega0(gamma_calc,0,omega_0,0)
+
+    print(f"omega_max = {omega_max} ± {domega_max} ")
+
+
+
+
+    plt.plot(omega_plot,np.rad2deg(phi_plot), label = "Fit an Daten")
+    plt.scatter(omega,np.rad2deg(phi), label= "Daten")
     
+    plt.xlabel(r'$\omega$ (1/s)')
+    plt.ylabel(r'$\varphi$ (°)')
+    plt.title('Phi vs Omega')
+    plt.grid()
+    plt.legend()
+    plt.show()
+
+    return
+
+
+
+
+
+def whereEquals(x,y,y_target):
+    x_out = np.array([])
+    y_delta = y-y_target
+    for i in range(len(y)-1):
+        if(y_delta[i]*y_delta[i+1]<0):
+            if(np.abs(y_delta[i])< np.abs(y_delta[i+1])):
+                x_out = np.append(x_out,x[i])
+            else: x_out = np.append(x_out,x[i+1])
+    return x_out
+
 
 
 forced_300mA = np.loadtxt("_1b/_03_daten/Erzwungen_300_mA.csv", skiprows=1, delimiter=',').transpose()
 forced_300mA[1] = forced_300mA[1] * 1e-3  # mA to A
 forced_300mA[0] = forced_300mA[0] * 2 * np.pi #F to omega
 err_f_300 = np.array([[0.001 for _ in range(forced_300mA.shape[1])],
-                    [0.001 for _ in range(forced_300mA.shape[1])]])
+                    [0.001 for _ in range(forced_300mA.shape[1])],
+                    [1 for _ in range(forced_300mA.shape[1])]])
 
 #alpha_omega_plot(forced_300mA, err_f_300)
-popt = alpha_fit(forced_300mA, err_f_300)
+#popt = alpha_fit(forced_300mA, err_f_300)
+phi_fit(forced_300mA,err_f_300)
 
