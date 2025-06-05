@@ -47,20 +47,24 @@ def alpha_fit(data, error):
     A_max = A[max]
     omega_max = omega[max]
 
+
+    #TODO: überarbeiten; funktioniert nicht
     A_halb = A_max/np.sqrt(2) # unsere Wertsbreite
-    halb = np.where(A == A_halb)
+    halb = np.where(np.round(A,1) == np.round(A_halb,1))
     A_halb = A[halb]
     omega_halb = omega[halb]
-    print(A_halb)
+    #print("A_halb =" + A_halb)
     
 
     print(f"A_max = {A_max}, omega_max = {omega_max}")
 
 
-    plt.scatter(omega_max, A_max, color='red', label = r"$A_\text{max}$")
-    plt.scatter(omega_halb, A_halb, color='red', label = r"$\frac{1}{\sqrt{2}} \cdot A_\text{max}$")
-    plt.plot(omega_halb,A_halb, color = 'red', label= r"Halbwertsbreite")
-    plt.plot(omega, A, label = r"Fit an Daten")
+    #plt.scatter(2,A_halb)
+    plt.scatter(omega_max, A_max, color='red', label = r"$A_\text{max}$", zorder=2)
+    #plt.scatter(omega_halb, A_halb, color='red', label = r"$\frac{1}{\sqrt{2}} \cdot A_\text{max}$", zorder = 2)
+    plt.plot(omega_halb,A_halb, color = 'red', label= r"Halbwertsbreite", zorder = 1)
+    plt.plot(omega, A, label = r"Fit an Daten",  zorder = 0)
+    
     plt.xlabel(r'$\omega$ (1/s)')
     plt.ylabel(r'$\alpha$ (V)')
     plt.title('Alpha vs Omega')
@@ -72,7 +76,7 @@ def alpha_fit(data, error):
 
 
 
-forced_300mA = np.loadtxt("_1b\_03_daten\Erzwungen_300_mA.csv", skiprows=1, delimiter=',').transpose()
+forced_300mA = np.loadtxt("_1b/_03_daten/Erzwungen_300_mA.csv", skiprows=1, delimiter=',').transpose()
 forced_300mA[1] = forced_300mA[1] / 1e-3  # mA to A
 forced_300mA[0] = forced_300mA[0] * 2 * np.pi #F to omega
 err_f_300 = np.array([[0.001 for _ in range(forced_300mA.shape[1])],
