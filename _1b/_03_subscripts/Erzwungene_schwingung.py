@@ -60,7 +60,7 @@ def alpha_fit(data, error):
 
     print(f"A_max = {A_max}, omega_max = {omega_max}")
     print(f"A_halb = {A_halb}, omega_halb = {omega_halb}")
-    print(f"gamma = {(omega_halb[1]-omega_halb[0])/(2)}")
+    print(f"gamma = {(omega_halb[1]-omega_halb[0])/(2)}, ∆ω = {(omega_halb[1]-omega_halb[0])/(2)}")
 
     
     
@@ -107,7 +107,7 @@ def phi_fit(data,error):
 
     omega_0_where = np.where(omega_0 == omega_plot)
 
-    a= 0
+    a = 0
     steigung = (phi_plot[omega_0_where[0]+1+a]-phi_plot[omega_0_where[0]-1+a])/(omega_plot[omega_0_where[0]+1+a]-omega_plot[omega_0_where[0]-1+a])
     plt.scatter([omega_plot[omega_0_where[0]+1+a],omega_plot[omega_0_where[0]-1+a]], np.rad2deg([phi_plot[omega_0_where[0]+1+a],phi_plot[omega_0_where[0]-1+a]]))
     gamma_calc = np.sqrt(1/steigung)
