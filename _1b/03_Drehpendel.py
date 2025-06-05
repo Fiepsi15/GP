@@ -41,6 +41,7 @@ Lambda6, dLambda6 = log_dec_gamma(thingy_600mA, T6, err_600, dT6)
 
 forced_300mA = np.loadtxt('_03_daten/Erzwungen_300_mA.csv', skiprows=1, delimiter=',').transpose()
 forced_300mA[1] = forced_300mA[1] / 1e-3  # mA to A
+forced_300mA[0] = forced_300mA[0] * 2 * np.pi #F to omega
 err_f_300 = np.array([[0.001 for _ in range(forced_300mA.shape[1])],
                     [0.001 for _ in range(forced_300mA.shape[1])]])
 Erzwungene_schwingung.alpha_omega_plot([forced_300mA[0], forced_300mA[1]], err_f_300)
