@@ -27,6 +27,10 @@ def log_dec_gamma(data, T, error, dT):
     plt.plot(data[0], data[1][0] * np.exp(-(gamma - dgamma) * data[0]), color='green',
              linestyle='--')
     plt.legend()
+    plt.grid()
+    plt.minorticks_on()
+    plt.tick_params(direction='in')
+    plt.tick_params(direction='in', which='minor')
     plt.show()
     return log_dec_bar, log_dec_err
 
