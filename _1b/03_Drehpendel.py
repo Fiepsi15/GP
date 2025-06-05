@@ -4,6 +4,7 @@ from _1b._03_subscripts.reg_gamma import reg_gamma
 from _1b._03_subscripts.log_dec_gamma import log_dec_gamma
 from _1b._03_subscripts import Erzwungene_schwingung
 import _1b._03_subscripts.funcs as funcs
+from scrips import array_to_tex as a2t
 
 # Air dampened pendulum
 print("Just air dampening:\n--------------------\n")
@@ -30,6 +31,8 @@ T3, dT3 = 1.925, 0.001
 
 omega300 , domega300 = 3.263992367 , 0.001659558
 
+a2t.csv_to_tex("_1b/_03_daten/Free_300_mA.csv", err_300, [['$t$', '$U$'], ['s', 'mV']], 'Amplitude bei 300mA', 'tab:300mA_free')
+
 gamma3, dgamma3 = reg_gamma(thingy_300mA, err_300)
 log_dec_gamma(thingy_300mA, T3, err_300, dT3)
 omega0300, domega0300 = funcs.eigenfrequenz(gamma3,dgamma3, omega300, domega300)
@@ -45,6 +48,8 @@ err_600 = np.array([[round_up(0.04 * np.sqrt(2), 2) for _ in range(thingy_600mA.
 T6, dT6 = 2.03, 0.01
 
 omega600 , domega600 = 3.095165176, 0.01524711909
+
+a2t.csv_to_tex("_1b/_03_daten/Free_600_mA.csv", err_600, [['$t$', '$U$'], ['s', 'mV']], 'Amplitude bei 600mA', 'tab:600mA_free')
 
 gamma6, dgamma6 = reg_gamma(thingy_600mA, err_600)
 Lambda6, dLambda6 = log_dec_gamma(thingy_600mA, T6, err_600, dT6)

@@ -4,8 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7606580c-2153-4aa2-8339-3139625c714b" name="Changes" comment="">
+    <list default="true" id="7606580c-2153-4aa2-8339-3139625c714b" name="Changes" comment="Enhanced the readability of the plots relating to 03_Drehpendel.py">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_1b/03_Drehpendel.py" beforeDir="false" afterPath="$PROJECT_DIR$/_1b/03_Drehpendel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_1b/_03_subscripts/log_dec_gamma.py" beforeDir="false" afterPath="$PROJECT_DIR$/_1b/_03_subscripts/log_dec_gamma.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scrips/array_to_tex.py" beforeDir="false" afterPath="$PROJECT_DIR$/scrips/array_to_tex.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,28 +53,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.03_Drehpendel.executor&quot;: &quot;Run&quot;,
-    &quot;Python.05_Viskosität.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Drehpendel.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Erzwungene_schwingung.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Oberflaechenspannung.executor&quot;: &quot;Run&quot;,
-    &quot;Python.array_to_tex.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;drehpendel-aufgabenteil-2&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/sebas/PycharmProjects/GP/_1b&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.03_Drehpendel.executor": "Run",
+    "Python.05_Viskosität.executor": "Run",
+    "Python.Drehpendel.executor": "Run",
+    "Python.Erzwungene_schwingung.executor": "Run",
+    "Python.Oberflaechenspannung.executor": "Run",
+    "Python.array_to_tex.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "drehpendel-aufgabenteil-2",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/sebas/OneDrive/Dokumente/Uni/2024 WS/GP/plots",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\sebas\PycharmProjects\GP\_1b\03_daten" />
@@ -93,16 +96,16 @@
       </envs>
       <option name="SDK_HOME" value="" />
       <option name="SDK_NAME" value="Python 3.12 (GP)" />
-      <option name="WORKING_DIRECTORY" value="C:\Users\sebas\PycharmProjects\GP\_1b" />
+      <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/_1b/03_Drehpendel.py" />
+      <option name="SCRIPT_NAME" value="_1b.03_Drehpendel" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
+      <option name="MODULE_MODE" value="true" />
       <option name="REDIRECT_INPUT" value="false" />
       <option name="INPUT_FILE" value="" />
       <method v="2" />
@@ -138,6 +141,8 @@
       <workItem from="1749048138138" duration="1010000" />
       <workItem from="1749050209377" duration="5566000" />
       <workItem from="1749124951199" duration="2463000" />
+      <workItem from="1749143956500" duration="6329000" />
+      <workItem from="1749158986551" duration="3640000" />
     </task>
     <task id="LOCAL-00001" summary="Init">
       <option name="closed" value="true" />
@@ -211,7 +216,23 @@
       <option name="project" value="LOCAL" />
       <updated>1749055778792</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="reordered Erzwungen_600_mA.csv">
+      <option name="closed" value="true" />
+      <created>1749144263815</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1749144263815</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Enhanced the readability of the plots relating to 03_Drehpendel.py">
+      <option name="closed" value="true" />
+      <created>1749159434554</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1749159434554</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -238,10 +259,12 @@
     <MESSAGE value="fixed logarithmic decrement" />
     <MESSAGE value="seperated some stuff" />
     <MESSAGE value="did first part of the Forced oscilations" />
-    <option name="LAST_COMMIT_MESSAGE" value="did first part of the Forced oscilations" />
+    <MESSAGE value="reordered Erzwungen_600_mA.csv" />
+    <MESSAGE value="Enhanced the readability of the plots relating to 03_Drehpendel.py" />
+    <option name="LAST_COMMIT_MESSAGE" value="Enhanced the readability of the plots relating to 03_Drehpendel.py" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/GP$Drehpendel.coverage" NAME="Drehpendel Coverage Results" MODIFIED="1749055649802" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="C:\Users\sebas\PycharmProjects\GP\_1b" />
+    <SUITE FILE_PATH="coverage/GP$Drehpendel.coverage" NAME="Drehpendel Coverage Results" MODIFIED="1749162633089" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/GP$Erzwungene_schwingung.coverage" NAME="Erzwungene_schwingung Coverage Results" MODIFIED="1749055536789" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/_1b/_03_subscripts" />
     <SUITE FILE_PATH="coverage/GP$Oberflaechenspannung.coverage" NAME="Oberflaechenspannung Coverage Results" MODIFIED="1747503465378" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/_1b" />
     <SUITE FILE_PATH="coverage/GP$03_Drehpendel.coverage" NAME="03_Drehpendel Coverage Results" MODIFIED="1749055523202" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/_1b" />
