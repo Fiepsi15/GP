@@ -26,7 +26,7 @@ def reg_gamma(data, error):
     plt.plot(x, model(x, gamma + dgamma), label='$\\pm\\Delta$', color='red', linestyle='--')
     plt.plot(x, model(x, gamma - dgamma), color='red', linestyle='--')
     plt.grid()
-    plt.xlabel(r"$T (s)$")
+    plt.xlabel(r"t (s)")
     plt.ylabel(r"$\Lambda$")
     plt.legend()
     plt.minorticks_on()

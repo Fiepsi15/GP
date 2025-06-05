@@ -32,7 +32,7 @@ def log_dec_gamma(data, T, error, dT):
              linestyle='--')
     plt.plot(data[0], data[1][0] * np.exp(-(gamma - dgamma) * data[0]), color='green',
              linestyle='--')
-    plt.xlabel("T (s)")
+    plt.xlabel("t (s)")
     plt.ylabel("A (mV)")
     plt.legend()
     plt.grid()
