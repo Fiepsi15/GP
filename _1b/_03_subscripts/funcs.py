@@ -16,6 +16,10 @@ def eigenfrequenz(gamma, dgamma, omega, domega):
     print(f"omega0 = {omega0} ± {domega0}")
     return omega0, domega0
 
+def eigenfrequenz_omega_max(gamma,dgamma,omega_max,domega_max):
+    omega0 = np.sqrt(omega_max ** 2 + 2*gamma ** 2)
+    return omega0
+
 
 def resonanzfrequenz(gamma, dgamma, omega, domega):
     omega_max = np.sqrt(omega ** 2 - gamma ** 2)

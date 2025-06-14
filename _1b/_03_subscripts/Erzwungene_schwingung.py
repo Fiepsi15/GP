@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 from _1b._03_subscripts.funcs import resonanzfrequenz_omega0
+from _1b._03_subscripts.funcs import eigenfrequenz_omega_max
 
 
 def alpha_omega_plot(data, error):
@@ -66,6 +67,9 @@ def alpha_fit(data, error):
 
     print(f"gamma = {(omega_halb[1]-omega_halb[0])/(2)}, ∆ω = {(omega_halb[1]-omega_halb[0])/(2)}")
 
+    omega0_calc = eigenfrequenz_omega_max((omega_halb[1]-omega_halb[0])/(2),0,omega_max,0)
+    print(f"omega0 = {omega0_calc}")
+
     plt.scatter(omega_max, A_max, color='green', label=r"$A_\text{max}$", zorder=4, marker='D')
     plt.scatter(omega_halb, [A_halb, A_halb], color='black', label=r"$\frac{1}{\sqrt{2}} \cdot A_\text{max}$", zorder=3)
     plt.plot(omega_halb, [A_halb, A_halb], color='black', label=r"$\Delta\omega$", zorder=1)
@@ -91,7 +95,7 @@ def phi_fit(data, error):
     omega0 = popt[0]
     gamma = popt[1]
     dgamma = np.sqrt(pcov[1][1])
-    print(f"gamma = {gamma} ± {dgamma}")
+    print(f"\n\phi-fi\n------------------\ngamma = {gamma} ± {dgamma}")
 
     omega_plot = np.linspace(np.min(omega), np.max(omega), 200)
     phi_plot = model(omega_plot, omega0, gamma)
