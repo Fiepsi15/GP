@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="7606580c-2153-4aa2-8339-3139625c714b" name="Changes" comment="Daten aus dem Versuch Reversionspendel eingefügt">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,7 +23,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="Reversionspendel" />
+        <entry key="$PROJECT_DIR$" value="drehpendel-aufgabenteil-2-edits" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -64,9 +65,9 @@
     "Python.main.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "Latente-Waerme",
+    "git-widget-placeholder": "drehpendel-aufgabenteil-2",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/sebas/PycharmProjects/GP/_1b",
+    "last_opened_file_path": "C:/Users/sebas/OneDrive/Dokumente/Uni/2024 WS/GP/plots",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -97,16 +98,16 @@
       </envs>
       <option name="SDK_HOME" value="" />
       <option name="SDK_NAME" value="Python 3.12 (GP)" />
-      <option name="WORKING_DIRECTORY" value="C:\Users\sebas\PycharmProjects\GP\_1b" />
+      <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/_1b/03_Drehpendel.py" />
+      <option name="SCRIPT_NAME" value="_1b.03_Drehpendel" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
+      <option name="MODULE_MODE" value="true" />
       <option name="REDIRECT_INPUT" value="false" />
       <option name="INPUT_FILE" value="" />
       <method v="2" />
