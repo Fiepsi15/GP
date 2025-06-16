@@ -65,6 +65,9 @@ forced_300mA[0] = forced_300mA[0] * 2 * np.pi #F to omega
 err_f_300 = np.array([[0.001 for _ in range(forced_300mA.shape[1])],
                     [0.001 for _ in range(forced_300mA.shape[1])],
                     [1 for _ in range(forced_300mA.shape[1])]])
+
+a2t.array_to_tex(np.array([np.round(forced_300mA[i], 5) for i in range(3)]), err_f_300, [['$\\omega$', '$A$', '$\\phi$'], ['rad/s', 'mV', '°']], 'Erzwungene Schwingung bei 300mA', 'tab:300mA_forced')
+
 Erzwungene_schwingung.alpha_fit([forced_300mA[0], forced_300mA[1]], err_f_300)
 Erzwungene_schwingung.phi_fit(forced_300mA,err_f_300)
 
@@ -76,5 +79,8 @@ forced_600mA[0] = forced_600mA[0] * 2 * np.pi * 1e-3 #F to omega
 err_f_600 = np.array([[0.001 for _ in range(forced_600mA.shape[1])],
                     [0.001 for _ in range(forced_600mA.shape[1])],
                     [1 for _ in range(forced_600mA.shape[1])]])
+
+a2t.array_to_tex(np.array([np.round(forced_600mA[i], 5) for i in range(3)]), err_f_600, [['$\\omega$', '$A$', '$\\phi$'], ['rad/s', 'mV', '°']], 'Erzwungene Schwingung bei 600mA', 'tab:600mA_forced')
+
 Erzwungene_schwingung.alpha_fit([forced_600mA[0], forced_600mA[1]], err_f_600)
 Erzwungene_schwingung.phi_fit(forced_600mA,err_f_600)
