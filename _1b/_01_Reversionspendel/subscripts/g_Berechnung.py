@@ -2,6 +2,13 @@ import numpy as np
 
 
 def g(T, dT, L, dL):
+    '''
+    :param T:
+    :param dT:
+    :param L:
+    :param dL:
+    :return: g, dg:
+    '''
     
     g = 4 * np.pi**2 * L / T**2
 
