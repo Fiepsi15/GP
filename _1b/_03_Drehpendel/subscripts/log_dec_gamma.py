@@ -1,6 +1,6 @@
 import numpy as np
 from matplotlib import pyplot as plt
-from _1b._03_subscripts.funcs import logarithmic_decrement
+from _1b._03_Drehpendel.subscripts.funcs import logarithmic_decrement
 from scrips import array_to_tex as a2t
 
 def log_dec_gamma(data, T, error, dT):

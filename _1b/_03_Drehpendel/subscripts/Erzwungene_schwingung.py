@@ -1,8 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
-from _1b._03_subscripts.funcs import resonanzfrequenz_omega0
-from _1b._03_subscripts.funcs import eigenfrequenz_omega_max
+from _1b._03_Drehpendel.subscripts.funcs import resonanzfrequenz_omega0
+from _1b._03_Drehpendel.subscripts.funcs import eigenfrequenz_omega_max
 
 
 def alpha_omega_plot(data, error):

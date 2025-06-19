@@ -1,7 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 from scipy.optimize import curve_fit
-from _1b._03_subscripts.funcs import prep_y
+from _1b._03_Drehpendel.subscripts.funcs import prep_y
 
 def reg_gamma(data, error):
     def model(T, gamma):
