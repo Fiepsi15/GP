@@ -58,8 +58,8 @@ def csv_to_tex(file, error, quantities_and_units, caption, label):
     """
     Converts a CSV file into a LaTeX table format.
     :param file: String, path to the CSV file.
-    :param error:
-    :param quantities_and_units:
+    :param error: [...], [...], ...
+    :param quantities_and_units: [q1, q2], [u1, u2]
     :param caption:
     :param label:
     :return:
@@ -70,8 +70,8 @@ def csv_to_tex(file, error, quantities_and_units, caption, label):
     quant_len = data.shape[0]
     list_len = data.shape[1]
     #err = np.array([[round_up(0.1 * np.sqrt(2), 2) for _ in range(data.shape[1])], [round_up(np.sqrt(8), 1) for _ in range(data.shape[1])]])
+    print(error)
 
-    data[1] = data[1] / 2
 
     #Verarbeitung
     def find_row_len():
