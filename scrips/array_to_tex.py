@@ -70,7 +70,6 @@ def csv_to_tex(file, error, quantities_and_units, caption, label):
     quant_len = data.shape[0]
     list_len = data.shape[1]
     #err = np.array([[round_up(0.1 * np.sqrt(2), 2) for _ in range(data.shape[1])], [round_up(np.sqrt(8), 1) for _ in range(data.shape[1])]])
-    print(error)
 
 
     #Verarbeitung

@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run Drehpendel as module",
+      "type": "python",
+      "request": "launch",
+      "module": "_1b.03_Drehpendel",  // <- adapt this
+      "justMyCode": false,
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}
