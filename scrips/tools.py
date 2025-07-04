@@ -7,12 +7,6 @@ def round_up(n, decimals=0):
     return np.round(n * 10 ** -decimals, decimals + 2)
 
 
-def round_to_any_digit(n, decimals=0):
-    n = n * 10 ** decimals
-    n = np.round(n, 0)
-    return np.round(n * 10 ** -decimals, decimals + 2)
-
-
 def find_first_nonzero_digit(n):
     n_s = str(n)
     pre_decimals = 0
@@ -35,6 +29,6 @@ def sci_round(n, delta_n, delta_delta_n=1/3):
 
     if dposition < 0:
         dposition += 1
-    return round_to_any_digit(n, dposition), round_up(delta_n, dposition)
+    return np.round(n, dposition), round_up(delta_n, dposition)
 
 
