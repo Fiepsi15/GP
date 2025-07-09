@@ -1,6 +1,7 @@
 import numpy as np
 
 
+# We got anny Uncertainty here?
 def get_k_statisch(m: float, g: float, L_S: float, x_1: float, x_2: float, L_K: float, L: float) -> float:
     """
     Berechnet die statische Federkonstante k für das gekoppelte Pendel.
@@ -25,13 +26,14 @@ def get_Schwerpunktslaenge(I: float, m: float, omega: float, g: float, delta_I: 
     :param m: Masse des Pendels
     :param omega: Winkelgeschwindigkeit
     :param g: Erdbeschleunigung
-    :return: L_S
+    :return: (L_S, Fehler in L_S)
     """
     return (I * omega ** 2) / (m * g), np.sqrt((omega ** 2 /(m * g) * delta_I) ** 2
                                                + (I * omega ** 2 / (g * m ** 2) * delta_m) ** 2
                                                + (2 * I * omega / (m * g) * delta_omega) ** 2)
 
 
+# pls not uncertainty, imma die....
 def get_Traegheitsmoment_from_Parameters(M_Z: float, h: float, R1: float, R2: float, L_Z: float, M_st: float, L: float,
                                          R: float, M_K: float, L_K: float, M_M: float, L_M: float) -> float:
     """
@@ -55,22 +57,26 @@ def get_Traegheitsmoment_from_Parameters(M_Z: float, h: float, R1: float, R2: fl
             + M_st * (1 / 3 * L ** 2 + 1 / 4 * R) + M_K * L_K ** 2 + M_M * L_M ** 2)
 
 
-def get_kopplungsgrad_from_Eigenfrequenzen(Periode_0: float, Periode_180: float) -> float:
+# doesn't seam quite right...
+def get_kopplungsgrad_from_Eigenfrequenzen(Periode_0: float, Periode_180: float) -> tuple[float, float]:
     """
     Berechnet den Kopplungsgrad basierend auf den Eigenfrequenzen.
 
     :param Periode_0: Periode bei 0 Grad
     :param Periode_180: Periode bei gegenphasiger Schwingung (180 Grad)
-    :return: Kopplungsgrad
+    :return: (Kopplungsgrad, Fehler in Kopplungsgrad)
     """
-    return (Periode_0 ** 2 - Periode_180 ** 2) / (Periode_0 ** 2 + Periode_180 ** 2)
+    return (Periode_0 ** 2 - Periode_180 ** 2) / (Periode_0 ** 2 + Periode_180 ** 2), np.sqrt((4 * Periode_0 * Periode_180 ** 2/(Periode_0 ** 2 + Periode_180 ** 2) ** 2) ** 2
+                                                                                              + (4 * Periode_0 ** 2 * Periode_180 / (Periode_0 ** 2 + Periode_180 ** 2) ** 2) ** 2)
 
-def get_kopplungsgrad_from_Schwebung(Phasenperiode: float, Gruppenperiode: float) -> float:
+def get_kopplungsgrad_from_Schwebung(Phasenperiode: float, Gruppenperiode: float, delta_Phasenperiode: float, delta_Gruppenperiode: float) -> tuple[float, float]:
     """
     Berechnet den Kopplungsgrad basierend auf der Schwebung.
 
     :param Phasenperiode: Periode der Phasenverschiebung
     :param Gruppenperiode: Periode der Gruppengeschwindigkeit
-    :return: Kopplungsgrad
+    :return: (Kopplungsgrad, Fehler in Kopplungsgrad)
     """
-    return 2 * (Phasenperiode * Gruppenperiode) / (Phasenperiode ** 2 + Gruppenperiode ** 2)
+    return 2 * (Phasenperiode * Gruppenperiode) / (Phasenperiode ** 2 + Gruppenperiode ** 2), np.sqrt(((2 * Gruppenperiode * (Phasenperiode ** 2 - Gruppenperiode ** 2)) / (Phasenperiode ** 2 + Gruppenperiode ** 2) ** 2 * delta_Phasenperiode) ** 2
+                                                                                                      + ((2 * Phasenperiode * (Gruppenperiode ** 2 - Phasenperiode ** 2)) / (Gruppenperiode ** 2 + Phasenperiode ** 2) ** 2 * delta_Gruppenperiode) ** 2)
+
