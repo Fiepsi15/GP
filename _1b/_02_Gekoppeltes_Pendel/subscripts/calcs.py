@@ -33,6 +33,22 @@ def get_Schwerpunktslaenge(I: float, m: float, omega: float, g: float, delta_I: 
                                                + (2 * I * omega / (m * g) * delta_omega) ** 2)
 
 
+def get_Schwerpunktslaenge_from_Parameters(m_Z: float, L_Z: float, rho: float, L: float, R: float, m_K: float, L_K: float, m_M: float, L_M: float, ) -> float:
+    """
+    Berechnet die Länge bis zum Schwerpunkt des Pendels basierend auf den gegebenen Parametern.
+
+    :param M_Z: Masse des Zylinders
+    :param L_Z: Länge bis zum Zylinder
+    :param L: Länge des Pendels
+    :param R: Radius der Stange
+    :param rho: Dichte des Materials
+    :return: Schwerpunktslänge L_S
+    """
+    m = rho * np.pi * R ** 2 * L
+    M = m_Z + m + m_K + m_M
+
+    return (m_Z * L_Z + m * (L / 2) + m_K * L_K + m_M * L_M) / M
+
 # pls not uncertainty, imma die....
 def get_Traegheitsmoment_from_Parameters(M_Z: float, h: float, R1: float, R2: float, L_Z: float, M_st: float, L: float,
                                          R: float, M_K: float, L_K: float, M_M: float, L_M: float) -> float:
@@ -55,6 +71,41 @@ def get_Traegheitsmoment_from_Parameters(M_Z: float, h: float, R1: float, R2: fl
     """
     return (M_Z * (1 / 12 * h ** 2 + 1 / 4 * (R2 ** 2 - R1 ** 2) + L_Z)
             + M_st * (1 / 3 * L ** 2 + 1 / 4 * R) + M_K * L_K ** 2 + M_M * L_M ** 2)
+
+def get_Traegheitsmoment_from_Parameters_err(dL : float, dh: float, dm: float, M_Z: float, h: float, R1: float, R2: float, L_Z: float, M_st: float, L: float,
+                                         R: float, M_K: float, L_K: float, M_M: float, L_M: float) -> float:
+    """
+    Berechnet das Trägheitsmoment des Pendels basierend auf den gegebenen Parametern.
+
+    :param M_Z: Masse des Zylinders
+    :param h: Höhe des Zylinders
+    :param R1: Innenradius des Zylinders
+    :param R2: Aussenradius des Zylinders
+    :param L_Z: Länge bis zum Zylinders
+    :param M_st: Masse der Stange
+    :param L: Länge des Pendels
+    :param R: Radius der Stange
+    :param M_K: Masse der Kopplungsmontur
+    :param L_K: Kopplungslänge
+    :param M_M: Masse der Mutter
+    :param L_M: Länge bis zur Mutter
+    :return: Trägheitsmoment I
+    """
+    
+    return (
+        ((1 / 12 * h**2 + 1 / 4 * (R2**2 - R1**2) + L_Z) * dm) ** 2
+        + (1 / 6 * M_Z * h * dh) ** 2
+        + (1 / 2 * M_Z * R2 * dh) ** 2
+        + (1 / 2 * M_Z * R1 * dh) ** 2
+        + (M_Z * dL) ** 2
+        + ((1 / 3 * L**2 + 1 / 4 * R) * dm) ** 2
+        + (2 / 3 * M_st * L * dL) ** 2
+        + (1 / 4 * M_st * dh) ** 2
+        + (L_K**2 * dm) ** 2
+        + (2 * M_K * L_K * dL) ** 2
+        + (L_M**2 * dm) ** 2
+        + (2 * M_M * L_K * dL) ** 2
+    )
 
 
 # doesn't seam quite right...
@@ -79,4 +130,3 @@ def get_kopplungsgrad_from_Schwebung(Phasenperiode: float, Gruppenperiode: float
     """
     return 2 * (Phasenperiode * Gruppenperiode) / (Phasenperiode ** 2 + Gruppenperiode ** 2), np.sqrt(((2 * Gruppenperiode * (Phasenperiode ** 2 - Gruppenperiode ** 2)) / (Phasenperiode ** 2 + Gruppenperiode ** 2) ** 2 * delta_Phasenperiode) ** 2
                                                                                                       + ((2 * Phasenperiode * (Gruppenperiode ** 2 - Phasenperiode ** 2)) / (Gruppenperiode ** 2 + Phasenperiode ** 2) ** 2 * delta_Gruppenperiode) ** 2)
-
