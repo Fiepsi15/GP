@@ -2,7 +2,7 @@ import numpy as np
 
 
 # We got any Uncertainty here?
-def get_k_statisch(m: float, g: float, L_S: float, x_1: float, x_2: float, L_K: float, L: float) -> float:
+def get_k_statisch(m: float, g: float, L_S: float, x_1: float, x_2: float, L_K: float, L: float, delta_m, delta_L_S, delta_X1, delta_x2, delta_L_K, delta_L) -> tuple[float, float]:
     """
     Berechnet die statische Federkonstante k für das gekoppelte Pendel.
 
@@ -13,9 +13,16 @@ def get_k_statisch(m: float, g: float, L_S: float, x_1: float, x_2: float, L_K: 
     :param x_2: Auslenkung des zweiten Pendels
     :param L_K: Kopplungslänge
     :param L: Länge des Pendels
-    :return: Federkonstante k
+    :return: (Federkonstante k, Fehler in k)
     """
-    return (m * g * L_S * x_2) / (L_K * x_1 * L)
+    return (m * g * L_S * x_2) / (L_K * x_1 * L) , np.sqrt(
+        ((g * L_S * x_2 / (L_K * x_1 * L)) * delta_m) ** 2 +
+        ((m * g * x_2 / (L_K * x_1 * L)) * delta_L_S) ** 2 +
+        ((m * g * L_S / (L_K * x_1 * L)) * delta_x2) ** 2 +
+        ((m * g * L_S * x_2 / (L_K ** 2 * x_1 * L)) * delta_L_K) ** 2 +
+        ((m * g * L_S * x_2 / (L_K * x_1 ** 2 * L)) * delta_X1) ** 2 +
+        ((m * g * L_S * x_2 / (L_K * x_1 * L ** 2)) * delta_L) ** 2
+    )
 
 
 def get_Schwerpunktslaenge(I: float, m: float, omega: float, g: float, delta_I: float, delta_m: float, delta_omega: float) -> tuple[float, float]:
