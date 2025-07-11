@@ -35,9 +35,47 @@ print(f"Trägheitsmoment_3= {I_1:.4f} kg*m^2")
 print(f"Unsicherheit im Trägheitsmoment: {dI} kg*m^2")
 
 Is = np.array([[L_K, L_K-4e-2, L_K-8e-2], [I_1, I_2, I_3]])
-array_to_tex.array_to_tex(Is, [[1e-3 for _ in range(3)], [dI for _ in range(3)]], [["L_K", "I"], ["m", "kg*m^2"]], "Trägheitsmomente", "träg para")
+array_to_tex.array_to_tex(Is, [[1e-3 for _ in range(3)], [dI for _ in range(3)]], [["$L_K$", "$I$"], ["\\text{m}", "\\text{kg}\\cdot\\text{m}^2"]], "Trägheitsmomente", "träg para")
 
 print("\n\nFederkonstante:")
-print(calcs.get_k_statisch(m, 9.81, L_S, 101e-3, 6e-3, L_K, L, dm, dL, dL, dL, dL, dL))
+k = calcs.get_k_statisch(m, 9.81, L_S, 101e-3, 6e-3, L_K, L, dm, dL, dL, dL, dL, dL)
+print(k)
 print("\n\nSchwerpunktslänge:")
-print(calcs.get_Schwerpunktslaenge(I_1, m, 2*np.pi / 1.356, 9.81, dI, dm, 2*np.pi/ 0.023))
+
+T_0 = np.array([1.350, 1.356, 1.340]) #In Phase
+dT_0 = np.array([0.028, 0.023, 0.020])
+
+T_1 = np.array([1.275, 1.280, 1.283]) # Gegenphase
+dT_1 = np.array([0.025, 0.025, 0.028])
+
+T_P = np.array([1.343, 1.51, 1.352]) # Phase
+dT_P = np.array([0.030, 0.03, 0.028])
+
+T_G = np.array([45.7, 60.5, 94]) # Gruppe
+dT_G = np.array([1.3, 2, 4])
+
+print(calcs.get_Schwerpunktslaenge(calcs.get_Traegheitsmoment_from_oscillation(k[0], L_K, 2 * np.pi / T_0[0], 2 * np.pi / T_1[0])[0], m, 2*np.pi / 1.350, 9.81, 0.036, dm, 2*np.pi/(1.35 ** 2) * 0.023))
+print("\n\nKopplungsgrad:")
+kappa, dkappa = calcs.get_kopplungsgrad_from_Eigenfrequenzen(T_0, T_1, dT_0, dT_1)
+array_to_tex.array_to_tex(np.array([[L_K, L_K-4e-2, L_K-8e-2], kappa]), [[dL for _ in range(3)], dkappa], [["L_K", "\\kappa"], ["m", ""]], "Kopplungsgrad", "kopplungsgrad")
+
+print("\n\nKopplungsgrad schwebung:")
+kappa_s, dkappa_s = calcs.get_kopplungsgrad_from_Schwebung(T_P, T_G, dT_P, dT_G)
+array_to_tex.array_to_tex(np.array([[L_K, L_K-4e-2, L_K-8e-2], kappa_s]), [[dL for _ in range(3)], dkappa_s], [["L_K", "\\kappa"], ["m", ""]], "Kopplungsgrad Schwebung", "kopplungsgrad_schwebung")
+
+print("\n\nTrägheitsmoment aus Schwingung:")
+print(calcs.get_Traegheitsmoment_from_oscillation(k[0], L_K, 2 * np.pi / T_0, 2 * np.pi / T_1, k[1], dL, 2 * np.pi/(T_0 ** 2) * dT_0, 2 * np.pi/(T_1 ** 2) * dT_1))
+
+'''
+omega_P = 2 * np.pi / T_P
+omega_G = 2 * np.pi / T_G
+
+domega_P = 2 * np.pi / (T_P ** 2) * dT_P
+domega_G = 2 * np.pi / (T_G ** 2) * dT_G
+
+domega = domega_G + domega_P
+
+omega_1 = omega_P + omega_G
+omega_2 = omega_P - omega_G
+print(calcs.get_Traegheitsmoment_from_oscillation(k[0], L_K, omega_2, omega_1, k[1], dL, domega, domega))
+'''
