@@ -79,3 +79,7 @@ omega_1 = omega_P + omega_G
 omega_2 = omega_P - omega_G
 print(calcs.get_Traegheitsmoment_from_oscillation(k[0], L_K, omega_2, omega_1, k[1], dL, domega, domega))
 '''
+
+
+kappa = calcs.get_kopplungsgrad_from_parameters(m, dm, k[0], k[1], L_S, dL, L_K, dL)
+print(f"kappa {kappa}")

@@ -79,7 +79,7 @@ def get_Traegheitsmoment_from_Parameters(M_Z: float, h: float, R1: float, R2: fl
     :param L_M: Länge bis zur Mutter
     :return: Trägheitsmoment I
     """
-    return (M_Z * (1 / 12 * h ** 2 + 1 / 4 * (R2 ** 2 - R1 ** 2) + L_Z)
+    return (M_Z * (1 / 12 * h ** 2 + 1 / 4 * (R2 ** 2 - R1 ** 2) + L_Z**2)
             + M_st * (1 / 3 * L ** 2 + 1 / 4 * R ** 2) + M_K * L_K ** 2 + M_M * L_M ** 2)
 
 
@@ -105,7 +105,7 @@ def get_Traegheitsmoment_from_Parameters_err(dL: float, dh: float, dm: float, M_
     """
 
     return np.sqrt(
-        ((1 / 12 * h ** 2 + 1 / 4 * (R2 ** 2 - R1 ** 2) + L_Z) * dm) ** 2
+        ((1 / 12 * h ** 2 + 1 / 4 * (R2 ** 2 - R1 ** 2) + L_Z**2 ) * dm) ** 2
         + (1 / 6 * M_Z * h * dh) ** 2
         + (1 / 2 * M_Z * R2 * dh) ** 2
         + (1 / 2 * M_Z * R1 * dh) ** 2
@@ -136,6 +136,34 @@ def get_Traegheitsmoment_from_oscillation(k: float, L_K: float, Periode_0: float
         ((4 * k * L_K ** 2 * Periode_180) / (Periode_180 ** 2 - Periode_0 ** 2) ** 2 * delta_Periode_180) ** 2
     )
 
+def get_kopplungsgrad_from_parameters(m: float, delta_m: float, k: float, delta_k: float, L_S: float, delta_L_S:  float, L_K: float, delta_L_K: float):
+    """
+    Berechnet kappa aus Parametern.
+    
+    Parameter:
+    m -- Masse
+    k -- Federkonstante
+    L_K -- Kopplungslänge
+    g -- Erdbeschleunigung
+    L_S -- Schwerpunktslänge
+    """
+    g= 9.81  # Erdbeschleunigung in m/s^2
+
+    D = m * g * L_S + k * L_K**2
+    
+    # Partielle Ableitungen
+    d_k =     (m * g * L_S * L_K**2) / D**2
+    d_L_K = 2 * (k * m * g * L_S * L_K) / D**2
+    d_m =   (k * L_K**2 * g * L_S)    / D**2
+    d_L_S =   (k * L_K**2 * m * g)    / D**2
+  
+    return k * L_K**2 / (m * g * L_S + k * L_K**2), np.sqrt(
+        (d_k * delta_k)**2 +
+        (d_L_K * delta_L_K)**2 +
+        (d_m * delta_m)**2 +
+        (d_L_S * delta_L_S)**2
+    )   
+    
 
 def get_kopplungsgrad_from_Eigenfrequenzen(Periode_0: float, Periode_180: float, delta_Periode_0: float,
                                            delta_Periode_180: float) -> tuple[float, float]:
