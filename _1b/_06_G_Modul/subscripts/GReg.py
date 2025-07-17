@@ -3,7 +3,7 @@ from scipy.optimize import curve_fit
 
 
 def g_mod_regression(T: np.ndarray, dT: float, J: np.ndarray, dJ: np.ndarray, length: float = 1.0, dl=0.1,
-                     radius: float = 1.0, dr=0.1):
+                     radius: float = 1.0, dr=0.1) -> tuple[float, float]:
     """
     Perform a regression analysis for the G-Modul from the torsion oscillation of a given length of Wire.
     :param length: Length of the wire.
@@ -20,8 +20,10 @@ def g_mod_regression(T: np.ndarray, dT: float, J: np.ndarray, dJ: np.ndarray, le
     def model(x, c):
         return c * x
 
-    def G(c, dc, length, dl, radius, dr):
-        return (8 * np.pi * length) / (c * radius ** 4), np.sqrt(1) #Todo : Implement uncertainty calculation (gauss)
+    def G(c, dc, length, dl, radius, dr) -> tuple[float, float]:
+        return (8 * np.pi * length) / (c * radius ** 4), np.sqrt(((8 * np.pi) / (c * radius ** 4) * dl) ** 2
+                                                                 + ((8 * np.pi) / (c ** 2 * radius ** 4) * dc) ** 2
+                                                                 + ((32 * np.pi * length) / (c * radius ** 5) * dr) ** 2)
 
     x = J
     y = T ** 2 - T[0] ** 2
