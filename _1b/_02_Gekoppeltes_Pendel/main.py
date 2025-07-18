@@ -80,6 +80,7 @@ omega_2 = omega_P - omega_G
 print(calcs.get_Traegheitsmoment_from_oscillation(k[0], L_K, omega_2, omega_1, k[1], dL, domega, domega))
 '''
 
-
-kappa = calcs.get_kopplungsgrad_from_parameters(m, dm, k[0], k[1], L_S, dL, L_K, dL)
-print(f"kappa {kappa}")
+print("\n\nKopplungsgrad aus Parametern:")
+kappa, dkappa = calcs.get_kopplungsgrad_from_parameters(m, dm, k[0], k[1], L_S, dL, np.array([L_K, L_K-4e-2, L_K-8e-2]), dL)
+array_to_tex.array_to_tex(np.array([[L_K, L_K-4e-2, L_K-8e-2], kappa]), [[dL for _ in range(3)], dkappa], [["L_K", "\\kappa"], ["m", ""]], "Kopplungsgrad aus Parametern", "kopplungsgrad_param")
+print(f"kappa {kappa}{dkappa}")

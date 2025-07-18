@@ -136,7 +136,7 @@ def get_Traegheitsmoment_from_oscillation(k: float, L_K: float, Periode_0: float
         ((4 * k * L_K ** 2 * Periode_180) / (Periode_180 ** 2 - Periode_0 ** 2) ** 2 * delta_Periode_180) ** 2
     )
 
-def get_kopplungsgrad_from_parameters(m: float, delta_m: float, k: float, delta_k: float, L_S: float, delta_L_S:  float, L_K: float, delta_L_K: float):
+def get_kopplungsgrad_from_parameters(m: float, delta_m: float, k: float, delta_k: float, L_S: float, delta_L_S:  float, L_K, delta_L_K: float):
     """
     Berechnet kappa aus Parametern.
     
