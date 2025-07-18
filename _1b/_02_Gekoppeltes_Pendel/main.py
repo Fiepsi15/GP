@@ -22,7 +22,6 @@ d_h = 0.05e-3  # Unsicherheit in der genau gemessenen Längen in m
 dm = 0.01e-3  # Unsicherheit in der Masse in kg
 
 
-
 L_S = calcs.get_Schwerpunktslaenge_from_Parameters(m_Z, L_Z, rho, L, R, m_K, L_K, m_M, L_M)
 I_1 = calcs.get_Traegheitsmoment_from_Parameters(m_Z, h, R1, R2, L_Z, M_st, L, R, m_K, L_K, m_M, L_M)
 I_2 = calcs.get_Traegheitsmoment_from_Parameters(m_Z, h, R1, R2, L_Z, M_st, L, R, m_K, L_K-4e-2, m_M, L_M)
@@ -84,3 +83,36 @@ print("\n\nKopplungsgrad aus Parametern:")
 kappa, dkappa = calcs.get_kopplungsgrad_from_parameters(m, dm, k[0], k[1], L_S, dL, np.array([L_K, L_K-4e-2, L_K-8e-2]), dL)
 array_to_tex.array_to_tex(np.array([[L_K, L_K-4e-2, L_K-8e-2], kappa]), [[dL for _ in range(3)], dkappa], [["L_K", "\\kappa"], ["m", ""]], "Kopplungsgrad aus Parametern", "kopplungsgrad_param")
 print(f"kappa {kappa}{dkappa}")
+
+
+
+
+#Die Einzelnen Trägheitsmomente Tabelle muss noch erstellt werden
+I_Zylinder = m_Z * (1 / 12 * h**2 + 1 / 4 * (R2**2 - R1**2) + L_Z**2)
+I_Zylinder_err = np.sqrt(
+    ((1 / 12 * h**2 + 1 / 4 * (R2**2 - R1**2) + L_Z**2) * dm) ** 2
+    + (1 / 6 * m_Z * h * d_h) ** 2
+    + (1 / 2 * m_Z * R2 * d_h) ** 2
+    + (1 / 2 * m_Z * R1 * d_h) ** 2
+    + (m_Z * dL) ** 2
+)
+I_stange = M_st * (1 / 3 * L**2 + 1 / 4 * R**2)
+I_stange_err = np.sqrt(
+    ((1 / 3 * L**2 + 1 / 4 * R) * dm) ** 2
+    + (2 / 3 * M_st * L * dL) ** 2
+    + (1 / 4 * M_st * d_h) ** 2
+)
+I_Mutter = m_M * L_M**2
+I_Mutter_err = np.sqrt((L_M**2 * dm) ** 2 + (2 * m_M * L_K * dL) ** 2)
+I_Federmontur = np.zeros(3)
+I_Federmontur_err = np.zeros(3)
+for i in range(3):
+    I_Federmontur[i] = m_K * (L_K - i * 4e-2) ** 2
+    I_Federmontur_err[i] = np.sqrt(
+        ((L_K - i * 4e-2) ** 2 * dm) ** 2 + (2 * m_K * (L_K - i * 4e-2) * dL) ** 2
+    )
+
+arr = np.array([I_Zylinder, I_stange, I_Mutter])
+arr_err = np.array([I_Zylinder_err, I_stange_err, I_Mutter_err])
+print(arr)
+print(arr_err)
