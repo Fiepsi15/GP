@@ -1,6 +1,3 @@
-from asyncio import set_event_loop_policy
-
-import matplotlib.pyplot as plt
 import numpy as np
 from _1b._06_G_Modul.subscripts import GReg as sub
 from _1b._06_G_Modul.subscripts import Moment_of_Inertia as MoI
