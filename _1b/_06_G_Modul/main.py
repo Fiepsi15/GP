@@ -18,6 +18,8 @@ dr = 0.01e-3 / 2 # Uncertainty in radius of the Wire(m)
 # Calculate the moments of inertia for the rings
 rings = np.loadtxt('_1b/_06_G_Modul/daten/ring_data.csv', skiprows=1, delimiter=',').transpose()[1:4, :] * 1e-3  # Load data and convert to kg and meters
 print(rings)
+rings[1] = rings[1] / 2  # Convert diameter to radius
+rings[2] = rings[2] / 2  # Convert diameter to radius
 moments_of_inertia, Delta_moments_of_inertia = MoI.get_moment_of_inertia(rings[0], dm, rings[1], dR, rings[2], dR)
 print(moments_of_inertia, Delta_moments_of_inertia)
 
