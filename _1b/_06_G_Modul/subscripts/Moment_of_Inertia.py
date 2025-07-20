@@ -1,6 +1,6 @@
 import numpy as np
 
-def get_moment_of_inertia(mass, dm, inner_radius, dri, outer_radius, dro) -> tuple[float, float]:
+def get_moment_of_inertia(mass, dm, inner_radius, dri, outer_radius, dro):
     """
     Calculate the moment of inertia for a hollow cylinder.
 
