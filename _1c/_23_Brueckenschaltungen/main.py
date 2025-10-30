@@ -3,6 +3,7 @@ import _1c._23_Brueckenschaltungen.subscripts.poti_transform as ptt
 import _1c._23_Brueckenschaltungen.subscripts.decade_transform as dct
 import _1c._23_Brueckenschaltungen.subscripts.poggendorf as pogg
 import _1c._23_Brueckenschaltungen.subscripts.wheatstone as wheat
+import _1c._23_Brueckenschaltungen.subscripts.Imballance as ib
 import scrips.tools as to
 from scrips.array_to_tex import array_to_tex as a2t
 import _1c._23_Brueckenschaltungen.daten as data
@@ -63,3 +64,13 @@ a2t(wheatstone_RC1, np.array([wheatstone_RC1s_err, wheatstone_RC1p_err]), [['$R_
 print(RC1R_x, RC1R_x_err)
 RC1R_x, RC1R_x_err = to.sci_round(RC1R_x, RC1R_x_err)
 print("\nUnbekannter Widerstand (RC) R_1:\nR_x = ", RC1R_x, "±", RC1R_x_err, "Ω")
+
+Imbalance_data = np.loadtxt('_1c/_23_Brueckenschaltungen/daten/Wheatstone_Imbalance.csv', skiprows=1, delimiter=',').transpose()
+Imbalance_data[0], Imbalance_datap_err = ptt.poti_transform_2(Imbalance_data[0])
+Imbalance_U_err = np.array([0.1 for _ in range(Imbalance_data.shape[1])])
+a2t(Imbalance_data, np.array([Imbalance_datap_err, Imbalance_U_err]), [['$R_P$', '$U$'], ['$\\Omega$', '$mV$']], 'Spannung in abhängigkeit des Widerstands ', 'Ausschlagmethode')
+alpha, alpha_err = ib.imballance(Imbalance_data[0], Imbalance_data[1], Imbalance_U_err)
+print(alpha, alpha_err)
+alpha, alpha_err = to.sci_round(alpha, alpha_err)
+print(alpha, alpha_err)
+
