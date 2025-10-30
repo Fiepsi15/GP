@@ -17,7 +17,7 @@ def imballance(R_S: np.ndarray, U_B: np.ndarray, R_S_err: np.ndarray, U_B_err: n
 
     al, al_err = sci_round(alpha, alpha_err)
 
-    plt.errorbar(x_data, y_data, xerr=x_err, yerr=y_err, label='Widerstands Wertepaare', fmt='o', capsize=5, color='blue')
+    plt.errorbar(x_data, y_data, xerr=x_err, yerr=y_err, label='Gemessene Spannungswerte', fmt='o', capsize=5, color='blue')
     plt.plot(x_data, model(x_data, alpha, beta), label=f'Regression: $\\alpha = ${al}', color='red')
     plt.plot(x_data, model(x_data, alpha + alpha_err, beta), label=f'$\\pm \\delta\\alpha = {al_err}$', color='red', linestyle='--')
     plt.plot(x_data, model(x_data, alpha - alpha_err, beta), linestyle='--', color='red')

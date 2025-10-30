@@ -32,3 +32,6 @@ def poti_transform_2(setting: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     #print(R, R_err, "\n")
     return R, R_err
 
+
+def poti_transform(setting: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    return setting * poti_3_slope + poti_3_intercept, np.sqrt((setting * poti_3_slope_err) ** 2 + poti_3_intercept_err ** 2)

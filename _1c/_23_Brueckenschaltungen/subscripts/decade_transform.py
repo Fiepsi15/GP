@@ -22,3 +22,6 @@ def decade_trafo(setting: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     R = R_1 + R_2 + R_3
     R_err = decade_err(d1, d2, d3, zehner_err, hunderter_err, tausender_err)
     return R, R_err
+
+def dec():
+    return sdk.decade_kalibrierung()
