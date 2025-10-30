@@ -3,11 +3,12 @@ import _1c._23_Brueckenschaltungen.subscripts.poti_kalibrierung as potik
 
 
 potis = np.loadtxt('_1c/_23_Brueckenschaltungen/daten/poti_kalibrierung.csv', skiprows=1, delimiter=',').transpose()
-(poti_1_slope, poti_1_slope_err), (poti_1_intercept, poti_1_intercept_err) = potik.poti_kalibrierung_fused(potis[0], potis[1])
+
+(poti_1_slope, poti_1_slope_err), (poti_1_intercept, poti_1_intercept_err) = potik.poti_kalibrierung_fused(potis[0], potis[1], 1)
 #print(poti_1_slope, poti_1_slope_err, poti_1_intercept, poti_1_intercept_err)
-(poti_2_slope, poti_2_slope_err), (poti_2_intercept, poti_2_intercept_err) = potik.poti_kalibrierung_fused(potis[0], potis[2])
+(poti_2_slope, poti_2_slope_err), (poti_2_intercept, poti_2_intercept_err) = potik.poti_kalibrierung_fused(potis[0], potis[2], 0.1)
 #print(poti_2_slope, poti_2_slope_err, poti_2_intercept, poti_2_intercept_err)
-(poti_3_slope, poti_3_slope_err), (poti_3_intercept, poti_3_intercept_err) = potik.poti_kalibrierung(potis[0], potis[3])
+(poti_3_slope, poti_3_slope_err), (poti_3_intercept, poti_3_intercept_err) = potik.poti_kalibrierung(potis[0], potis[3], 1)
 #print(poti_3_slope, poti_3_slope_err, poti_3_intercept, poti_3_intercept_err)
 
 
