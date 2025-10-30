@@ -22,12 +22,12 @@ def poti_transform_2(setting: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     s1 = (setting // 100) * 100
     s2 = (setting % 100)
 
-    print(s1, s2, "\n")
+    #print(s1, s2, "\n")
     R_1 = poti_1_slope * s1 + poti_1_intercept
     R_2 = slope2 * s2
     R = R_1 + R_2
     R_err = poti_err_2(s1, s2)
 
-    print(R, R_err, "\n")
+    #print(R, R_err, "\n")
     return R, R_err
 
