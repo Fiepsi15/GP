@@ -1,5 +1,6 @@
 import numpy as np
-from scrips.tools import round_up
+from scrips.tools import sci_round
+
 
 def array_to_tex(array, error, quantities_and_units, caption='Table 1', label='Tabelle 1'):
     """
@@ -27,6 +28,11 @@ def array_to_tex(array, error, quantities_and_units, caption='Table 1', label='T
     row_len = find_row_len()
     col_len = list_len // row_len * quant_len
     folds = list_len // row_len + (list_len % row_len > 0)
+
+    #Scientific rounding of errors
+    for i in range(quant_len):
+        for j in range(list_len):
+            array[i][j], error[i][j] = sci_round(array[i][j], error[i][j])
 
     s = '\\begin{table}[H] \n\\centering \n\\caption{' + caption + '}\n\\begin{tabular}{|c||'
     for i in range(row_len):
