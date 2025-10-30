@@ -23,6 +23,10 @@ def wheatstone(R_1: float, R_1_err: float, R_s: np.ndarray, R_p: np.ndarray, R_p
 
     plt.scatter(x_data, y_data, label='Datenpunkte')
     plt.plot(x_data, model(x_data, alpha), label='Fit: $R_P = {:.4f} R_S$'.format(alpha), color='red')
+    plt.minorticks_on()
+    plt.tick_params(direction='in', which='minor')
+    plt.grid(True)
+    plt.legend()
     plt.show()
 
     return get_R_x(R_1, alpha), get_R_x_err(R_1, R_1_err, alpha, alpha_err)

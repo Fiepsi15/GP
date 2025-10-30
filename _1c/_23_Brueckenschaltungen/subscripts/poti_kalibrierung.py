@@ -14,9 +14,11 @@ def poti_kalibrierung_fused(setting: np.ndarray, measurement: np.ndarray) -> tup
     slope_err = np.sqrt(np.diag(pcov))[0]
     intercept_err = 0.1
 
+    '''
     plt.scatter(x_data, y_data)
     plt.plot(x_data, linear_model(x_data, slope))
     plt.show()
+    '''
     return (slope, slope_err), (intercept, intercept_err)
 
 
@@ -30,7 +32,9 @@ def poti_kalibrierung(setting: np.ndarray, measurement: np.ndarray) -> tuple[tup
     slope, intercept = popt
     slope_err, intercept_err = np.sqrt(np.diag(pcov))
 
+    '''
     plt.scatter(x_data, y_data)
     plt.plot(x_data, linear_model(x_data, slope, intercept))
     plt.show()
+    '''
     return (slope, slope_err), (intercept, intercept_err)
