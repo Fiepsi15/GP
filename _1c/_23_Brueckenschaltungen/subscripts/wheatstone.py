@@ -3,14 +3,27 @@ from scipy.optimize import curve_fit
 import matplotlib.pyplot as plt
 
 
-def get_R_x(R_1, alpha):
+def get_R_x(R_1, alpha, C: bool):
+    if C:
+        return R_1 / alpha
     return R_1 * alpha
 
-def get_R_x_err(R_1, R_1_err, alpha, alpha_err):
+
+def get_R_x_err(R_1, R_1_err, alpha, alpha_err, C: bool):
+    if C:
+        return np.sqrt((R_1_err / alpha) ** 2 + (R_1 * alpha_err / alpha ** 2) ** 2)
     return np.sqrt((R_1_err * alpha) ** 2 + (R_1 * alpha_err) ** 2)
 
 
-def wheatstone(R_1: float, R_1_err: float, R_s: np.ndarray, R_p: np.ndarray, R_p_err: np.ndarray):
+def wheatstone_C(R_1: float, R_1_err: float, R_s: np.ndarray, R_p: np.ndarray, R_p_err: np.ndarray):
+    return wheatstone(R_1, R_1_err, R_s, R_p, R_p_err, C=True)
+
+
+def wheatstone_R(R_1: float, R_1_err: float, R_s: np.ndarray, R_p: np.ndarray, R_p_err: np.ndarray):
+    return wheatstone(R_1, R_1_err, R_s, R_p, R_p_err, C=False)
+
+
+def wheatstone(R_1: float, R_1_err: float, R_s: np.ndarray, R_p: np.ndarray, R_p_err: np.ndarray, C: bool):
     def model(R_s, alpha):
         return R_s * alpha
 
@@ -29,5 +42,5 @@ def wheatstone(R_1: float, R_1_err: float, R_s: np.ndarray, R_p: np.ndarray, R_p
     plt.legend()
     plt.show()
 
-    return get_R_x(R_1, alpha), get_R_x_err(R_1, R_1_err, alpha, alpha_err)
+    return get_R_x(R_1, alpha, C), get_R_x_err(R_1, R_1_err, alpha, alpha_err, C)
 
