@@ -62,6 +62,7 @@ def array_to_tex(array, error, quantities_and_units, caption='Table 1', label='T
 
 def csv_to_tex(file, error, quantities_and_units, caption, label):
     """
+    -- deprecated --
     Converts a CSV file into a LaTeX table format.
     :param file: String, path to the CSV file.
     :param error: [...], [...], ...

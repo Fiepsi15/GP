@@ -63,6 +63,8 @@ RC1R_x, RC1R_x_err = wheat.wheatstone_R(float(R_1[0]), float(R_1_err[0]), wheats
 a2t(wheatstone_RC1, np.array([wheatstone_RC1s_err, wheatstone_RC1p_err]), [['$R_S$', '$R_P$'], ['$\\Omega$', '$\\Omega$']], 'Wheatstone $R_x,\\,C_x$ Messreihe', 'R-C-Reihenschaltung')
 print(RC1R_x, RC1R_x_err)
 RC1R_x, RC1R_x_err = to.sci_round(RC1R_x, RC1R_x_err)
+R_1, R_1_err = to.sci_round(float(R_1[0]), float(R_1_err[0]))
+print("\nR_1 = ", R_1, "±", R_1_err)
 print("\nUnbekannter Widerstand (RC) R_1:\nR_x = ", RC1R_x, "±", RC1R_x_err, "Ω")
 
 Imbalance_data = np.loadtxt('_1c/_23_Brueckenschaltungen/daten/Wheatstone_Imbalance.csv', skiprows=1, delimiter=',').transpose()
