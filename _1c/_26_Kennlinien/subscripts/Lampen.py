@@ -13,16 +13,20 @@ def resistance(U: np.ndarray, I: np.ndarray) -> np.ndarray:
 
 
 def stefan_boltzmann(r, P):
-    def model(r, sigma, A, c):
-        return sigma * A * ((293 + r/c) ** 4 - 293 ** 4)
+    def model(r, A, c):
+        sigma = 5.67e-10
+        Delta_T = r / c
+        return sigma * A * ((293 + Delta_T) ** 4 - 293 ** 4)
 
     x_data = r
     y_data = P
-    popt, pcov = curve_fit(model, x_data, y_data)
-    sigma, A, c = popt[0], popt[1], popt[2]
-    sigma_err, A_err, c_err = np.sqrt(np.diag(pcov))
-    plt.plot(x_data, model(x_data, sigma, A, c), label='Fit', color='green')
-    return sigma, A, c, sigma_err, A_err, c_err
+    popt, pcov = curve_fit(model, xdata=x_data, ydata=y_data)
+    A, c = popt
+    A_err, c_err = np.sqrt(np.diag(pcov))
+    plt.plot(x_data, model(x_data, A, c), label='Fit', color='green', linestyle='dotted')
+    plt.plot(x_data, model(x_data, 7.7571e-3, -0.0002656), label='pls kill me', color='orange', linestyle='dashed')
+    plt.title('$P(W) = \\sigma\\cdot A\\cdot((T_0 + \\frac{r}{c})^4 - T_0^4)$')
+    return A, c, A_err, c_err
 
 
 def make_plots(U: np.ndarray, I: np.ndarray):
@@ -40,13 +44,14 @@ def make_plots(U: np.ndarray, I: np.ndarray):
 
     r = R / R[0] - 1
     plt.scatter(r, P, label='Messwerte', color='red')
-    stefan_boltzmann(R / R[0] - 1, P)
+    print(stefan_boltzmann(R / R[0] - 1, P))
     plt.xlabel('$r (-)$')
-    plt.ylabel('$P (\\Omega)$')
+    plt.ylabel('$P (W)$')
     plt.legend()
     plt.minorticks_on()
     plt.tick_params(direction='in', which='minor')
     plt.grid(True, which='both')
-    plt.loglog()
+    #plt.loglog()
+    #plt.yscale('log')
     plt.show()
 
