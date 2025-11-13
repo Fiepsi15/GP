@@ -30,8 +30,8 @@ def stefan_boltzmann(r, P):
 
     x_data = r
     y_data = P
-    #popt, pcov = curve_fit(model, xdata=x_data, ydata=y_data, p0=[1e-5, -1])
-    popt, pcov = curve_fit(model, xdata=x_data, ydata=y_data, p0=[1, 1])
+    popt, pcov = curve_fit(model, xdata=x_data, ydata=y_data, p0=[1e-5, -1])
+    #popt, pcov = curve_fit(model, xdata=x_data, ydata=y_data, p0=[1, 1])
     A, c = popt
     A_err, c_err = np.sqrt(np.diag(pcov))
     plt.plot(x_data, model(x_data, A, c), label='Fit', color='red')

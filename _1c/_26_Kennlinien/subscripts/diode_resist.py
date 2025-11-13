@@ -25,11 +25,11 @@ def linreg(U_e, U_a):
     popt, pcov = curve_fit(model, xdata=U_e, ydata=U_a)
     G, b = popt
     G_err, b_err = np.sqrt(np.diag(pcov))
+    (G, G_err), (b, b_err) = sci_round(G, G_err), sci_round(b, b_err)
     return G, G_err, b, b_err
 
 
 def diode_resistor(U_e, U_a):
-
     G, G_err, b, b_err = linreg(U_e[:6], U_a[:6])
-    G, G_err = sci_round(G, G_err)
+    print(f'Glättungsfaktor: G = {G} ± {G_err} V/V')
     plot_UU(U_e, U_a, G, G_err, b)
