@@ -11,6 +11,11 @@ def find_first_nonzero_digit(n):
     n_s = str(n)
     pre_decimals = 0
     for i in range(len(n_s)):
+        if n_s[-i-1] == 'e':
+            pre_decimals = int(n_s[-i+1:])
+            position = pre_decimals
+            return pre_decimals, position
+    for i in range(len(n_s)):
         if n_s[i] == '.':
             pre_decimals = i
             break
