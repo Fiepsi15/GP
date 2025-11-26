@@ -1,6 +1,7 @@
 import numpy as np
 from _1c._24_Wirbelstrom.subscripts.tau_solve import get_tau
 from matplotlib import pyplot as plt
+from scipy.optimize import curve_fit
 from scrips.tools import sci_round
 
 
@@ -16,11 +17,30 @@ def volumen(Volumenwerte: np.ndarray, t_u_30: np.ndarray, shared_tau_30_Cu_1mm_B
     tau[0] = tau_1mm
     tau_err[0] = tau_1mm_err
     for i in range(len(t_g)):
-        tau[i + 1], tau_err[i + 1] = get_tau(t_g_arr=t_g[i], t_u_arr=t_u[i])
+        tau[i + 1], tau_err[i + 1] = get_tau(t_g_arr=t_g[i], t_u_arr=t_u)
 
-    plt.errorbar(Volumen, tau, yerr=tau_err, fmt='o', capsize=5, label='$\\tau$')
+    print('\nTau bei Volumen:')
+    for i in range(len(tau)):
+        tau_r, tau_err_r = sci_round(tau[i], tau_err[i])
+        vol, _ = sci_round(1/Volumen[i], 1/Volumen[i] * 0.1)
+        print(f'Bei 1/V = {vol} ist τ = {tau_r} ± {tau_err_r}')
+
+
+    def model(x, a, b):
+        return a * x + b
+
+    x = 1/Volumen
+    popt, pcov = curve_fit(model, x, tau, sigma=tau_err, absolute_sigma=True)
+    a, b = popt
+    a_err, b_err = np.sqrt(np.diag(pcov))
+
+    plt.plot(x, model(x, *popt), linestyle='--', color='red', label='Fit zur bewertung der linearität')
+    plt.plot(x, model(x, a + a_err, b + b_err), linestyle=':', color='gray', label='Fit Unsicherheit')
+    plt.plot(x, model(x, a - a_err, b - b_err), linestyle=':', color='gray')
+
+    plt.errorbar(x, tau, yerr=tau_err, fmt='o', capsize=5, label='$\\tau$')
     plt.ylabel('Zeitkonstante $\\tau$ in s')
-    plt.xlabel('Volumen V in $m^3$')
+    plt.xlabel('Volumen $\\frac{1}{V}$ in $m^{-3}$')
     plt.minorticks_on()
     plt.tick_params(which='both', direction='in', top=True, right=True)
     plt.legend()

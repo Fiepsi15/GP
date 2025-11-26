@@ -14,7 +14,7 @@ def neigung(Neigungswerte: np.ndarray):
     for i in range(len(t_g)):
         tau[i], tau_err[i] = get_tau(t_g_arr=t_g[i], t_u_arr=t_u[i])
 
-    print('tau bei Neigung:')
+    print('\nTau bei Neigung:')
     for i in range(len(tau)):
         tau_r, tau_err_r = sci_round(tau[i], tau_err[i])
         print(tau_r, '+-', tau_err_r)
