@@ -19,12 +19,15 @@ def neigung(Neigungswerte: np.ndarray):
         tau_r, tau_err_r = sci_round(tau[i], tau_err[i])
         print(tau_r, '+-', tau_err_r)
 
-    tau_avg, _ = sci_round(np.average(tau), np.std(tau))
+    tau_avg, tau_std = sci_round(np.average(tau), np.std(tau))
 
     plt.errorbar(alpha, tau, yerr=tau_err, fmt='o', label='$\\tau$ Werte mit Fehlerbalken', capsize=5)
     plt.plot(alpha, [np.average(tau) for _ in range(len(alpha))],
              linestyle='--', color='red', label=f'Durchschnittswert: {tau_avg}s')
-    plt.title('3.3.1 Unabhängigkeit von der Neigung')
+    plt.plot(alpha, [np.average(tau) + tau_std for _ in range(len(alpha))],
+             linestyle=':', color='grey', label='Standardabweichung')
+    plt.plot(alpha, [np.average(tau) - tau_std for _ in range(len(alpha))],
+             linestyle=':', color='grey')
     plt.xlabel('Neigungswinkel α in °')
     plt.ylabel('Zeitkonstante τ in s')
     plt.minorticks_on()

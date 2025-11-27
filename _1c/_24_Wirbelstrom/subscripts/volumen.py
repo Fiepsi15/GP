@@ -38,7 +38,7 @@ def volumen(Volumenwerte: np.ndarray, t_u_30: np.ndarray, shared_tau_30_Cu_1mm_B
     plt.plot(x, model(x, a + a_err, b + b_err), linestyle=':', color='gray', label='Fit Unsicherheit')
     plt.plot(x, model(x, a - a_err, b - b_err), linestyle=':', color='gray')
 
-    plt.errorbar(x, tau, yerr=tau_err, fmt='o', capsize=5, label='$\\tau$')
+    plt.errorbar(x, tau, yerr=tau_err, fmt='o', capsize=5, label='$\\tau$ Werte mit Fehlerbalken')
     plt.ylabel('Zeitkonstante $\\tau$ in s')
     plt.xlabel('Volumen $\\frac{1}{V}$ in $m^{-3}$')
     plt.minorticks_on()

@@ -6,7 +6,7 @@ from scrips.tools import sci_round
 
 def leitfaehigkeit(Leitfaehigkeitswerte: np.ndarray, t_u_30: np.ndarray, shared_tau_30_Cu_1mm_BBB: tuple[float, float]):
     tau_1mm, tau_1mm_err = shared_tau_30_Cu_1mm_BBB
-    Leitfaehigkeit = np.array([5.8e7, 3.7e7, 3e7])#, 8.6e6])
+    Leitfaehigkeit = np.array([6e7, 4e7, 3.2e7])#, 8.6e6])
 
     t_g = np.array([Leitfaehigkeitswerte[0], Leitfaehigkeitswerte[1]])#, Leitfaehigkeitswerte[2]])
     t_u = t_u_30
@@ -36,7 +36,7 @@ def leitfaehigkeit(Leitfaehigkeitswerte: np.ndarray, t_u_30: np.ndarray, shared_
     plt.plot(x, model(x, a + a_err, b + b_err), linestyle=':', color='gray', label='Fit Unsicherheit')
     plt.plot(x, model(x, a - a_err, b - b_err), linestyle=':', color='gray')
 
-    plt.errorbar(x, tau, yerr=tau_err, fmt='o', capsize=5, label='$\\tau$')
+    plt.errorbar(x, tau, yerr=tau_err, fmt='o', capsize=5, label='$\\tau$ Werte mit Fehlerbalken')
     plt.ylabel('Zeitkonstante $\\tau$ in s')
     plt.xlabel('Leitfähigkeit $\\frac{1}{\\sigma}$ in $\\frac{m}{S}$')
     plt.minorticks_on()
