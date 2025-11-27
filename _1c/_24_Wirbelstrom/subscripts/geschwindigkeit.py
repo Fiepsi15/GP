@@ -32,3 +32,5 @@ def geschwindigkeit(t: np.ndarray, a: np.ndarray):
     plt.legend()
     plt.grid(True)
     plt.show()
+
+    return f, f_err
