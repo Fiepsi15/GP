@@ -1,5 +1,6 @@
 import numpy as np
 from scrips.tools import sci_round
+from scrips.array_to_tex import array_to_tex  # Import hinzugefügt
 from _1c._24_Wirbelstrom.subscripts.neigung import neigung as ng
 from _1c._24_Wirbelstrom.subscripts.volumen import volumen as vol
 from _1c._24_Wirbelstrom.subscripts.feldstaerke import feldstaerke as fs
@@ -9,6 +10,13 @@ from _1c._24_Wirbelstrom.subscripts.beta import beta_bestimmung
 
 Neigungswerte = np.loadtxt('_1c/_24_Wirbelstrom/daten/Neigung.csv', delimiter=',', skiprows=1).transpose()
 Ne48, Ne40, Ne30, Ne20, Ne10 = Neigungswerte[0:2], Neigungswerte[2:4], Neigungswerte[4:6], Neigungswerte[6:8], Neigungswerte[8:10]
+
+# Messwerte tabellieren
+quantities_and_units = [['$t_g$', '$t_u$', '$t_g$', '$t_u$', '$t_g$', '$t_u$', '$t_g$', '$t_u$', '$t_g$', '$t_u$'], ['s', 's', 's', 's', 's', 's', 's', 's', 's', 's']]
+error = np.full_like(Neigungswerte, 0.001)  # Beispiel: Fehler 0.01 für alle Werte
+caption = 'Messwerte der Neigungsmessung'
+label = 'tab:neigungsmessung'
+#array_to_tex(Neigungswerte, error, quantities_and_units, caption, label)
 
 t_u_30 = Neigungswerte[5]
 
@@ -33,6 +41,8 @@ a = Geschwindigkeitswerte[0]
 t = Geschwindigkeitswerte[1:].transpose()
 
 k, k_err = gs(t, a)
+k_r, k_err_r = sci_round(k, k_err)
+print(f'k: {k_r} ± {k_err_r} m/s²')
 
 # Beispielwerte für die Parameter (bitte durch echte Werte ersetzen)
 m = 25.91e-3 + 30.28e-3       # Masse in kg
@@ -46,6 +56,8 @@ r_err = 0.05e-3 / 2           # Unsicherheit Radius
 d = 1e-3                      # Dicke in m
 d_err = 0.05e-3               # Unsicherheit Dicke
 g = 9.81                      # Erdbeschleunigung in m/s^2
+m_r, m_err_r = sci_round(m, m_err)
+print(f'Masse: {m_r} ± {m_err_r} kg')
 
 beta, beta_err = beta_bestimmung(m, m_err, g, sigma, sigma_err, B0, B0_err, r, r_err, d, d_err, k, k_err)
 beta_r, beta_err_r = sci_round(beta, beta_err)

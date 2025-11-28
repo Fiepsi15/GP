@@ -8,6 +8,7 @@ def neigung(Neigungswerte: np.ndarray):
     alpha = np.arctan(np.array([10, 20, 30.4, 40.2, 48]) / 50) * 360 / (2 * np.pi)
     t_g = np.array([Neigungswerte[0], Neigungswerte[2], Neigungswerte[4], Neigungswerte[6], Neigungswerte[8]])
     t_u = np.array([Neigungswerte[1], Neigungswerte[3], Neigungswerte[5], Neigungswerte[7], Neigungswerte[9]])
+    print(alpha)
 
     tau = np.zeros(len(t_g))
     tau_err = np.zeros(len(t_g))
