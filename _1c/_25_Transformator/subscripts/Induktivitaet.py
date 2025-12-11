@@ -4,14 +4,26 @@ from matplotlib import pyplot as plt
 from scrips.tools import sci_round
 
 
-def get_gegen_inductance(omega, U_2, I_1):
+def get_coupping_coefficient(L_12, L_1, L_2):
+    kappa = L_12 / np.sqrt(L_1 * L_2)
+    return kappa
 
+
+def get_gegen_inductance(omega, U_2, I_1):
     L_12 = U_2 / (1j * omega * I_1)
     return L_12
 
 
 def get_self_inductance_2(L_12, I_1, I_2):
-    pass
+    """
+    Calculates the self-inductance L_2 from the mutual inductance L_12 and the currents I_1 and I_2.
+    :param L_12:
+    :param I_1:
+    :param I_2:
+    :return:
+    """
+    L_2 = L_12 * (I_1 / I_2)
+    return L_2
 
 
 def get_self_inductance(omega, omega_err, U_1, U_1_err, I_1, I_1_err):
