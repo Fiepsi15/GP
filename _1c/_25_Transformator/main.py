@@ -61,31 +61,31 @@ kappa_320_r, kappa_320_sig_r = sci_round(kappa_320_avg, kappa_320_sig)
 
 print(f'{kappa_130_r} +- {kappa_130_sig_r}', f'{kappa_320_r} +- {kappa_320_sig_r}', sep='\n')
 
-#plt.plot(N2, np.real(kappa_130), 'o', label='Kopplungskoeffizient bei 130 Hz')
-#plt.plot(N2, np.real(kappa_320), 'o', label='Kopplungskoeffizient bei 320 Hz')
-#plt.legend()
-#plt.show()
+plt.plot(N2, np.real(kappa_130), 'o', label='Kopplungskoeffizient bei 130 Hz')
+plt.plot(N2, np.real(kappa_320), 'o', label='Kopplungskoeffizient bei 320 Hz')
+plt.legend()
+plt.show()
 
 I_130_300 = np.loadtxt('_1c/_25_Transformator/daten/I_last_300Ohm_130Hz.csv', delimiter=',', skiprows=1).transpose()
 N ,I1, I2, U1 = I_130_300
 
 last.plot_U_N_withreg(300, 1, 50, N, U1, I2 * 1e-3, 0.1 * 1e-3)
-last.plot_U_N_withreg_corrected(300, 1, 50, N, U1, I2 * 1e-3, 0.1 * 1e-3)
+last.plot_U_N_withreg_corrected(300, 1, 50, N, U1, I2 * 1e-3, 0.1 * 1e-3, L1_130, L2_130, 130 / (2 * np.pi))
 
 I_320_300 = np.loadtxt('_1c/_25_Transformator/daten/I_last_300Ohm_320Hz.csv', delimiter=',', skiprows=1).transpose()
 N ,I1, I2, U1 = I_320_300
 
 last.plot_U_N_withreg(300, 1, 50, N, U1, I2 * 1e-3, 0.1 * 1e-3)
-last.plot_U_N_withreg_corrected(300, 1, 50, N, U1, I2 * 1e-3, 0.1 * 1e-3)
+last.plot_U_N_withreg_corrected(300, 1, 50, N, U1, I2 * 1e-3, 0.1 * 1e-3, L1_320, L2_320, 320 / (2 * np.pi))
 
 I_130_2000 = np.loadtxt('_1c/_25_Transformator/daten/I_last_2kOhm_130Hz.csv', delimiter=',', skiprows=1).transpose()
 N ,I1, I2, U1 = I_130_2000
 
 last.plot_U_N_withreg(2000, 1, 50, N, U1, I2 * 1e-3, 0.1 * 1e-3)
-last.plot_U_N_withreg_corrected(2000, 1, 50, N, U1, I2 * 1e-3, 0.1 * 1e-3)
+last.plot_U_N_withreg_corrected(2000, 1, 50, N, U1, I2 * 1e-3, 0.1 * 1e-3, L1_130, L2_130, 130 / (2 * np.pi))
 
 I_320_2000 = np.loadtxt('_1c/_25_Transformator/daten/I_last_2kOhm_320Hz.csv', delimiter=',', skiprows=1).transpose()
 N ,I1, I2, U1 = I_320_2000
 
 last.plot_U_N_withreg(2000, 1, 50, N, U1, I2 * 1e-3, 0.1 * 1e-3)
-last.plot_U_N_withreg_corrected(2000, 1, 50, N, U1, I2 * 1e-3, 0.1 * 1e-3)
+last.plot_U_N_withreg_corrected(2000, 1, 50, N, U1, I2 * 1e-3, 0.1 * 1e-3, L1_320, L2_320, 320 / (2 * np.pi))

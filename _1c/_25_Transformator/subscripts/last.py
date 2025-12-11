@@ -30,8 +30,13 @@ def plot_U_N_withreg(R, delta_R, N1, N2, U1, I2, delta_I2):
     return
 
 
-def plot_U_N_withreg_corrected(R, delta_R, N1, N2, U1, I2, delta_I2):
-    R_N2 = 5.5
+def plot_U_N_withreg_corrected(R, delta_R, N1, N2, U1, I2, delta_I2, L1, L2, omega):
+    R_N = 5.5
     N_ges = 500
-    R_corr = R + R_N2 * (N2 / N_ges)
+    R_i2 = R_N * (N2 / N_ges)
+    R_corr = R + R_i2
+
+    alpha = np.abs(1 + R_N * (N1 / N_ges) * (1j * omega * L2 + R) / (1j * omega * L1 * R))
+    U1 = U1 / alpha
+
     plot_U_N_withreg(R_corr, delta_R, N1, N2, U1, I2, delta_I2)
