@@ -46,13 +46,16 @@ def get_self_inductance(omega, omega_err, U_1, U_1_err, I_1, I_1_err):
     dL = np.sqrt(np.diag(pcov))[0] / (omega * 1j)
 
     alpha, alpha_err = sci_round(popt[0], np.sqrt(np.diag(pcov))[0])
-    plt.errorbar(x, y, xerr=I_1_err, yerr=U_1_err, fmt='o', label='data', capsize=5, color='blue')
-    plt.plot(x, model(x, *popt), label=f'fit: $\\alpha=${alpha} $\\pm$ {alpha_err}', color='red')
-    plt.plot(x, model(x, alpha + alpha_err), label=f'$\\pm\\delta\\alpha$', color='red', linestyle='--')
+    plt.errorbar(x, y, xerr=I_1_err, yerr=U_1_err, fmt='o', label='Messdaten', capsize=5, color='blue')
+    plt.plot(x, model(x, *popt), label=f'Lineare Regression: $\\alpha=${alpha}', color='red')
+    plt.plot(x, model(x, alpha + alpha_err), label=f'$\\delta\\alpha = \\pm {alpha_err}$', color='red', linestyle='--')
     plt.plot(x, model(x, alpha - alpha_err), linestyle='--', color='red')
     plt.xlabel('$I_1$ (A)')
     plt.ylabel('$U_1$ (V)')
+    plt.minorticks_on()
+    plt.tick_params(which='both', direction='in', top=True, right=True)
     plt.legend()
+    plt.grid(True)
     plt.show()
 
     return L, dL

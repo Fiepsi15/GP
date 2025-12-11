@@ -16,10 +16,12 @@ def plot_remanence(T, U1, U2):
 
     plt.errorbar(T, U, label='Messdaten', fmt='o', color='blue', capsize=5)
     plt.plot(T , f(T, *popt), label='Fit 4. Grades zur Bestimmung der Nullstelle', color='red')
-    plt.legend()
     plt.ylabel('Remanenzspannung $U_r (\\mathrm{V})$')
     plt.xlabel('$T (\\mathrm{°C})$')
-    plt.grid()
+    plt.minorticks_on()
+    plt.tick_params(which='both', direction='in', top=True, right=True)
+    plt.legend()
+    plt.grid(True)
     plt.show()
 
     return

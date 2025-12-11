@@ -70,30 +70,30 @@ plt.show()
 I_130_300 = np.loadtxt('_1c/_25_Transformator/daten/I_last_300Ohm_130Hz.csv', delimiter=',', skiprows=1).transpose()
 N ,I1, I2, U1 = I_130_300
 
-last.plot_U_N_withreg(300, 1, 50, N, U1, I2 * 1e-3, 0.1 * 1e-3, L_12_130, L1_130)
+#last.plot_U_N_withreg(300, 1, 50, N, U1, I2 * 1e-3, 0.1 * 1e-3, L_12_130, L1_130)
 last.plot_U_N_withreg_corrected(300, 1, 50, N, U1, I2 * 1e-3, 0.1 * 1e-3, L1_130, L2_130, L_12_130, 130 / (2 * np.pi))
-last.plot_power(300, N, I2 * 1e-3)
+last.plot_power(300, 1, N, I2 * 1e-3, 0.1 * 1e-3)
 
 I_320_300 = np.loadtxt('_1c/_25_Transformator/daten/I_last_300Ohm_320Hz.csv', delimiter=',', skiprows=1).transpose()
 N ,I1, I2, U1 = I_320_300
 
-last.plot_U_N_withreg(300, 1, 50, N, U1, I2 * 1e-3, 0.1 * 1e-3, L_12_320, L1_320)
+#last.plot_U_N_withreg(300, 1, 50, N, U1, I2 * 1e-3, 0.1 * 1e-3, L_12_320, L1_320)
 last.plot_U_N_withreg_corrected(300, 1, 50, N, U1, I2 * 1e-3, 0.1 * 1e-3, L1_320, L2_320, L_12_320, 320 / (2 * np.pi))
-last.plot_power(300, N, I2 * 1e-3)
+last.plot_power(300, 1, N, I2 * 1e-3, 0.1 * 1e-3)
 
 I_130_2000 = np.loadtxt('_1c/_25_Transformator/daten/I_last_2kOhm_130Hz.csv', delimiter=',', skiprows=1).transpose()
 N ,I1, I2, U1 = I_130_2000
 
-last.plot_U_N_withreg(2000, 1, 50, N, U1, I2 * 1e-3, 0.1 * 1e-3, L_12_130, L1_130)
+#last.plot_U_N_withreg(2000, 1, 50, N, U1, I2 * 1e-3, 0.1 * 1e-3, L_12_130, L1_130)
 last.plot_U_N_withreg_corrected(2000, 1, 50, N, U1, I2 * 1e-3, 0.1 * 1e-3, L1_130, L2_130, L_12_130, 130 / (2 * np.pi))
-last.plot_power(2000, N, I2 * 1e-3)
+last.plot_power(2000, 10, N, I2 * 1e-3, 0.1 * 1e-3)
 
 I_320_2000 = np.loadtxt('_1c/_25_Transformator/daten/I_last_2kOhm_320Hz.csv', delimiter=',', skiprows=1).transpose()
 N ,I1, I2, U1 = I_320_2000
 
-last.plot_U_N_withreg(2000, 1, 50, N, U1, I2 * 1e-3, 0.1 * 1e-3, L_12_320, L1_320)
+#last.plot_U_N_withreg(2000, 1, 50, N, U1, I2 * 1e-3, 0.1 * 1e-3, L_12_320, L1_320)
 last.plot_U_N_withreg_corrected(2000, 1, 50, N, U1, I2 * 1e-3, 0.1 * 1e-3, L1_320, L2_320, L_12_320, 320 / (2 * np.pi))
-last.plot_power(2000, N, I2 * 1e-3)
+last.plot_power(2000, 10, N, I2 * 1e-3, 0.1 * 1e-3)
 
 Rem = np.loadtxt('_1c/_25_Transformator/daten/Remanenz.csv', delimiter=',', skiprows=1).transpose()
 T, U1, U2 = Rem
