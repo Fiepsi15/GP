@@ -4,6 +4,7 @@ from matplotlib import pyplot as plt
 import _1c._25_Transformator.subscripts.Induktivitaet as Ind
 import _1c._25_Transformator.subscripts.plots as pl
 import _1c._25_Transformator.subscripts.last as last
+import _1c._25_Transformator.subscripts.hyst as hyst
 
 # Induktivität 1
 
@@ -93,3 +94,8 @@ N ,I1, I2, U1 = I_320_2000
 last.plot_U_N_withreg(2000, 1, 50, N, U1, I2 * 1e-3, 0.1 * 1e-3, L_12_320, L1_320)
 last.plot_U_N_withreg_corrected(2000, 1, 50, N, U1, I2 * 1e-3, 0.1 * 1e-3, L1_320, L2_320, L_12_320, 320 / (2 * np.pi))
 last.plot_power(2000, N, I2 * 1e-3)
+
+Rem = np.loadtxt('_1c/_25_Transformator/daten/Remanenz.csv', delimiter=',', skiprows=1).transpose()
+T, U1, U2 = Rem
+
+hyst.plot_remanence(T, U1, U2)
