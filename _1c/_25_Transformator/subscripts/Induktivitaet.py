@@ -9,12 +9,30 @@ def get_coupping_coefficient(L_12, L_1, L_2):
     return kappa
 
 
-def get_gegen_inductance(omega, U_2, I_1):
+def get_delta_gegen_inductance(omega, U_2, I_1, omega_err, U_2_err, I_1_err):
+    """
+    Calculates the uncertainty of the mutual inductance L_12.
+    :param omega:
+    :param U_2:
+    :param I_1:
+    :param omega_err:
+    :param U_2_err:
+    :param I_1_err:
+    :return:
+    """
+    dL_12 = np.sqrt((U_2_err / (1j * omega * I_1)) ** 2 +
+                    (U_2 * omega_err / (1j * omega ** 2 * I_1)) ** 2 +
+                    (U_2 * I_1_err / (1j * omega * I_1 ** 2)) ** 2)
+    return dL_12
+
+
+def get_gegen_inductance(omega, U_2, I_1, omega_err=0, U_2_err=0, I_1_err=0):
     L_12 = U_2 / (1j * omega * I_1)
-    return L_12
+    L_12_err = get_delta_gegen_inductance(omega, U_2, I_1, omega_err, U_2_err, I_1_err)
+    return L_12, L_12_err
 
 
-def get_self_inductance_2(L_12, I_1, I_2):
+def get_self_inductance_2(L_12, I_1, I_2, delta_L_12=0, delta_I_1=0, delta_I_2=0):
     """
     Calculates the self-inductance L_2 from the mutual inductance L_12 and the currents I_1 and I_2.
     :param L_12:
@@ -23,7 +41,12 @@ def get_self_inductance_2(L_12, I_1, I_2):
     :return:
     """
     L_2 = L_12 * (I_1 / I_2)
-    return L_2
+
+    delta_L_2 = np.sqrt((delta_L_12 * (I_1 / I_2)) ** 2 +
+                        (L_12 * (delta_I_1 / I_2)) ** 2 +
+                        (L_12 * I_1 * delta_I_2 / I_2 ** 2) ** 2)
+
+    return L_2, delta_L_2
 
 
 def get_self_inductance(omega, omega_err, U_1, U_1_err, I_1, I_1_err):

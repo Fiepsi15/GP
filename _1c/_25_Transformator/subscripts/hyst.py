@@ -9,12 +9,13 @@ def plot_remanence(T, U1, U2):
     def f(x, a, b, c, d, e):
         return e * x ** 4 * d * x ** 3 * a * x ** 2 + b * x + c
 
+    U_err = np.array([100, 100, 100, 100, 100, 40, 40, 40, 40, 40, 20, 20, 20, 20, 20, 20])
     U = (U1 + U2) / 2
-    popt, pcov = curve_fit(f, T[:-1], U[:-1])
+    popt, pcov = curve_fit(f, T[:-1], U[:-1], sigma=U_err[:-1], absolute_sigma=True)
     x0 = fsolve(f, 0, args=tuple(popt))
     print(x0)
 
-    plt.errorbar(T, U, label='Messdaten', fmt='o', color='blue', capsize=5)
+    plt.errorbar(T, U, yerr=U_err, label='Messdaten', fmt='o', color='blue', capsize=5)
     plt.plot(T , f(T, *popt), label='Fit 4. Grades zur Bestimmung der Nullstelle', color='red')
     plt.ylabel('Remanenzspannung $U_r (\\mathrm{V})$')
     plt.xlabel('$T (\\mathrm{°C})$')

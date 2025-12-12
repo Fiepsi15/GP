@@ -1,5 +1,6 @@
 import numpy as np
 from scrips.tools import sci_round
+from scrips.array_to_tex import array_to_tex as a2t
 from matplotlib import pyplot as plt
 import _1c._25_Transformator.subscripts.Induktivitaet as Ind
 import _1c._25_Transformator.subscripts.plots as pl
@@ -13,10 +14,18 @@ N2, I1, U1, U2 = U_130
 
 L1_130, L1_130_err = Ind.get_self_inductance(130 / (2 * np.pi), 1 / (2 * np.pi), U_130[2], 0.01, U_130[1] * 1e-3, 0.1 * 1e-3)
 L1_130_r, L1_130_err_r = sci_round(-np.imag(L1_130), -np.imag(L1_130_err))
-#print(f'L_1_130 = {L1_130_r * -1j} ± {L1_130_err_r * 1j} H')
 
-L_12_130 = np.array([Ind.get_gegen_inductance(130 / (2 * np.pi), U_130[3][i], U_130[1][i] * 1e-3) for i in range(len(U_130[1]))])
-#print(np.array([U_130[0], L_12_130]).transpose())
+Ls = []
+Lserr = []
+for i in range(len(U_130[1])):
+    L_12_130, L_12_130_err = Ind.get_gegen_inductance(130 / (2 * np.pi), U_130[3][i], U_130[1][i] * 1e-3, 1, 0.01, 0.1 * 1e-3)
+    Ls.append(L_12_130)
+    Lserr.append(L_12_130_err)
+L_12_130 = np.array(Ls)
+L_12_130_err = np.array(Lserr)
+a = np.array([U_130[0], np.abs(L_12_130)])
+err = np.array([[0 for _ in range(len(N2))], np.abs(L_12_130_err)])
+#a2t(a, err, [['$N$', '$L_12$'], [' ', 'H']], 'Tabelle $L_12$ bei 130 Hz', 'L12_130')
 
 pl.plot_leerlauf(U1, U2, 50, N2, 0.01, 0.01)
 
@@ -25,10 +34,16 @@ N2, I1, U1, U2 = U_320
 
 L1_320, L1_320_err = Ind.get_self_inductance(320 / (2 * np.pi), 1 / (2 * np.pi), U_320[2], 0.01, U_320[1] * 1e-3, 0.1 * 1e-3)
 L1_320_r, L1_320_err_r = sci_round(-np.imag(L1_320), -np.imag(L1_320_err))
-#print(f'L_1_320 = {L1_320_r * -1j} ± {L1_320_err_r * 1j} H')
+print(f'L_1_130 = {L1_130_r * -1j} ± {L1_130_err_r * 1j} H\n')
+print(f'L_1_320 = {L1_320_r * -1j} ± {L1_320_err_r * 1j} H\n')
 
-L_12_320 = np.array([Ind.get_gegen_inductance(320 / (2 * np.pi), U_320[3][i], U_320[1][i] * 1e-3) for i in range(len(U_320[1]))])
+
+L_12_320, L_12_320_err = Ind.get_gegen_inductance(320 / (2 * np.pi), np.array([U_320[3][i] for i in range(len(U_320[1]))]), np.array([U_320[1][i] * 1e-3 for i in range(len(U_320[1]))]), 1, 0.01, 0.1 * 1e-3)
 #print(np.array([U_320[0], L_12_320]).transpose())
+a = np.array([U_320[0], np.abs(L_12_320)])
+err = np.array([[0 for _ in range(len(N2))], np.abs(L_12_320_err)])
+#a2t(a, err, [['$N_2$', '$L_{12}$'], [' ', 'H']], 'Tabelle $L_{12}$ bei 320 Hz', 'L12_320')
+
 
 pl.plot_leerlauf(U1, U2, 50, N2, 0.01, 0.01)
 
@@ -41,13 +56,19 @@ N2, I1, I2, U1 = I_130
 
 pl.plot_short(I1, I2, 50, N2, 0.01, 0.01)
 
-L2_130 = Ind.get_self_inductance_2(L_12_130, I1, I2)
+L2_130, L2_130_err = Ind.get_self_inductance_2(L_12_130, I1, I2, L_12_130_err, 0.1 * 1e-3, 0.1 * 1e-3)
+a = np.array([N2, np.abs(L2_130)])
+err = np.array([[0 for _ in range(len(N2))], np.abs(L2_130_err)])
+#a2t(a, err, [['$N_2$', '$L_{2}$'], [' ', 'H']], 'Tabelle $L_{2}$ bei 130 Hz', 'L2_130')
 #print(L2_130)
 
 I_320 = np.loadtxt('_1c/_25_Transformator/daten/I_320Hz_ohnelast.csv', delimiter=',', skiprows=1).transpose()
 N2, I1, I2, U1 = I_320
 
-L2_320 = Ind.get_self_inductance_2(L_12_320, I1, I2)
+L2_320, L2_320_err = Ind.get_self_inductance_2(L_12_320, I1, I2, L_12_320_err, 0.1 * 1e-3, 0.1 * 1e-3)
+a = np.array([N2, np.abs(L2_320)])
+err = np.array([[0 for _ in range(len(N2))], np.abs(L2_320_err)])
+#a2t(a, err, [['$N_2$', '$L_{2}$'], [' ', 'H']], 'Tabelle $L_{2}$ bei 320 Hz', 'L2_320')
 #print(L2_320)
 
 pl.plot_short(I1, I2, 50, N2, 0.01, 0.01)
