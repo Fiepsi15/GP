@@ -47,7 +47,7 @@ def plot_U_N_withreg(R, delta_R, N1, N2, U1, I2, delta_I2, L12, L1):
     plt.plot(x, model(x, alpha + alpha_err), label=f'$\\delta\\alpha = \\pm{alpha_err}$', color='red', linestyle='--')
     plt.plot(x, model(x, alpha - alpha_err), linestyle='--', color='red')
     plt.xlabel('$\\frac{N_2}{N_1}$')
-    plt.ylabel('$\\frac{U_1}{I_2 R}$')
+    plt.ylabel('$\\frac{U_2}{U_1}$')
     plt.minorticks_on()
     plt.tick_params(which='both', direction='in', top=True, right=True)
     plt.legend()
