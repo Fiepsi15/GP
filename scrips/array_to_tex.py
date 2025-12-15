@@ -2,7 +2,7 @@ import numpy as np
 from scrips.tools import sci_round
 
 
-def array_to_tex(array, error, quantities_and_units, caption='Table 1', label='Tabelle 1'):
+def array_to_tex(array, error, quantities_and_units, caption='Table 1', label='Tabelle 1', override_row_len=-1):
     """
     Converts a 2D numpy array into a LaTeX table format.
 
@@ -18,6 +18,8 @@ def array_to_tex(array, error, quantities_and_units, caption='Table 1', label='T
 
     # Processing
     def find_row_len():
+        if override_row_len != -1:
+            return override_row_len
         lengths = []
         for i in range(3, 6):
             if list_len % i == 0:

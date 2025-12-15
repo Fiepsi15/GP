@@ -3,6 +3,7 @@ from _1c._24_Wirbelstrom.subscripts.tau_solve import get_tau
 from matplotlib import pyplot as plt
 from scipy.optimize import curve_fit
 from scrips.tools import sci_round
+from scrips.array_to_tex import array_to_tex as a2t
 
 def get_sigma(m, tau, beta, B_0, V):
     return m / (tau * beta * B_0 ** 2 * V)
@@ -28,18 +29,27 @@ def leitfaehigkeit(Leitfaehigkeitswerte: np.ndarray, t_u_30: np.ndarray, shared_
     beta = np.pi / 8
 
     tau_1mm, tau_1mm_err = shared_tau_30_Cu_1mm_BBB
-    Leitfaehigkeit = np.array([6e7, 4e7, 3.2e7])#, 8.6e6])
+    Leitfaehigkeit = np.array([6e7, 4e7, 2.5e7])#, 8.6e6])
+    Leitfaehigkeit_err = np.array([1e7, 1e7, 1e7])
     #Leitfaehigkeit = np.array([5.4e7, 2e7, 1.3e7])#, 8.6e6])
 
     t_g = np.array([Leitfaehigkeitswerte[0], Leitfaehigkeitswerte[1]])#, Leitfaehigkeitswerte[2]])
     t_u = t_u_30
 
+    t_u_m = np.zeros(len(t_g) + 1)
+    t_u_err = np.zeros(len(t_g) + 1)
+    t_g_m = np.zeros(len(t_g) + 1)
+    t_g_err = np.zeros(len(t_g) + 1)
     tau = np.zeros(len(t_g) + 1)
     tau_err = np.zeros(len(t_g) + 1)
+    t_u_m[0] = 0.478
+    t_u_err[0] = 0.016
+    t_g_m[0] = 2.739
+    t_g_err[0] =0.016
     tau[0] = tau_1mm
     tau_err[0] = tau_1mm_err
     for i in range(len(t_g)):
-        tau[i + 1], tau_err[i + 1] = get_tau(t_g_arr=t_g[i], t_u_arr=t_u)
+        t_u_m[i + 1], t_u_err[i + 1], t_g_m[i + 1], t_g_err[i + 1], tau[i + 1], tau_err[i + 1] = get_tau(t_g_arr=t_g[i], t_u_arr=t_u)
 
     print('\nTau bei Leitfähigkeit:')
     for i in range(len(tau)):
@@ -50,6 +60,12 @@ def leitfaehigkeit(Leitfaehigkeitswerte: np.ndarray, t_u_30: np.ndarray, shared_
         sigma_calc_err = sigma_err(m, tau[i], beta, B0, V, m_err, tau_err[i], B0_err, V_err)
         sigma_calc, sigma_calc_err = sci_round(sigma_calc, sigma_calc_err)
         print(f'Berechnete Leitfähigkeit: {sigma_calc} ± {sigma_calc_err} S/m')
+
+
+    t_t_tau = np.array([Leitfaehigkeit, t_u_m, t_g_m, tau])
+    t_t_tau_err = np.array([Leitfaehigkeit_err, t_u_err, t_g_err, tau_err])
+    a2t(t_t_tau, t_t_tau_err, [['$\\sigma$', '$t_u$', '$t_g$', '$\\tau$'], ['S/m', 's', 's', 's']],
+        'Mittelwerte der ungebremsten und gebremsten Ablaufzeiten und $\\tau$', 'Feldstaerke_tau')
 
     def model(x, a, b):
         return a * x + b

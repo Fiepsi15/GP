@@ -3,21 +3,38 @@ from _1c._24_Wirbelstrom.subscripts.tau_solve import get_tau
 from matplotlib import pyplot as plt
 from scipy.optimize import curve_fit
 from scrips.tools import sci_round
+from scrips.array_to_tex import array_to_tex as a2t
 
 
 def volumen(Volumenwerte: np.ndarray, t_u_30: np.ndarray, shared_tau_30_Cu_1mm_BBB: tuple[float, float]):
     tau_1mm, tau_1mm_err = shared_tau_30_Cu_1mm_BBB
-    Volumen = np.array([1e-3, 2e-3, 3e-3]) * np.pi * (20.1e-3 / 2) ** 2
+    dicke = np.array([1e-3, 2e-3, 3e-3])
+    dicke_err = np.array([0.05e-3 for _ in range(len(dicke))])
+    Volumen = dicke * np.pi * (20.1e-3 / 2) ** 2
+
 
     t_g = np.array([Volumenwerte[0], Volumenwerte[1]])
     t_u = t_u_30
 
+    t_u_m = np.zeros(len(t_g) + 1)
+    t_u_err = np.zeros(len(t_g) + 1)
+    t_g_m = np.zeros(len(t_g) + 1)
+    t_g_err = np.zeros(len(t_g) + 1)
     tau = np.zeros(len(t_g) + 1)
     tau_err = np.zeros(len(t_g) + 1)
+    t_u_m[0] = 0.478
+    t_u_err[0] = 0.016
+    t_g_m[0] = 2.739
+    t_g_err[0] =0.016
     tau[0] = tau_1mm
     tau_err[0] = tau_1mm_err
     for i in range(len(t_g)):
-        tau[i + 1], tau_err[i + 1] = get_tau(t_g_arr=t_g[i], t_u_arr=t_u)
+        t_u_m[i + 1], t_u_err[i + 1], t_g_m[i + 1], t_g_err[i + 1], tau[i + 1], tau_err[i + 1] = get_tau(t_g_arr=t_g[i], t_u_arr=t_u)
+
+    t_t_tau = np.array([dicke, t_u_m, t_g_m, tau])
+    t_t_tau_err = np.array([dicke_err, t_u_err, t_g_err, tau_err])
+    a2t(t_t_tau, t_t_tau_err, [['$d$', '$t_u$', '$t_g$', '$\\tau$'], ['m', 's', 's', 's']],
+        'Mittelwerte der ungebremsten und gebremsten Ablaufzeiten und $\\tau$', 'volumen_tau', override_row_len=3)
 
     print('\nTau bei Volumen:')
     for i in range(len(tau)):

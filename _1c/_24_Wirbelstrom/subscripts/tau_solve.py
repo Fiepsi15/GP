@@ -19,4 +19,4 @@ def get_tau(t_u_arr, t_g_arr):
     tau_err = np.max([np.abs(tau_pp - tau), np.abs(tau_pm - tau),
                          np.abs(tau_mp - tau), np.abs(tau_mm - tau)])
 
-    return tau, tau_err
+    return t_u, t_u_err, t_g, t_g_err, tau, tau_err
