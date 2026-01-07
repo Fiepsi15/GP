@@ -4,19 +4,23 @@ import scipy.optimize as opt
 from scrips.tools import sci_round
 
 
-def gesamtbereich(omega, U_r, U):
+def gesamtbereich(omega, U_r, U, R, C, L, delta_R, delta_C, delta_L):
     R_v = 82
     I = U_r / R_v
     omega_0_r = 3070
     delta_omega_0_r = 200
     Z = U / I
 
+    Z_theo = np.sqrt(R ** 2 + (omega * L - 1 / (omega * C)) ** 2)
+
     plt.errorbar(omega, Z, label='Messwerte', fmt='o', color='blue')
-    plt.plot([omega_0_r, omega_0_r], [0, 0.1], label=f'$\\omega_0 = {omega_0_r} \\pm {delta_omega_0_r}$', color='green')
-    plt.plot([omega_0_r - delta_omega_0_r, omega_0_r - delta_omega_0_r], [0, 0.1], color='green', linestyle='--')
-    plt.plot([omega_0_r + delta_omega_0_r, omega_0_r + delta_omega_0_r], [0, 0.1], color='green', linestyle='--')
+    plt.plot(omega, Z_theo, label='Theoriekurve', color='red')
+    plt.plot([omega_0_r, omega_0_r], [0, 500], label=f'$\\omega_0 = {omega_0_r} \\pm {delta_omega_0_r}$', color='green')
+    plt.plot([omega_0_r - delta_omega_0_r, omega_0_r - delta_omega_0_r], [0, 500], color='green', linestyle='--')
+    plt.plot([omega_0_r + delta_omega_0_r, omega_0_r + delta_omega_0_r], [0, 500], color='green', linestyle='--')
     plt.xlabel('Frequenz $\\omega (\\mathrm{Hz})$')
     plt.ylabel('$Z \\;(\\Omega)$')
+    plt.xscale('log')
     plt.legend()
     plt.show()
 
@@ -52,6 +56,61 @@ def widerstand(omega, U_r, U, omega_0, delta_omega_0):
     plt.grid()
     plt.show()
     return Z_0, delta_Z_0
+
+def capacity(omega, U_r, U):
+    R_v = 82
+    I = U_r / R_v
+    Z = U / I
+    def model(x, a):
+        return a * x
+
+    x = omega
+    y = 1 / Z
+    popt, pcov = opt.curve_fit(model, x, y)
+    C = popt[0]
+    delta_C = np.sqrt(pcov[0, 0])
+    C_r, delta_C_r = sci_round(C, delta_C)
+
+    print(C_r, delta_C_r)
+
+    plt.errorbar(omega, Z, label='Messwerte', fmt='o', color='blue')
+    plt.plot(x, 1 / model(x, *popt), color='red', label='hyperbolische näherung')
+    plt.xlabel('Frequenz $\\omega (\\mathrm{Hz})$')
+    plt.ylabel('$Z \\;(\\Omega)$')
+    plt.legend()
+    plt.grid()
+    plt.show()
+
+    return C, delta_C
+
+
+def inductance(omega, U_r, U):
+    R_v = 82
+    I = U_r / R_v
+    Z = U / I
+
+    def model(x, a):
+        return a * x
+
+    x = omega
+    y = Z
+    popt, pcov = opt.curve_fit(model, x, y)
+    L = popt[0]
+    delta_L = np.sqrt(pcov[0, 0])
+    L_r, delta_L_r = sci_round(L, delta_L)
+
+    print(L_r, delta_L_r)
+
+
+    plt.errorbar(omega, Z, label='Messwerte', fmt='o', color='blue')
+    plt.plot(x, model(x, *popt), color='red', label='lineare näherung')
+    plt.xlabel('Frequenz $\\omega (\\mathrm{Hz})$')
+    plt.ylabel('$Z \\;(\\Omega)$')
+    plt.legend()
+    plt.grid()
+    plt.show()
+
+    return L, delta_L
 
 
 def phasenverschiebung(omega, phi):

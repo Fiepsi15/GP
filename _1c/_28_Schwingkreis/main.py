@@ -25,11 +25,16 @@ niederfrequenz_daten = swap_rows(niederfrequenz_daten, 1, 2)
 grenz_daten = swap_rows(grenz_daten, 1, 2)
 
 Versuch2_daten = np.concatenate((niederfrequenz_daten, grenz_daten, hochfrequenz_daten), axis=1)
-v2.gesamtbereich(Versuch2_daten[0], Versuch2_daten[1], Versuch2_daten[2])
 
 omega_0, delta_omega_0 = v2.phasenverschiebung(Versuch2_daten[0], Versuch2_daten[3])
 
 R, delta_R = v2.widerstand(grenz_daten[0], grenz_daten[1], grenz_daten[2], omega_0, delta_omega_0)
+
+C, delta_C = v2.capacity(niederfrequenz_daten[0], niederfrequenz_daten[1], niederfrequenz_daten[2])
+
+L, delta_L = v2.inductance(hochfrequenz_daten[0], hochfrequenz_daten[1], hochfrequenz_daten[2])
+
+v2.gesamtbereich(Versuch2_daten[0], Versuch2_daten[1], Versuch2_daten[2], R, C, L, delta_R, delta_C, delta_L)
 
 Versuch3_daten = np.loadtxt('_1c/_28_Schwingkreis/daten/Versuch3.csv', skiprows=1, delimiter=',').transpose()
 
