@@ -19,7 +19,9 @@ niederfrequenz_daten = np.loadtxt('_1c/_28_Schwingkreis/daten/niederfrequenzbere
 grenz_daten = np.loadtxt('_1c/_28_Schwingkreis/daten/Grenzbereich.csv', skiprows=1, delimiter=',').transpose()
 hochfrequenz_daten = np.loadtxt('_1c/_28_Schwingkreis/daten/hochfrequenzbereich.csv', skiprows=1, delimiter=',').transpose()
 hochfrequenz_daten[3] = hochfrequenz_daten[3] - 180
-hochfrequenz_daten[0] = hochfrequenz_daten[0] * 1e3  # Umrechnung kHz in Hz
+hochfrequenz_daten[0] = hochfrequenz_daten[0] * 2 * np.pi *1e3  # Umrechnung kHz in Hz
+niederfrequenz_daten[0] = niederfrequenz_daten[0] * 2 * np.pi
+grenz_daten[0] = grenz_daten[0] * 2 * np.pi
 
 niederfrequenz_daten = swap_rows(niederfrequenz_daten, 1, 2)
 grenz_daten = swap_rows(grenz_daten, 1, 2)
@@ -34,7 +36,7 @@ C, delta_C = v2.capacity(niederfrequenz_daten[0], niederfrequenz_daten[1], niede
 
 L, delta_L = v2.inductance(hochfrequenz_daten[0], hochfrequenz_daten[1], hochfrequenz_daten[2])
 
-v2.gesamtbereich(Versuch2_daten[0], Versuch2_daten[1], Versuch2_daten[2], R, C, L, delta_R, delta_C, delta_L)
+v2.gesamtbereich(Versuch2_daten[0], Versuch2_daten[1], Versuch2_daten[2], R, C, L, delta_R, delta_C, delta_L, omega_0, delta_omega_0)
 
 Versuch3_daten = np.loadtxt('_1c/_28_Schwingkreis/daten/Versuch3.csv', skiprows=1, delimiter=',').transpose()
 
