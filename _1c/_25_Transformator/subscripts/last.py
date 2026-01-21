@@ -1,0 +1,72 @@
+import numpy as np
+from scipy.optimize import curve_fit
+from matplotlib import pyplot as plt
+from scrips.tools import sci_round
+
+
+def plot_power(R, delta_R, N2, I2, delta_I2):
+    R_N = 5.5
+    delta_R_N = 0.1
+    N_ges = 500
+    R_i2 = R_N * (N2 / N_ges)
+    delta_R_i2 = delta_R_N * (N2 / N_ges)
+    R_corr = R + R_i2
+
+    P = R_corr * I2 ** 2
+    delta_P = np.sqrt((I2 ** 2 * delta_R) ** 2 + (I2 ** 2 * delta_R_i2) ** 2 + (2 * R_corr * I2 * delta_I2) ** 2)
+
+    plt.errorbar(N2, P, yerr=delta_P, label='Sekundärleistung', fmt='o', color='blue', capsize=5)
+    plt.xlabel('$N_2$')
+    plt.ylabel('P (W)')
+    plt.minorticks_on()
+    plt.tick_params(which='both', direction='in', top=True, right=True)
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+
+
+
+def plot_U_N_withreg(R, delta_R, N1, N2, U1, I2, delta_I2, L12, L1):
+    def model(x, alpha):
+        return alpha * x
+
+    U2 = R * I2
+
+    x = N2 / N1
+    y = U2 / U1
+    y_theorie = np.abs(L12 / L1)
+    y_err = np.sqrt((R * delta_I2) ** 2 + (I2 * delta_R) ** 2)
+
+    popt, pcov = curve_fit(model, x, y, sigma=y_err, absolute_sigma=True)
+
+    alpha, alpha_err = sci_round(popt[0], np.sqrt(np.diag(pcov))[0])
+
+    plt.errorbar(x, y, yerr=y_err, fmt='o', label='Messdaten', capsize=5, color='blue')
+    plt.plot(x, y_theorie, label='Theorie', color='green')
+    plt.plot(x, model(x, *popt), label=f'Lineare Regression: $\\alpha = {alpha}$', color='red')
+    plt.plot(x, model(x, alpha + alpha_err), label=f'$\\delta\\alpha = \\pm{alpha_err}$', color='red', linestyle='--')
+    plt.plot(x, model(x, alpha - alpha_err), linestyle='--', color='red')
+    plt.xlabel('$\\frac{N_2}{N_1}$')
+    plt.ylabel('$\\frac{U_2}{U_1}$')
+    plt.minorticks_on()
+    plt.tick_params(which='both', direction='in', top=True, right=True)
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+    return
+
+
+def plot_U_N_withreg_corrected(R, delta_R, N1, N2, U1, I2, delta_I2, L1, L2, L12, omega):
+    R_N = 5.5
+    N_ges = 500
+    R_i2 = R_N * (N2 / N_ges)
+    R_corr = R + R_i2
+
+    alpha = np.abs(1 + R_N * (N1 / N_ges) * (1j * omega * L2 + R) / (1j * omega * L1 * R))
+    U1_corr = U1 / alpha
+    U2 = R_corr * I2
+    x = N2 / N1
+    y = U2 / U1_corr
+    plt.scatter(x, y, label='Korrigierte Messwerte', color='darkred', marker='v')
+
+    plot_U_N_withreg(R, delta_R, N1, N2, U1, I2, delta_I2, L12, L1)
