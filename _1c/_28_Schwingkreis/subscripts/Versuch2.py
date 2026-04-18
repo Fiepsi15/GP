@@ -15,11 +15,14 @@ def gesamtbereich(omega, U_r, U, R, C, L, delta_R, delta_C, delta_L, omega_0, de
     delta_Z = np.sqrt((delta_U / I) ** 2 + (U / U_r * delta_R) ** 2 + (U * R_v / U_r ** 2 * delta_Ur) ** 2)
     omega_0_r, delta_omega_0_r = sci_round(omega_0, delta_omega_0)
 
-    Z_theo = np.sqrt(R ** 2 + (omega * L - 1 / (omega * C)) ** 2)
-    delta_theo = np.sqrt((R / Z_theo * delta_R) ** 2 + ((omega ** 2 * L - 1/C ) / Z_theo * delta_L) ** 2 + ((- L / C ** 2 + 1/ (omega ** 2 * C ** 3))/ Z_theo) ** 2 )
+    omega_theo = np.linspace(omega[0], omega[-1], 100)
+    Z_theo = np.sqrt(R ** 2 + (omega_theo * L - 1 / (omega_theo * C)) ** 2)
+    #delta_theo = np.sqrt((R / Z_theo * delta_R) ** 2 + ((omega ** 2 * L - 1/C ) / Z_theo * delta_L) ** 2 + ((- L / C ** 2 + 1/ (omega ** 2 * C ** 3))/ Z_theo) ** 2 )
+    x = np.linspace(omega[-1], 100000, 100)
 
     plt.errorbar(omega, Z, xerr=delta_omega, yerr=delta_Z, label='Messwerte', fmt='.', color='blue', capsize=5)
-    plt.plot(omega, Z_theo, label='Theoriekurve', color='red')
+    plt.plot(omega_theo, Z_theo, label='Theoriekurve', color='red')
+    plt.plot(x, np.sqrt(R ** 2 + (x * L - 1 / (x * C)) ** 2), color='red', linestyle='dashed', label='Theoriekurve (Extrapolation)')
     #plt.plot(omega, Z_theo + delta_theo, label='Unsicherheit', color='red', linestyle='--')
     #plt.plot(omega, Z_theo - delta_theo, color='red', linestyle='--')
     plt.plot([omega_0_r, omega_0_r], [0, 500], label=f'$\\omega_0 = {omega_0_r} \\pm {delta_omega_0_r}$', color='green')
@@ -59,7 +62,7 @@ def widerstand(omega, U_r, U, omega_0, delta_omega_0):
     delta_Z_0 = np.abs((Z_0p - Z_0m) / 2)
     Z_0r, delta_Z_0r = sci_round(Z_0, delta_Z_0)
     x = np.linspace(grenzomega[0], grenzomega[-1], 100)
-    print(Z_0r, delta_Z_0r)
+    print('R = ', Z_0r, delta_Z_0r)
 
     plt.errorbar(omega, Z, xerr=delta_omega, yerr=delta_Z, label='Messwerte', fmt='.', color='blue', capsize=5)
     plt.plot(x, model(x, *popt), color='red', label='quadratische näherung um $\\omega_0$ zur Interpolation')
@@ -95,7 +98,7 @@ def capacity(omega, U_r, U):
     delta_C = np.sqrt(pcov[0, 0])
     C_r, delta_C_r = sci_round(C, delta_C)
 
-    print(C_r, delta_C_r)
+    print('C = ', C_r, delta_C_r)
 
     plt.errorbar(omega, y, xerr=delta_omega, yerr=y_err, label='Messwerte', fmt='.', color='blue', capsize=5)
     plt.plot(x, model(x, *popt), color='red', label='lineare Regression')
@@ -142,6 +145,29 @@ def inductance(omega, U_r, U):
     plt.legend()
     plt.grid()
     plt.show()
+
+    return L, delta_L
+
+
+def nonlinear_fit_inductance(omega, U_r, U, R, C):
+    def model(omega, L):
+        return np.sqrt(R ** 2 + (omega * L - 1 / (omega * C)) ** 2)
+
+    delta_omega = np.full_like(omega, 1)
+    delta_Ur = 0.04
+    delta_U = 0.02
+    R_v = 82
+    delta_R = 1  # Ohm
+    I = U_r / R_v
+    Z = U / I
+    delta_Z = np.sqrt((delta_U / I) ** 2 + (U / U_r * delta_R) ** 2 + (U * R_v / U_r ** 2 * delta_Ur) ** 2)
+
+    x = omega
+    y = Z
+    popt, pcov = opt.curve_fit(model, x, y, sigma=delta_Z, absolute_sigma=True, p0=[0.1])
+    L, delta_L = popt[0], np.sqrt(pcov[0, 0])
+    L_r, delta_L_r = sci_round(L, delta_L)
+    print('L = ', L_r, delta_L_r)
 
     return L, delta_L
 
