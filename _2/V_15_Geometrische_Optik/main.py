@@ -1,6 +1,8 @@
 import numpy as np
 from _2.V_15_Geometrische_Optik.subscripts import brennweite_abbildung as abb
 from _2.V_15_Geometrische_Optik.subscripts import brennweite_bessel as bess
+from _2.V_15_Geometrische_Optik.subscripts import mikroskop as mikr
+from scrips.tools import sci_round
 
 # 3.1.1
 print("Brennweite Abbildungsverfahren:")
@@ -45,3 +47,35 @@ f, df = bess.calculate_f(d2, a2, dd=np.full_like(d2, delta_d), da=np.full_like(d
 d, dd = abb.calculate_d(60, -150, f * 1e3, df * 1e3)
 
 print(f"therefore, d must be about {d} ± {dd} mm")
+
+# 3.4 Mikroskop
+
+
+s1 = np.array([20, 20, 20])
+s2 = np.array([2.4, 2.2, 3.3])
+ds1 = 1
+ds2 = 0.1
+
+V_Obj, dV_Obj = mikr.get_vergroesserung_obj(s1, s2, ds1, ds2)
+V_Objr, dV_Objr = np.zeros_like(V_Obj), np.zeros_like(V_Obj)
+for i in range(len(V_Obj)):
+    V_Objr[i], dV_Objr[i] = sci_round(V_Obj[i], dV_Obj[i])
+print(f'\n Obj. Vergrößerung: {V_Objr} ± {dV_Objr}')
+
+s = 0.25
+d = np.array([18.3, 19, 14]) * 1e-2
+dd = np.full_like(d, 1e-3)
+f_Obj = 16 * 1e-3
+f_Ok = 25 * 1e-3
+
+V, dV = mikr.get_vergroesserung(s, d, f_Obj, f_Ok, dd)
+Vr, dVr = np.zeros_like(V), np.zeros_like(V)
+for i in range(len(V_Obj)):
+    Vr[i], dVr[i] = sci_round(V[i], dV[i])
+print(f'Gesamtvergrößerung: {Vr} ± {dVr}')
+
+Vm, dVm = mikr.get_ges_meas(V_Obj, f_Ok, s, dV_Obj)
+Vmr, dVmr = np.zeros_like(V), np.zeros_like(V)
+for i in range(len(V_Obj)):
+    Vmr[i], dVmr[i] = sci_round(Vm[i], dVm[i])
+print(f'Gesamtvergrößerung (gemessen): {Vmr} ± {dVmr}')
