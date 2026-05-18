@@ -1,6 +1,6 @@
 import numpy as np
 from matplotlib import pyplot as plt
-#import _2.V09_Schallwellen.subscripts.festkörper as fk
+import _2.V09_Schallwellen.subscripts.festkörper as fk
 import _2.V09_Schallwellen.subscripts.gase as gase
 
 def gas_prep(data):
@@ -13,6 +13,7 @@ def gas_prep(data):
     d_N = 1
     return nu, d, N, d_nu, d_d, d_N
 
+fk.rod()
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5), gridspec_kw={'wspace': 0.3})
 fig.suptitle('Schallgeschwindigkeit in')
