@@ -43,8 +43,16 @@ def array_to_tex(array, error, quantities_and_units, caption='Table 1', label='T
 
     for i in range(folds):
         s += '\\hline\n'
+        s += 'Messung '
+        for j in range(row_len):
+            j += row_len * i
+            if j == list_len:
+                s += '&'
+                continue
+            s += f'& {j + 1} '
+        s += '\\\\\n\\hline\n'
         for j in range(quant_len):
-            s += quantities_and_units[0][j] + '(' + quantities_and_units[1][j] + ') '
+            s += quantities_and_units[0][j] + '/' + quantities_and_units[1][j] + ' '
             for k in range(row_len):
                 k = k + row_len * i
                 if k == list_len:
@@ -52,7 +60,7 @@ def array_to_tex(array, error, quantities_and_units, caption='Table 1', label='T
                     continue
                 s += '& \\SI{' + str(array[j][k]) + ' \\pm ' + str(error[j][k]) + '}{} '
             s += '\\\\\n\\hline\n'
-    s += '\\end{tabular}\\label{tab: ' + label + '}\n'
+    s += '\\end{tabular}\\label{tab:' + label + '}\n'
     s += '\\end{table}'
 
     # Output
