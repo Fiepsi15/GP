@@ -4,34 +4,31 @@ from scipy.optimize import curve_fit
 from scrips.tools import sci_round
 
 
-def rod():
+def rod(frequencies, rule):
     def model(x, c):
         return c * x
 
     l = 1.138
 
-    frequency = np.array(
-        [[2.150, 6], [4.300, 6], [6.450, 6], [8.600, 5], [9.950, 2], [10.750, 5], [12.9, 2], [15.1, 3], [17.2, 2],
-         [19.4, 2], [21.5, 3]]).transpose() * 1e3
 
-    def rule1(i):
-        return i + 1 / 2
-
-    selected = find_valid_frequencies(frequency[0], rule=rule1)
+    selected = find_valid_frequencies(frequencies, rule=rule)
 
     for i in range(len(selected)):
         fset = np.array(selected[i]).transpose()
-        x = (fset[0] + 1 / 2) / l
+        x = rule(fset[0]) / l
         y = fset[1]
-        popt, pcov = curve_fit(model, x, y)
+        y_err = np.full_like(y, 50)
+        y_err = np.array([(50 if (y[i] < 11e3) else 100) for i in range(len(y))])
+        popt, pcov = curve_fit(model, x, y, sigma=y_err, absolute_sigma=True)
         c_val = popt[0]
         delta_c_val = np.sqrt(np.diag(pcov))[0]
         c_r, dc_r = sci_round(c_val, delta_c_val)
 
-        print(f'Value for c = {c_r} pm {dc_r}')
+        print(f'Value for c = {c_r} pm {dc_r}, with {len(selected[i])} frequencies and lowest order {fset[0][0]} at {fset[1][0]} Hz')
 
-        if i != 2:
+        if i != 2 and frequencies[0] != 4.3e3:
             continue
+        print(f'Serie:\n {fset.transpose()}')
 
         fit, ax = plt.subplots()
         ax.scatter(x, y, label='Messdaten', color='blue')
@@ -42,7 +39,7 @@ def rod():
         ax.grid()
 
     plt.show()
-    return
+    return selected
 
 
 def find_valid_frequencies(frequencies, rule):
