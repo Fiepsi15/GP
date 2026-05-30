@@ -41,6 +41,11 @@ def smooth_curves(curve, averaging_width):
 
 
 def find_cuts(phase_diff):
+    '''
+    Locates sudden jumps in ``phase_diff`` to identify the reset of the sweep.
+    :param phase_diff: phase difference of the driving function and the oscillating current
+    :return:
+    '''
     cuts = []
     skip = 0
     for i in range(5, len(phase_diff)):
@@ -55,25 +60,27 @@ def find_cuts(phase_diff):
 
 def sweep():
     sweep_data = np.loadtxt(data_directory + 'Sweep_150µF_10Hz_250Hz_Aqui_2000Hz_12052026.csv', skiprows=4,
-                            delimiter='\t').transpose() # Load Data
+                            delimiter='\t').transpose()  # Load Data
     # Extract measured Quantities
     time = sweep_data[0]
     Ue = sweep_data[1] - 2.5
-    U_LC = sweep_data[2] - 2.5 # Hier wurde versehentlich die Spannung über das LC Glied gemessen, anstatt über den Widerstand.
-    U_R = Ue - U_LC # Dies wird in dieser Zeile korrigiert
+    U_LC = sweep_data[
+               2] - 2.5  # Hier wurde versehentlich die Spannung über das LC Glied gemessen, anstatt über den Widerstand.
+    U_R = Ue - U_LC  # Dies wird in dieser Zeile korrigiert
 
-    R = 5 # Ohm
+    R = 5  # Ohm
 
-    I = U_R / R # Berechnung der Stromstärke anhand des Widerstands.
+    I = U_R / R  # Berechnung der Stromstärke anhand des Widerstands.
 
     # Hilbert-Transformationen und Extraktion von Amplitude und Phasendifferenz
     U_ana = signal.hilbert(Ue)
     I_ana = signal.hilbert(I)
     U_amp = np.abs(U_ana)
     I_amp = np.abs(I_ana)
+    frequency = np.diff(np.unwrap(np.angle(U_ana))) / (time[1] - time[0]) / (2 * np.pi)
     phase_diff = np.unwrap(np.angle(U_ana)) - np.unwrap(np.angle(I_ana)) + 2 * np.pi
 
-    Z = U_amp / I_amp # Berechnung der Impedanz
+    Z = U_amp / I_amp  # Berechnung der Impedanz
 
     # Herausfiltern der Schwankungen der Hilbert-Transformation zur vereinfachten Detektierung des Frequenzsprungs
     sampling_width = 100
@@ -81,27 +88,58 @@ def sweep():
     smoothed_I = smooth_curves(I_amp, sampling_width)
     smoothed_Z = smooth_curves(Z, sampling_width)
     smoothed_phase_diff = smooth_curves(phase_diff, sampling_width)
+    smoothed_frequency = smooth_curves(frequency, sampling_width)
 
+    # Zuschneiden auf einen Sweep
     cuts = find_cuts(smoothed_phase_diff)
-
-    fig, ((ax00, ax01), (ax10, ax11)) = plt.subplots(2, 2)
-
-    start = cuts[0] + 5
+    start = cuts[0] + 1
     end = cuts[1]
-    print(compressed_time.shape)
+    compressed_time, smoothed_I, smoothed_Z, smoothed_phase_diff, smoothed_frequency = (compressed_time[start:end] - compressed_time[start],
+                                                                    smoothed_I[start:end],
+                                                                    smoothed_Z[start:end],
+                                                                    smoothed_phase_diff[start:end],
+                                                                    smoothed_frequency[start:end])
 
-    ax00.plot(compressed_time[start:end], smoothed_I[start:end], color='blue', label='Amplitude')
+    print(compressed_time[-1])
+    i_0 = 0
+    for i in range(1, len(smoothed_phase_diff)):
+        if (smoothed_phase_diff[i] * smoothed_phase_diff[i - 1]) < 0:
+            print(compressed_time[i])
+            print(smoothed_frequency[i])
+            i_0 = i
 
-    ax01.plot(compressed_time[start:end], smoothed_Z[start:end], color='red', label='Impedance')
 
-    ax10.plot(compressed_time[start:end], smoothed_phase_diff[start:end], color='green', label='Phase diff')
 
-    ax00.legend()
-    ax01.legend()
-    ax10.legend()
+    fig, ax = plt.subplots(2, 2, figsize=(8, 7))
+    fig.subplots_adjust(hspace=0.4, wspace=0.3)
+
+    ax[0,0].plot(smoothed_frequency, smoothed_I, color='blue', label='Gemessene Stromstärke')
+    ax[0,0].plot([smoothed_frequency[i_0], smoothed_frequency[i_0]], [0, 0.15])
+    ax[0,0].set_ylabel('$I_R / \\mathrm{A}$')
+
+    ax[0,1].plot(smoothed_frequency, smoothed_Z, color='red', label='Gemessene Impedanz')
+    ax[0,1].plot([smoothed_frequency[i_0], smoothed_frequency[i_0]], [0, 40])
+    ax[0,1].set_ylabel('$|Z| / \\mathrm{\\Omega}$')
+
+    ax[1,0].plot(smoothed_frequency, smoothed_phase_diff, color='green', label='Gemessene Phasendifferenz')
+    ax[1,0].plot([smoothed_frequency[i_0], smoothed_frequency[i_0]], [-1, 1])
+    ax[1,0].plot(smoothed_frequency, np.zeros_like(smoothed_frequency), color='black', ls='-.')
+    ax[1,0].set_ylabel('$\\Delta \\varphi / \\mathrm{rad}$')
+    ax[1,0].set_ylim(-np.pi / 2, np.pi / 2)
+    #ax[1,0].set_xscale('log')
+
+    ax[1,1].plot(compressed_time, smoothed_frequency, color='orange', label='Gemessene Frequenz')
+    ax[1,1].set_ylabel('$\\nu / \\mathrm{Hz}$')
+
+    for a in ax:
+        for x in a:
+            x.legend()
+            x.grid()
+            x.minorticks_on()
+            x.set_xlabel('$\\nu / \\mathrm{Hz}$')
+    ax[1,1].set_xlabel('$t / \\mathrm{s}$')
 
     plt.show()
-
 
 
 sweep()
