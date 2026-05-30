@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import signal
+from scipy import optimize
 
 data_directory = 'DDA/RLC/data/'
 
@@ -58,26 +59,89 @@ def find_cuts(phase_diff):
     return cuts
 
 
+def theoretical_impedance(omega, r, l, c):
+    return np.sqrt(r ** 2 + (omega * l - 1 / (omega * c)) ** 2)
+
+
+def capacitance_regression(frequency, impedance):
+    def model(omega, C):
+        return omega * C
+
+    x = frequency * 2 * np.pi
+    y = 1 / impedance
+    popt, pcov = optimize.curve_fit(model, x, y)
+    C = popt[0]
+
+    plt.scatter(x, y, label='Messdaten')
+    plt.plot(x, model(x, C), label='Fit')
+    plt.xlabel('$\\omega / \\mathrm{rad/s}$')
+    plt.ylabel('$|Z|^{-1} / \\mathrm{\\Omega}^{-1}$')
+    plt.grid()
+    plt.legend()
+    plt.show()
+
+    return C
+
+
+def inductance_regression(frequency, impedance):
+    def model(omega, L):
+        return omega * L
+
+    x = frequency * 2 * np.pi
+    y = impedance
+    popt, pcov = optimize.curve_fit(model, x, y)
+    L = popt[0]
+
+    plt.scatter(x, y, label='Messdaten')
+    plt.plot(x, model(x, L), label='Fit')
+    plt.xlabel('$\\omega / \\mathrm{rad/s}$')
+    plt.ylabel('$|Z| / \\mathrm{\\Omega}$')
+    plt.grid()
+    plt.legend()
+    plt.show()
+
+    return L
+
+
 def sweep():
     sweep_data = np.loadtxt(data_directory + 'Sweep_150µF_10Hz_250Hz_Aqui_2000Hz_12052026.csv', skiprows=4,
                             delimiter='\t').transpose()  # Load Data
+
     # Extract measured Quantities
     time = sweep_data[0]
     Ue = sweep_data[1] - 2.5
-    U_LC = sweep_data[
-               2] - 2.5  # Hier wurde versehentlich die Spannung über das LC Glied gemessen, anstatt über den Widerstand.
+    U_LC = sweep_data[2] - 2.5  # Hier wurde versehentlich die Spannung über das LC Glied gemessen,
+    # anstatt über den Widerstand.
     U_R = Ue - U_LC  # Dies wird in dieser Zeile korrigiert
 
     R = 5  # Ohm
+    R_L = 0.12  # Ohm, Widerstand der Spule
+    L = 15e-3  # Henry
+    C = 150e-6  # Farad
+    fs = (len(time) - 1) / (time[-1] - time[0]) # Hz, sampling rate
 
-    I = U_R / R  # Berechnung der Stromstärke anhand des Widerstands.
+    I = U_R / R  # Berechnung der Stromstärke anhand der Spannung über den Widerstand.
+
+    f, Pxx_den = signal.welch(I, fs, nperseg=1024)
+    plt.plot(f, Pxx_den, label='$FT[I](\\nu)/\\mathrm{Hz}$')
+    plt.yscale('log')
+    plt.legend()
+    plt.grid()
+    plt.show()
+    nu_0 = 0
+    P_max = 0
+    for i in range(len(f)):
+        if Pxx_den[i] > P_max:
+            P_max = Pxx_den[i]
+            nu_0 = f[i]
+    print(f'Measured resonance frequency from FT: {nu_0} Hz')
 
     # Hilbert-Transformationen und Extraktion von Amplitude und Phasendifferenz
     U_ana = signal.hilbert(Ue)
     I_ana = signal.hilbert(I)
     U_amp = np.abs(U_ana)
     I_amp = np.abs(I_ana)
-    frequency = np.diff(np.unwrap(np.angle(U_ana))) / (time[1] - time[0]) / (2 * np.pi)
+    frequency = np.diff(np.unwrap(np.angle(U_ana))) * fs / (2 * np.pi)
     phase_diff = np.unwrap(np.angle(U_ana)) - np.unwrap(np.angle(I_ana)) + 2 * np.pi
 
     Z = U_amp / I_amp  # Berechnung der Impedanz
@@ -94,42 +158,65 @@ def sweep():
     cuts = find_cuts(smoothed_phase_diff)
     start = cuts[0] + 1
     end = cuts[1]
-    compressed_time, smoothed_I, smoothed_Z, smoothed_phase_diff, smoothed_frequency = (compressed_time[start:end] - compressed_time[start],
-                                                                    smoothed_I[start:end],
-                                                                    smoothed_Z[start:end],
-                                                                    smoothed_phase_diff[start:end],
-                                                                    smoothed_frequency[start:end])
+    compressed_time, smoothed_I, smoothed_Z, smoothed_phase_diff, smoothed_frequency = (
+        compressed_time[start:end] - compressed_time[start],
+        smoothed_I[start:end],
+        smoothed_Z[start:end],
+        smoothed_phase_diff[start:end],
+        smoothed_frequency[start:end])
 
-    print(compressed_time[-1])
+    # Bestimmen der Resonanzfrequenz anhand der Phasenverschiebung
     i_0 = 0
+    nu_0 = 0
     for i in range(1, len(smoothed_phase_diff)):
         if (smoothed_phase_diff[i] * smoothed_phase_diff[i - 1]) < 0:
-            print(compressed_time[i])
-            print(smoothed_frequency[i])
+            print(f'Time of resonance: {compressed_time[i]}')
+            nu_0 = smoothed_frequency[i]
+            print(f'Resonance frequency: {nu_0}')
+            print(f'Theoretical value from param.: {1 / np.sqrt(L * C) / (2 * np.pi)}')
             i_0 = i
 
+    # Bestimmen von R, C und L
+    R_exp = np.min(smoothed_Z)
+    print(f'Measured resistance of the setup: {R_exp}')
+    C_exp = capacitance_regression(smoothed_frequency[:30], smoothed_Z[:30])
+    print(f'Measured Capacitance: {C_exp}')
+    L_exp = inductance_regression(smoothed_frequency[120:], smoothed_Z[120:])
+    print(f'Measured Inductance: {L_exp}')
 
+    # Plotting
+    theo_imp = theoretical_impedance(omega=smoothed_frequency * 2 * np.pi, r=R + R_L, l=L, c=C)
+    exp_imp_param = theoretical_impedance(omega=smoothed_frequency * 2 * np.pi, r=R_exp, l=L_exp, c=C_exp)
+    theo_curr = np.mean(U_amp) / theo_imp
+    exp_curr = np.mean(U_amp) / exp_imp_param
+    theo_phase = np.arctan((smoothed_frequency * 2 * np.pi * L - 1 / (smoothed_frequency * 2 * np.pi * C)) / (R + R_L))
+    exp_phase = np.arctan(
+        (smoothed_frequency * 2 * np.pi * L_exp - 1 / (smoothed_frequency * 2 * np.pi * C_exp)) / R_exp)
 
     fig, ax = plt.subplots(2, 2, figsize=(8, 7))
     fig.subplots_adjust(hspace=0.4, wspace=0.3)
 
-    ax[0,0].plot(smoothed_frequency, smoothed_I, color='blue', label='Gemessene Stromstärke')
-    ax[0,0].plot([smoothed_frequency[i_0], smoothed_frequency[i_0]], [0, 0.15])
-    ax[0,0].set_ylabel('$I_R / \\mathrm{A}$')
+    ax[0, 0].plot(smoothed_frequency, smoothed_I, color='red', label='Gemessen')
+    ax[0, 0].plot([smoothed_frequency[i_0], smoothed_frequency[i_0]], [0, 0.15])
+    ax[0, 0].plot(smoothed_frequency, theo_curr, color='blue', label='Theoretische param.')
+    ax[0, 0].plot(smoothed_frequency, exp_curr, color='green', label='exp. param.')
+    ax[0, 0].set(ylabel='$I_R / \\mathrm{A}$', title='Stromstärke')
 
-    ax[0,1].plot(smoothed_frequency, smoothed_Z, color='red', label='Gemessene Impedanz')
-    ax[0,1].plot([smoothed_frequency[i_0], smoothed_frequency[i_0]], [0, 40])
-    ax[0,1].set_ylabel('$|Z| / \\mathrm{\\Omega}$')
+    ax[0, 1].plot(smoothed_frequency, smoothed_Z, color='red', label='Gemessen')
+    ax[0, 1].plot(smoothed_frequency, theo_imp, color='blue', label='Theoretische param')
+    ax[0, 1].plot(smoothed_frequency, exp_imp_param, color='green', label='exp. param.')
+    ax[0, 1].plot([smoothed_frequency[i_0], smoothed_frequency[i_0]], [0, 40])
+    ax[0, 1].set(ylabel='$|Z| / \\mathrm{\\Omega}$', title='Impedanz')
 
-    ax[1,0].plot(smoothed_frequency, smoothed_phase_diff, color='green', label='Gemessene Phasendifferenz')
-    ax[1,0].plot([smoothed_frequency[i_0], smoothed_frequency[i_0]], [-1, 1])
-    ax[1,0].plot(smoothed_frequency, np.zeros_like(smoothed_frequency), color='black', ls='-.')
-    ax[1,0].set_ylabel('$\\Delta \\varphi / \\mathrm{rad}$')
-    ax[1,0].set_ylim(-np.pi / 2, np.pi / 2)
-    #ax[1,0].set_xscale('log')
+    ax[1, 0].plot(smoothed_frequency, smoothed_phase_diff, color='red', label='Gemessen')
+    ax[1, 0].plot(smoothed_frequency, theo_phase, color='blue', label='Theoretische param')
+    ax[1, 0].plot(smoothed_frequency, exp_phase, color='green', label='exp. param.')
+    ax[1, 0].plot([smoothed_frequency[i_0], smoothed_frequency[i_0]], [-1, 1])
+    ax[1, 0].plot(smoothed_frequency, np.zeros_like(smoothed_frequency), color='black', ls='-.')
+    ax[1, 0].set(ylabel='$\\Delta \\varphi / \\mathrm{rad}$', ylim=(-np.pi / 2, np.pi / 2), title='Phasenverschiebung')
 
-    ax[1,1].plot(compressed_time, smoothed_frequency, color='orange', label='Gemessene Frequenz')
-    ax[1,1].set_ylabel('$\\nu / \\mathrm{Hz}$')
+    ax[1, 1].plot(compressed_time, smoothed_frequency, color='orange', label='Gemessen')
+    ax[1, 1].set(ylabel='$\\nu / \\mathrm{Hz}$', title='Frequenz')
 
     for a in ax:
         for x in a:
@@ -137,7 +224,7 @@ def sweep():
             x.grid()
             x.minorticks_on()
             x.set_xlabel('$\\nu / \\mathrm{Hz}$')
-    ax[1,1].set_xlabel('$t / \\mathrm{s}$')
+    ax[1, 1].set_xlabel('$t / \\mathrm{s}$')
 
     plt.show()
 
