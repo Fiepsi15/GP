@@ -118,6 +118,7 @@ def sweep(Capacitance, Aquisition_rate, data_directory):
 
     I = U_R / R  # Berechnung der Stromstärke anhand der Spannung über den Widerstand.
 
+    # Fourrier-Transformation
     f, Pxx_den = signal.welch(I, fs, nperseg=1024)
     plt.plot(f, Pxx_den, label='$FT[I](\\nu)/\\mathrm{Hz}$')
     plt.yscale('log')
@@ -161,6 +162,7 @@ def sweep(Capacitance, Aquisition_rate, data_directory):
         smoothed_phase_diff[start:end],
         smoothed_frequency[start:end])
 
+    # Verschieben der Phasendifferenz um Vielfache von 2 pi um auf 0 zu zentrieren
     smoothed_phase_diff = smoothed_phase_diff - (np.mean(smoothed_phase_diff) // (2 * np.pi) * (2 * np.pi))
 
     # Bestimmen der Resonanzfrequenz anhand der Phasenverschiebung
