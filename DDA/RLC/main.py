@@ -5,4 +5,4 @@ data_directory = 'DDA/RLC/data/'
 
 
 square_wave(data_directory)
-sweep(220, 2000, data_directory)
+sweep(150, 2000, data_directory)

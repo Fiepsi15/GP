@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy import signal
 from DDA.RLC.subscripts import shared
+from scrips.tools import sci_round
 
 
 def square_wave(data_directory):
@@ -26,9 +27,13 @@ def square_wave(data_directory):
     free_dampened = np.abs(Pxx_den_LC - Pxx_den_e * (Pxx_den_LC[i_0] / P_e_max))
 
     nu_0 = np.average(f, weights=free_dampened) # Erwartungswert zeigt die Eigenfrequenz
-    print(f'Eigenfrequenz aus Square (gedämpft): {nu_0}')
+    d_nu_0 = np.sqrt(np.abs(np.average(f ** 2, weights=free_dampened) - nu_0**2))
+    nu_r, d_nu_r = sci_round(nu_0, d_nu_0)
+    print(f'Eigenfrequenz aus Square (gedämpft): {nu_r} pm {d_nu_r}')
     nu_prime = np.sqrt(1 / (L * C) - (R / (2 * L)) ** 2) / (2 * np.pi)
-    print(f'Theorie: {nu_prime}')
+    d_nu_prime = 1 / nu_prime * 0.1 / np.sqrt(L * C)
+    nu_r, d_nu_r = sci_round(nu_prime, d_nu_prime)
+    print(f'Theorie: {nu_r} pm {d_nu_r}')
 
     # Plotting
     plt.plot(f, Pxx_den_e, label='$FT[U_e](\\nu)/\\mathrm{Hz}$')
@@ -39,7 +44,9 @@ def square_wave(data_directory):
     plt.grid()
     plt.show()
 
-    plt.plot(f, free_dampened, label='Free Oscillation')
+    plt.plot(f, free_dampened, label='Leistungsdichtespektrum der freien Schwingung', color='blue')
+    plt.xlabel('$f / \\mathrm{Hz}$')
+    plt.ylabel('$PSD$')
     plt.xlim(-10,250)
     plt.legend()
     plt.grid()
@@ -47,9 +54,12 @@ def square_wave(data_directory):
 
     fig, ax = plt.subplots()
 
-    ax.plot(time, Ue)
-    ax.plot(time, U_LC)
-    ax.set(xlim=(1.78, 1.93))
+    ax.plot(time, Ue, label='Eingangsspannung', color='orange')
+    ax.plot(time, U_LC, label='Spannung $U_\\mathrm{LC}$', color='blue')
+    ax.set(xlim=(1.78, 1.93), xlabel='$t / \\mathrm{s}$', ylabel='$U/\\mathrm{V}$')
+    ax.minorticks_on()
+    ax.tick_params(direction='in', which='both')
+    ax.legend()
     ax.grid()
     plt.show()
 
