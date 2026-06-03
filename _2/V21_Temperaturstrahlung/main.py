@@ -3,6 +3,7 @@ from scrips.tools import sci_round
 from matplotlib import pyplot as plt
 from _2.V21_Temperaturstrahlung.subscripts import leslie
 from _2.V21_Temperaturstrahlung.subscripts import distance
+from _2.V21_Temperaturstrahlung.subscripts import stefan_boltzmann
 
 data_directory = 'data/'
 
@@ -49,6 +50,19 @@ def distance_dependence(data_directory):
     return n, delta_n
 
 
+def st_blz(directory):
+    data = np.loadtxt(directory + 'Stefan_Boltzmann.csv', skiprows=1, delimiter=',').transpose()
+    T = data[0] + 273.15 # in K
+    U = data[2] / 1e3
+    A_blende = np.pi * (19.9 * 1e-3 / 2) ** 2 # pi * (d/2)^2 in m^2
+    A_strahler = np.pi * (19.5 * 1e-3 / 2) ** 2 # pi * (d/2)^2 in m^2
+    r = 0.5 # m
+    T_0 = 23.2 + 273.15 # Raumtemperatur
+
+    stefan_boltzmann.stefan_boltzmann_konstante(T, U, T_0, A_blende, A_strahler, r)
+
+    return
 
 #leslie_cube(data_directory)
-distance_dependence(data_directory)
+#distance_dependence(data_directory)
+st_blz(data_directory)
