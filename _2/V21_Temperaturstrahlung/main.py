@@ -1,6 +1,7 @@
 import numpy as np
 from scrips.tools import sci_round
 from matplotlib import pyplot as plt
+from scipy import integrate
 from _2.V21_Temperaturstrahlung.subscripts import leslie
 from _2.V21_Temperaturstrahlung.subscripts import distance
 from _2.V21_Temperaturstrahlung.subscripts import stefan_boltzmann
@@ -11,18 +12,20 @@ data_directory = 'data/'
 
 def run_leslie_cube(directory):
     data = np.loadtxt(directory + 'leslie.csv', skiprows=1, delimiter=',').transpose()
+    Temperatur = data[1] # in °C
     Schwarz = data[2]  # in V
     Weiss = data[3]  # in V
     Matt = data[4]  # in V
     Verspiegelt = data[5]  # in V
+    delta_relative = 0.1
 
-    leslie.emissionsvermoegen(Schwarz, Weiss, Matt, Verspiegelt)
+    leslie.emissionsvermoegen(Temperatur, Schwarz, Weiss, Matt, Verspiegelt, delta_relative)
     return
 
 
 def run_distance_dependence(data_directory):
     fig, ax = plt.subplots(3, 1,figsize=(8,10))
-    fig.add_gridspec()
+    fig.subplots_adjust(top=0.92, bottom=0.05, hspace=0.4)
     fig.suptitle('Distanzabhängigkeit der Strahlungsintensität')
 
     print(f'\nDistanzabhängigkeit:')
@@ -44,10 +47,12 @@ def run_distance_dependence(data_directory):
     n_r, delta_n_r = sci_round(n, delta_n)
     print(f'Im Mittel: {n_r} ± {delta_n_r}\n---')
 
+    t = np.linspace(0.25, 0.5, 100)
     ax = ax[2]
-    x = np.linspace(0, 0.7, 10)
-    ax.plot(x, x * n, label='Mittel', ls='--', color='red')
-    ax.fill_between(x, x * (n - delta_n), x * (n + delta_n), color='red', alpha=0.2, label='Unsicherheit')
+    ax.plot(t, t ** n, label='Resultierende Kurve für den Mittelwert', color='red')
+    ax.plot(t, t ** -2, label='$1 / r^2$', ls='--', color='blue')
+    ax.fill_between(t, t ** (n - delta_n), t ** (n + delta_n), color='red', alpha=0.2, label='Unsicherheit')
+    ax.set(xlabel='$r/\\mathrm{m}$', ylabel='$U/\\text{Arbitrary}$', title=f'Mittelwert')
     ax.tick_params(axis='both', direction='in', which='both')
     ax.minorticks_on()
     ax.legend()
@@ -100,7 +105,7 @@ def run_pyrometrie(directory):
 
     pyrometrie.temperature_proportionality_order(T, U, I, delta_T, delta_U, delta_I)
 
-#run_leslie_cube(data_directory)
-run_distance_dependence(data_directory)
+run_leslie_cube(data_directory)
+#run_distance_dependence(data_directory)
 #run_stefan_boltzmann(data_directory)
 #run_pyrometrie(data_directory)
