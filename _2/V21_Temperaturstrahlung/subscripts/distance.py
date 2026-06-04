@@ -17,7 +17,7 @@ def distance_dependence(distance: np.ndarray, voltage: np.ndarray, ax, messreihe
     n = popt[0]
     delta_n = np.sqrt(np.diag(pcov))[0]
     n_r, dn_r = sci_round(n, delta_n)
-    print(f'Es gilt: I ist proportional zu r ^ ({n_r} pm {dn_r})')
+    print(f'Proportionalität nach Messreihe {messreihe}: I zu r ^ ({n_r} pm {dn_r})')
 
     ax.errorbar(x, y, xerr=delta_x, yerr=delta_y, fmt='.', label=f'Messreihe {messreihe}', capsize=5, color=('blue' if messreihe == 1 else 'red'))
     ax.plot(x, model(x, n), label=f'Lineare Regression {messreihe}', color=('green' if messreihe == 1 else 'orange'))

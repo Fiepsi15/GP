@@ -4,32 +4,38 @@ from matplotlib import pyplot as plt
 from scrips.tools import sci_round
 
 
-def calculate_x(T, T_0, A_B, A_S, r):
-    a = 0.16 * 1000 * A_B * A_S
-    t = (T ** 4 - T_0 ** 4)
-    return a * t / (np.pi * r ** 2)
+def get_sigma(a, da, A_B, dA_B, A_S, dA_S, r, dr):
+    b = np.pi * r ** 2
+    c = 0.16 * 1000 * A_B * A_S
+    delta_sigma = np.sqrt((b / c * da) ** 2
+                          + (a * 2 * np.pi * r / c * dr) ** 2
+                          + (a * b / c * dA_B / A_B) ** 2
+                          + (a * b / c * dA_S / A_S) ** 2)
+    return a * b / c, delta_sigma
 
 
-def stefan_boltzmann_konstante(T, U, T_0, A_Blende, A_Strahler, r):
+def stefan_boltzmann_konstante(T, dT, U, T_0, A_Blende, dA_Blende, A_Strahler, dA_Strahler, r, dr):
     def model(x, sigma):
         return sigma * x
 
-    x = calculate_x(T, T_0, A_Blende, A_Strahler, r)
+    x = T ** 4 - T_0 ** 4
+    delta_x = 4 * T ** 3 * dT
     y = U
+    delta_y = 0
     popt, pcov = optimize.curve_fit(model, x, y)
-    sigma = popt[0]
-    delta_sigma = np.sqrt(np.diag(pcov))[0]
+    a = popt[0]
+    delta_a = np.sqrt(np.diag(pcov))[0]
+    sigma, delta_sigma = get_sigma(a, delta_a, A_Blende, dA_Blende, A_Strahler, dA_Strahler, r, dr)
     sigma_r, delta_sigma_r = sci_round(sigma, delta_sigma)
-    print(sigma_r, delta_sigma_r)
+    print(f'\nErrechneter wert für die Stefan-Boltzmann-Konstante: {sigma_r} pm {delta_sigma_r}\n---')
 
     fig, ax = plt.subplots()
     fig.suptitle('Bestimmung der Stefan-Boltzmann-Konstante')
 
-    ax.errorbar(x, y, fmt='.', label=f'Messreihe', capsize=5, color='blue')
-    ax.plot(x, model(x, sigma), label=f'Lineare Regression ', color='green')
-    ax.fill_between(x, model(x, sigma - delta_sigma), model(x, sigma + delta_sigma), color='green', alpha=0.2)
-    ax.set(xlabel='$\\log(r/r_0)$', ylabel='$\\log(U/U_0)$')
+    ax.errorbar(x, y, xerr=delta_x, fmt='.', label=f'Messreihe', capsize=5, color='blue')
+    ax.plot(x, model(x, a), label=f'Lineare Regression ', color='green')
+    ax.fill_between(x, model(x, a - delta_a), model(x, a + delta_a), color='green', alpha=0.2)
+    ax.set(xlabel='$(T-T_0)^4/\\mathrm{K}^4$', ylabel='$U/\\mathrm{V}$')
     ax.minorticks_on()
 
     return
-

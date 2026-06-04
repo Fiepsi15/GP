@@ -27,6 +27,6 @@ def emissionsvermoegen(schwarz: np.ndarray, weiss: np.ndarray, matt: np.ndarray,
     print('\nEmissionsvermögen von:')
     print(f'Weiss = {em_w_r} pm {d_em_w_r}')
     print(f'Matt = {em_m_r} pm {d_em_m_r}')
-    print(f'Verspiegelt = {em_v_r} pm {d_em_v_r}\n---\n')
+    print(f'Verspiegelt = {em_v_r} pm {d_em_v_r}\n---')
 
     return
