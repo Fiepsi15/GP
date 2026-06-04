@@ -19,10 +19,13 @@ def distance_dependence(distance: np.ndarray, voltage: np.ndarray, ax, messreihe
     n_r, dn_r = sci_round(n, delta_n)
     print(f'Proportionalität nach Messreihe {messreihe}: I zu r ^ ({n_r} pm {dn_r})')
 
-    ax.errorbar(x, y, xerr=delta_x, yerr=delta_y, fmt='.', label=f'Messreihe {messreihe}', capsize=5, color=('blue' if messreihe == 1 else 'red'))
-    ax.plot(x, model(x, n), label=f'Lineare Regression {messreihe}', color=('green' if messreihe == 1 else 'orange'))
-    ax.fill_between(x, model(x, n - delta_n), model(x, n + delta_n), color='green', alpha=0.2)
+    ax.errorbar(x, y, xerr=delta_x, yerr=delta_y, label=f'Messreihe {messreihe}', capsize=5, color=('green' if messreihe == 1 else 'purple'), fmt=('v' if messreihe == 1 else '^'))
+    ax.plot(x, model(x, n), label=f'Lineare Regression {messreihe}', color=('green' if messreihe == 1 else 'purple'))
+    ax.fill_between(x, model(x, n - delta_n), model(x, n + delta_n), color=('green' if messreihe == 1 else 'purple'), alpha=0.2)
     ax.set(xlabel='$\\log(r/r_0)$', ylabel='$\\log(U/U_0)$')
+    ax.tick_params(axis='both', direction='in', which='both')
     ax.minorticks_on()
+    ax.legend()
+    ax.grid()
 
     return n, delta_n

@@ -14,15 +14,15 @@ def get_sigma(a, da, A_B, dA_B, A_S, dA_S, r, dr):
     return a * b / c, delta_sigma
 
 
-def stefan_boltzmann_konstante(T, dT, U, T_0, A_Blende, dA_Blende, A_Strahler, dA_Strahler, r, dr):
+def stefan_boltzmann_konstante(T, dT, U, dU, T_0, A_Blende, dA_Blende, A_Strahler, dA_Strahler, r, dr):
     def model(x, sigma):
         return sigma * x
 
-    x = T ** 4 - T_0 ** 4
+    x = T ** 4
     delta_x = 4 * T ** 3 * dT
     y = U
-    delta_y = 0
-    popt, pcov = optimize.curve_fit(model, x, y)
+    delta_y = dU
+    popt, pcov = optimize.curve_fit(model, x, y, sigma=delta_y, absolute_sigma=True)
     a = popt[0]
     delta_a = np.sqrt(np.diag(pcov))[0]
     sigma, delta_sigma = get_sigma(a, delta_a, A_Blende, dA_Blende, A_Strahler, dA_Strahler, r, dr)
@@ -32,7 +32,7 @@ def stefan_boltzmann_konstante(T, dT, U, T_0, A_Blende, dA_Blende, A_Strahler, d
     fig, ax = plt.subplots()
     fig.suptitle('Bestimmung der Stefan-Boltzmann-Konstante')
 
-    ax.errorbar(x, y, xerr=delta_x, fmt='.', label=f'Messreihe', capsize=5, color='blue')
+    ax.errorbar(x, y, xerr=delta_x, yerr=delta_y, fmt='.', label=f'Messreihe', capsize=5, color='blue')
     ax.plot(x, model(x, a), label=f'Lineare Regression ', color='green')
     ax.fill_between(x, model(x, a - delta_a), model(x, a + delta_a), color='green', alpha=0.2)
     ax.set(xlabel='$(T-T_0)^4/\\mathrm{K}^4$', ylabel='$U/\\mathrm{V}$')
