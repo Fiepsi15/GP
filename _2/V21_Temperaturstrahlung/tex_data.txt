@@ -1,0 +1,17 @@
+\begin{table}[H] 
+\centering 
+\caption{leslie.tex}
+\begin{tabular}{|c||c|c|c|}
+\hline
+Messung & 1 & 2 & 3 \\
+\hline
+$T$/$\mathrm{°C}$ & \SI{82.0 \pm 0.1}{} & \SI{81.2 \pm 0.1}{} & \SI{80.5 \pm 0.1}{} \\
+\hline
+$\varepsilon_\mathrm{W}$/ & \SI{0.97 \pm 0.14}{} & \SI{0.99 \pm 0.14}{} & \SI{0.98 \pm 0.14}{} \\
+\hline
+$\varepsilon_\mathrm{M}$/ & \SI{0.33 \pm 0.05}{} & \SI{0.34 \pm 0.05}{} & \SI{0.33 \pm 0.05}{} \\
+\hline
+$\varepsilon_\mathrm{V}$/ & \SI{0.28 \pm 0.04}{} & \SI{0.29 \pm 0.05}{} & \SI{0.29 \pm 0.05}{} \\
+\hline
+\end{tabular}\label{tab:Tabelle 1}
+\end{table}
