@@ -9,9 +9,9 @@ def absorption_quantification(Baseline, Sample):
     Sample[1] = Sample[1] - Baseline[1]
 
     peaks, _ = signal.find_peaks(Sample[1], prominence=0.1)
-    print(peaks)
+    print('\nPeak wavelengths: ')
     for peak in peaks:
-        print(Sample[0][peak])
+        print(f'lambda = {Sample[0][peak]}')
 
     ax.plot(Sample[0], Sample[1], label='Absorption Spectrum Sample', color='red')
     ax.plot([Sample[0][peaks[0]], Sample[0][peaks[0]]], [0, 1], label='peaks', color='blue', ls='--')
@@ -21,7 +21,6 @@ def absorption_quantification(Baseline, Sample):
     ax.minorticks_on()
     ax.grid(True)
     ax.legend()
-    plt.show()
 
     molecular_weight_Eos = 25.8e3  # kDa
     yield_volume = 1e-3  # L
@@ -32,7 +31,7 @@ def absorption_quantification(Baseline, Sample):
     concentration_others = concentration_278 - concentration_506
     con_Eos_r, _ = sci_round(concentration_Eos, 0.1 * concentration_Eos)
     con_oth_r, _ = sci_round(concentration_others, 0.1 * concentration_others)
-    print(f'Achieved concentration of EosFP: {con_Eos_r} mol/L')
+    print(f'\nAchieved concentration of EosFP: {con_Eos_r} mol/L')
     print(f'Concentration of other proteins: {con_oth_r} mol/L')
 
     mass_Eos = concentration_Eos * molecular_weight_Eos * yield_volume * 1e-3  # kg

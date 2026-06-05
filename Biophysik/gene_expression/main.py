@@ -1,6 +1,8 @@
 import numpy as np
+from matplotlib import pyplot as plt
 from Biophysik.gene_expression.subscripts import cell_growth
 from Biophysik.gene_expression.subscripts import protein_quantification
+from Biophysik.gene_expression.subscripts import photoconversion
 
 
 data_directory = 'Biophysik/gene_expression/'
@@ -19,4 +21,6 @@ Sample = data[-2:]
 protein_quantification.absorption_quantification(Baseline, Sample)
 
 #Photoconversion
+photoconversion.run_pc(data_directory + 'Photoconversion/Gruppe 5')
 
+plt.show()

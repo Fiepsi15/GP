@@ -43,6 +43,5 @@ def calculate_doubleling_coefficient(t, OD_600):
     ax2.set_ylabel('$\\log(\\frac{OD_{600}}{OD_{600}^0})$')
     ax2.legend()
     ax2.grid()
-    plt.show()
 
     return
