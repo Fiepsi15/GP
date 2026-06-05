@@ -16,17 +16,17 @@ def absorption_quantification(Baseline, Sample):
     ax.plot(Sample[0], Sample[1], label='Absorption Spectrum Sample', color='red')
     ax.plot([Sample[0][peaks[0]], Sample[0][peaks[0]]], [0, 1], label='peaks', color='blue', ls='--')
     ax.plot([Sample[0][peaks[1]], Sample[0][peaks[1]]], [0, 1], color='blue', ls='--')
-    ax.set(xlabel='$\\lambda/\\mathrm{nm}$', ylabel='$\\mathrm{Absorption}$')
+    ax.set(xlabel='Wellenlänge in $\\mathrm{nm}$', ylabel='$\\mathrm{Absorbanz}$')
     ax.tick_params(axis='both', which='both', direction='in')
     ax.minorticks_on()
     ax.grid(True)
     ax.legend()
 
-    molecular_weight_Eos = 25.8e3  # kDa
+    molecular_weight_Eos = 25.8e3  # Da
     yield_volume = 1e-3  # L
 
-    concentration_506 = Sample[1][peaks[0]] / 72e3 * (13000 / 300)
-    concentration_278 = Sample[1][peaks[1]] / 23.515e3 * (13000 / 300)
+    concentration_506 = Sample[1][peaks[0]] / 72e3 * (1600 / 300)
+    concentration_278 = Sample[1][peaks[1]] / 23.515e3 * (1600 / 300)
     concentration_Eos = concentration_506
     concentration_others = concentration_278 - concentration_506
     con_Eos_r, _ = sci_round(concentration_Eos, 0.1 * concentration_Eos)
