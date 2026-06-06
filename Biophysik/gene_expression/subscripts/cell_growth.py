@@ -10,8 +10,8 @@ def calculate_doubleling_coefficient(t, OD_600):
 
     x = (t[1:] - t[1])
     y = np.log(OD_600 / OD_600[1])
-    y_err = 0.001 / OD_600
-    popt, pcov = curve_fit(model, x, y[1:])#, sigma=y_err[1:], absolute_sigma=True)
+    y_err = np.full_like(y, 0.1)
+    popt, pcov = curve_fit(model, x, y[1:], sigma=y_err[1:], absolute_sigma=True)
     b = popt[0]
     delta_b = np.sqrt(np.diag(pcov))[0]
 
@@ -25,9 +25,9 @@ def calculate_doubleling_coefficient(t, OD_600):
 
     fig, (ax, ax2) = plt.subplots(1, 2, figsize=(10, 5))
     fig.subplots_adjust(wspace=0.4, left=0.1, right=0.95, top=0.85)
-    fig.suptitle('Wachstum der Vorkultur', size=17, weight='semibold')
+    fig.suptitle('Wachstum der Hauptkultur', size=17, weight='semibold')
 
-    ax.errorbar(t / 60, OD_600, xerr=1, yerr=0.001, fmt='.', color='blue', capsize=5, label='Messdaten')
+    ax.errorbar(t / 60, OD_600, xerr=1, yerr=0.1 * OD_600, fmt='.', color='blue', capsize=5, label='Messdaten')
     ax.plot(T, np.exp(model(T * 60 - t[1], b)) * OD_600[1], color='red', label=f'Ausgleichskurve')
     ax.fill_between(np.linspace(0, 20, 100), np.full(100, 0.05), np.full(100, 0.15), color='red', alpha=0.2, label='Aufwärmung auf $37\\mathrm{ °C}$')
     ax.set_xlabel('Zeit in $\\mathrm{min}$')

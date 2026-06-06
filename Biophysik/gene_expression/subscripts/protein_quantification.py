@@ -13,10 +13,11 @@ def absorption_quantification(Baseline, Sample):
     for peak in peaks:
         print(f'lambda = {Sample[0][peak]}')
 
-    ax.plot(Sample[0], Sample[1], label='Absorption Spectrum Sample', color='red')
+    ax.plot(Sample[0], Sample[1], label='Probe', color='red')
     ax.plot([Sample[0][peaks[0]], Sample[0][peaks[0]]], [0, 1], label='peaks', color='blue', ls='--')
     ax.plot([Sample[0][peaks[1]], Sample[0][peaks[1]]], [0, 1], color='blue', ls='--')
     ax.set(xlabel='Wellenlänge in $\\mathrm{nm}$', ylabel='$\\mathrm{Absorbanz}$')
+    fig.suptitle('Absorptionsspektrum', size=17, weight='semibold')
     ax.tick_params(axis='both', which='both', direction='in')
     ax.minorticks_on()
     ax.grid(True)

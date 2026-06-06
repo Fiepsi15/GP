@@ -37,12 +37,17 @@ def calculate_evolution(data, peak_g, peak_r):
     I_r, b_r, c_r = popt
     delta_I_r, delta_b_r, delta_c_r = np.sqrt(np.diag(pcov))
 
+    I_0_g_r, d_I_0_g_r = sci_round(I_g, delta_I_g)
     b_g_r, d_b_g_r = sci_round(b_g, delta_b_g)
+    c_g_r, d_c_g_r = sci_round(c_g, delta_c_g)
+    I_0_r_r, d_I_0_r_r = sci_round(I_r, delta_I_r)
     b_r_r, d_b_r_r = sci_round(b_r, delta_b_r)
-    print(f'\nGrün: b ={b_g_r} pm {d_b_g_r}')
-    print(f'Rot: b ={b_r_r} pm {d_b_r_r}')
+    c_r_r, d_c_r_r = sci_round(c_r, delta_c_r)
+    print(f'\nGrün: I_0 = {I_0_g_r} +- {d_I_0_g_r}, b = {b_g_r} +- {d_b_g_r}, c = {c_g_r} +- {d_c_g_r}')
+    print(f'Rot: I_0 = {I_0_r_r} +- {d_I_0_r_r}, b ={b_r_r} +- {d_b_r_r}, c = {c_r_r} +- {d_c_r_r}')
 
     fig, ax = plt.subplots()
+    fig.suptitle('Zeitentwicklung der Maxima', size=17, weight='semibold')
     ax.errorbar(t, data[peak_g], label='Messwerte grüne Spezies', fmt='.', color='green')
     ax.plot(t, model(t, I_g, b_g, c_g), label='Exponentieller Fit', color='green')
     ax.errorbar(t, data[peak_r][0], label='Messwerte rote Spezies', fmt='.', color='red')
@@ -78,7 +83,7 @@ def run_pc(data_directory):
 
     fig, ax = plt.subplots(2,2, figsize=(12, 8), sharex=True, sharey=True)
     fig.subplots_adjust(left = 0.1, hspace=0.2, wspace=0.1, right=0.95)
-    fig.suptitle('Zeitentwicklung des Emissionsspektrums', fontsize=20, weight='semibold')
+    fig.suptitle('Zeitentwicklung des Emissionsspektrums', fontsize=30, weight='semibold')
 
     ax[0,0].plot(wavelength, data[0], label='Gemessenes Spektrum', color='blue')
     ax[0,0].set(title='$t = 0 \\mathrm{s}$')
