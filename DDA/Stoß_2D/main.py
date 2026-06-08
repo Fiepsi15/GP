@@ -2,6 +2,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 from subscripts.lin_momentum import test_momentum as lin_momentum
 from subscripts.energy import test_energy as energy
+from DDA.Stoß_2D.subscripts.xy_plot import plot as xy_plot
 
 # t;x;y;r;vx;vy;v;px;py;p;K;x;y;r;vx;vy;v;px;py;p;K;
 data_dir = 'daten/'
@@ -70,4 +71,6 @@ post = (24, 38)
 
 #lin_momentum(p1, p2, pre, post)
 
-energy(v1, v2, 18.4, 18.4, pre, post)
+#energy(v1, v2, 18.4, 18.4, pre, post)
+
+xy_plot(r1, r2, pre, post)
