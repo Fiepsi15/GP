@@ -101,7 +101,7 @@ post = (24, 38)
 
 #lin_momentum(p1, p2, pre, post)
 
-#energy(v1, v2, 18.4, 18.4, pre, post)
+energy(v1, v2, 18.4, 18.4, pre, post)
 
 #xy_plot(r1, r2, pre, post)
 
@@ -117,7 +117,7 @@ post = (16,34)
 
 #lin_momentum(p1, p2, pre, post)
 
-#energy(v1, v2, 18.4, 18.4, pre, post)
+energy(v1, v2, 18.4, 18.4, pre, post)
 
 #xy_plot(r1, r2, pre, post)
 
@@ -132,7 +132,7 @@ post = (57,81)
 
 #test_range(r1, r2, pre, post)
 
-lin_momentum(p1, p2, pre, post)
+#lin_momentum(p1, p2, pre, post)
 
 energy(v1, v2, 18.4, 18.4, pre, post)
 
@@ -149,11 +149,11 @@ post = (51,71)
 
 #test_range(r1, r2, pre, post)
 
-lin_momentum(p1, p2, pre, post)
+#lin_momentum(p1, p2, pre, post)
 
 energy(v1, v2, 18.4, 18.4, pre, post)
 
-xy_plot(r1, r2, pre, post)
+#xy_plot(r1, r2, pre, post)
 
 data = np.loadtxt(data_dir + '3-5-2-Puck-Hantel-Stoss1.txt', skiprows=3, delimiter=';', converters=conv).transpose()
 
