@@ -1,7 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
-from scipy import signal
 from subscripts.lin_momentum import test_momentum as lin_momentum
+from subscripts.energy import test_energy as energy
 
 # t;x;y;r;vx;vy;v;px;py;p;K;x;y;r;vx;vy;v;px;py;p;K;
 data_dir = 'daten/'
@@ -68,4 +68,6 @@ post = (24, 38)
 
 #test_range(r1, r2, pre, post)
 
-lin_momentum(p1, p2, pre, post)
+#lin_momentum(p1, p2, pre, post)
+
+energy(v1, v2, 18.4, 18.4, pre, post)
