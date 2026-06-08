@@ -63,13 +63,13 @@ def test_momentum(r1, r2, r3, v2, v3, p1, p2, p3, m1, m2, m3, pre, post):
 
     testprint(l_pre_m, l_pre_std, l_post_m, l_post_std)
 
-    values = np.array([[l1_pre_m[0], l1_post_m[0]], [l1_pre_m[1], l1_post_m[1]],
-                       [l2_pre_m[0], l2_post_m[0]], [l2_pre_m[1], l2_post_m[1]],
-                       [l3_pre_m[0], l3_post_m[0]], [l3_pre_m[1], l3_post_m[1]],
-                       [l_pre_m[0], l_post_m[0]], [l_pre_m[1], l_post_m[1]]]) * 1e3
-    uncert = np.array([[l1_pre_std[0], l1_post_std[0]], [l1_pre_std[1], l1_post_std[1]],
-                       [l2_pre_std[0], l2_post_std[0]], [l2_pre_std[1], l2_post_std[1]],
-                       [l3_pre_std[0], l3_post_std[0]], [l3_pre_std[1], l3_post_std[1]],
-                       [l_pre_std[0], l_post_std[0]], [l_pre_std[1], l_post_std[1]]]) * 1e3
+    values = np.array([[l1_pre_m, l1_post_m],
+                       [l2_pre_m, l2_post_m],
+                       [l3_pre_m, l3_post_m],
+                       [l_pre_m, l_post_m]]) * 1e3
+    uncert = np.array([[l1_pre_std, l1_post_std],
+                       [l2_pre_std, l2_post_std],
+                       [l3_pre_std, l3_post_std],
+                       [l_pre_std, l_post_std]]) * 1e3
 
-    a2t(values, uncert, [['l_{1x}', 'l_{1y}', 'l_{2x}', 'l_{2y}', 'l_{3x}', 'l_{3y}', 'l_x', 'l_y'], ['mNms' for _ in range(len(values))]], override_row_len=3)
+    a2t(values, uncert, [['l_{1}', 'l_{2}', 'l_{3}', 'L'], ['mNms' for _ in range(len(values))]], override_row_len=2)
