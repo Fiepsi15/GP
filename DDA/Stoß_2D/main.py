@@ -83,6 +83,7 @@ def test_range3(r1, r2, r3, pre, post):
     return
 
 
+# ruhe 1
 data = np.loadtxt(data_dir + 'ruhend-stoss-gleiche-Masse1.txt', skiprows=3, delimiter=';', converters=conv).transpose()
 data[3:5] = data[4:6]
 data[5:7] = data[7:9]
@@ -104,6 +105,56 @@ post = (24, 38)
 
 #xy_plot(r1, r2, pre, post)
 
+# ruhe 2
+data = np.loadtxt(data_dir + 'ruhend-stoss-gleiche-Masse2.txt', skiprows=3, delimiter=';', converters=conv).transpose()
+
+time, r1, v1, p1, K1, r2, v2, p2, K2 = extract(data)
+
+pre = (2,16)
+post = (16,34)
+
+#test_range(r1, r2, pre, post)
+
+#lin_momentum(p1, p2, pre, post)
+
+#energy(v1, v2, 18.4, 18.4, pre, post)
+
+#xy_plot(r1, r2, pre, post)
+
+# bew 1
+data = np.loadtxt(data_dir + '3-2-2Bewegter-Stoss-Gleiche-Masse1.txt', skiprows=3, delimiter=';', converters=conv).transpose()
+
+time, r1, v1, p1, K1, r2, v2, p2, K2 = extract(data)
+#print(data.shape)
+
+pre = (44,55)
+post = (57,81)
+
+#test_range(r1, r2, pre, post)
+
+lin_momentum(p1, p2, pre, post)
+
+energy(v1, v2, 18.4, 18.4, pre, post)
+
+#xy_plot(r1, r2, pre, post)
+
+# Bewegt 2
+data = np.loadtxt(data_dir + '3-2-2Bewegter-Stoss-Gleiche-Masse2.txt', skiprows=3, delimiter=';', converters=conv).transpose()
+
+time, r1, v1, p1, K1, r2, v2, p2, K2 = extract(data)
+#print(data.shape)
+
+pre = (35,49)
+post = (51,71)
+
+#test_range(r1, r2, pre, post)
+
+lin_momentum(p1, p2, pre, post)
+
+energy(v1, v2, 18.4, 18.4, pre, post)
+
+xy_plot(r1, r2, pre, post)
+
 data = np.loadtxt(data_dir + '3-5-2-Puck-Hantel-Stoss1.txt', skiprows=3, delimiter=';', converters=conv).transpose()
 
 time, r1, v1, p1, K1, r2, v2, p2, K2, r3, v3, p3, K3 = extract(data)
@@ -113,5 +164,5 @@ post = (28, 55)
 
 #test_range3(r1, r2, r3, pre, post)
 
-ang_momentum(r3, r1, r2, v1, v2, p3, p1, p2, 18.4, 18.6, 18.6, pre, post)
+#ang_momentum(r3, r1, r2, v1, v2, p3, p1, p2, 18.4, 18.6, 18.6, pre, post)
 
