@@ -3,6 +3,7 @@ from matplotlib import pyplot as plt
 from subscripts.lin_momentum import test_momentum as lin_momentum
 from subscripts.energy import test_energy as energy
 from DDA.Stoß_2D.subscripts.xy_plot import plot as xy_plot
+from DDA.Stoß_2D.subscripts.ang_momentum import test_momentum as ang_momentum
 
 # t;x;y;r;vx;vy;v;px;py;p;K;x;y;r;vx;vy;v;px;py;p;K;
 data_dir = 'daten/'
@@ -39,7 +40,20 @@ def extract(daten):
     py2 = daten[13]
     p2 = np.array([px2, py2])
     K2 = daten[14]
-    return time, r1, v1, p1, K1, r2, v2, p2, K2
+    ret = (time, r1, v1, p1, K1, r2, v2, p2, K2)
+    if len(daten) > 15:
+        x3 = daten[15]
+        y3 = daten[16]
+        r3 = np.array([x3, y3])
+        vx3 = daten[17]
+        vy3 = daten[18]
+        v3 = np.array([vx3, vy3])
+        px3 = daten[19]
+        py3 = daten[20]
+        p3 = np.array([px3, py3])
+        K3 = daten[21]
+        ret = (time, r1, v1, p1, K1, r2, v2, p2, K2, r3, v3, p3, K3)
+    return ret
 
 
 def test_range(r1, r2, pre, post):
@@ -54,6 +68,21 @@ def test_range(r1, r2, pre, post):
     return
 
 
+def test_range3(r1, r2, r3, pre, post):
+    plt.scatter(r1[0][pre[0]:pre[1]], r1[1][pre[0]:pre[1]], label='pre')
+    plt.scatter(r1[0][post[0]:post[1]], r1[1][post[0]:post[1]], label='post')
+    plt.scatter(r1[0], r1[1], label='r1', marker='.')
+    plt.scatter(r2[0][pre[0]:pre[1]], r2[1][pre[0]:pre[1]], label='pre')
+    plt.scatter(r2[0][post[0]:post[1]], r2[1][post[0]:post[1]], label='post')
+    plt.scatter(r2[0], r2[1], label='r2', marker='.')
+    plt.scatter(r3[0][pre[0]:pre[1]], r3[1][pre[0]:pre[1]], label='pre')
+    plt.scatter(r3[0][post[0]:post[1]], r3[1][post[0]:post[1]], label='post')
+    plt.scatter(r3[0], r3[1], label='r3', marker='.')
+    plt.legend()
+    plt.show()
+    return
+
+
 data = np.loadtxt(data_dir + 'ruhend-stoss-gleiche-Masse1.txt', skiprows=3, delimiter=';', converters=conv).transpose()
 data[3:5] = data[4:6]
 data[5:7] = data[7:9]
@@ -62,7 +91,7 @@ data[10:12] = data[14:16]
 data[12:14] = data[17:19]
 data[14] = data[-1]
 
-time, r1, v1, p1, K1, r2, v2, p2, K2 = extract(data)
+time, r1, v1, p1, K1, r2, v2, p2, K2 = extract(data[:15])
 
 pre = (12, 23)
 post = (24, 38)
@@ -73,4 +102,16 @@ post = (24, 38)
 
 #energy(v1, v2, 18.4, 18.4, pre, post)
 
-xy_plot(r1, r2, pre, post)
+#xy_plot(r1, r2, pre, post)
+
+data = np.loadtxt(data_dir + '3-5-2-Puck-Hantel-Stoss1.txt', skiprows=3, delimiter=';', converters=conv).transpose()
+
+time, r1, v1, p1, K1, r2, v2, p2, K2, r3, v3, p3, K3 = extract(data)
+
+pre = (2, 27)
+post = (28, 55)
+
+#test_range3(r1, r2, r3, pre, post)
+
+ang_momentum(r3, r1, r2, v1, v2, p3, p1, p2, 18.4, 18.6, 18.6, pre, post)
+
