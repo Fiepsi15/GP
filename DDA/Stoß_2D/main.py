@@ -215,7 +215,7 @@ post = (17,35)
 
 #energy(v1, v2, 9.31, 18.42, pre, post)
 
-#xy_plot(r1, r2, pre, post)
+#xy_plot.plot(r1, r2, pre, post)
 
 # Schwer bewegt 2
 data = np.loadtxt(data_dir + '3-3-2-LeichterRuhend-SchwererBewegt2.txt', skiprows=3, delimiter=';', converters=conv).transpose()
@@ -232,7 +232,7 @@ post = (19,35)
 
 #energy(v1, v2, 9.31, 18.42, pre, post)
 
-#xy_plot(r1, r2, pre, post)
+#xy_plot.plot(r1, r2, pre, post)
 
 # Freie Bewegung 1
 data = np.loadtxt(data_dir + '3-5-1-FreieBewegungHantel1.txt', skiprows=3, delimiter=';', converters=conv).transpose()
@@ -251,7 +251,7 @@ post = (60,70)
 
 #energy(v1, v2, 18.6, 18.6, pre, post)
 pre, post = (0, 70), (70,69)
-#xy_plot(r1, r2, pre, post)
+#xy_plot.plot(r1, r2, pre, post)
 
 # Freie Bewegung 2
 data = np.loadtxt(data_dir + '3-5-1-FreieBewegungHantel2.txt', skiprows=3, delimiter=';', converters=conv).transpose()
@@ -323,21 +323,21 @@ post = (20, 40)
 #lin_momentum(p, np.zeros_like(p), pre, post)
 
 #bande(r, v, p, 18.42, pre, post)
-xy_plot.plot1(r, pre, post)
+#xy_plot.plot1(r, pre, post)
 
 # Bande 2
 data = np.loadtxt(data_dir + '3-4-Bandenstoss2.txt', skiprows=3, delimiter=';', converters=conv).transpose()
 
 time, x, y, vx, vy, px, py, K = data
 r, v, p = np.array([x, y]), np.array([vx, vy]), np.array([px, py])
-print(data.shape)
+#print(data.shape)
 pre = (1, 17)
 post = (18, 35)
 
-test_range1(r, pre, post)
+#test_range1(r, pre, post)
 
-lin_momentum(p, np.zeros_like(p), pre, post)
+#lin_momentum(p, np.zeros_like(p), pre, post)
 
-bande(r, v, p, 18.42, pre, post)
+#bande(r, v, p, 18.42, pre, post)
 
-xy_plot.plot1(r, pre, post)
+#xy_plot.plot1(r, pre, post)
