@@ -22,7 +22,7 @@ def calculate_single(n, d, z, g, ax=None, messreihe=0):
     wavelength = kappa / g
     delta_wavelength = delta_kappa / g
     lambda_r, delta_lambda_r = sci_round(wavelength * 1e9, delta_wavelength * 1e9)
-    print(f'Wellenlänge: {lambda_r} ± {delta_lambda_r} nm')
+    print(f'Wellenlänge (Messung {messreihe}): {lambda_r} ± {delta_lambda_r} nm')
 
     if ax is None:
         return wavelength, delta_wavelength
@@ -42,7 +42,8 @@ def calculate_wavelength(n, d, z, g):
     lambda_bar = np.mean(wavelength)
     delta_lambda_bar = np.std(wavelength) / np.sqrt(len(wavelength))
     lambda_r, delta_lambda_r = sci_round(lambda_bar * 1e9, delta_lambda_bar * 1e9)
-    print(f'Wellenlänge : {lambda_r} pm {delta_lambda_r} nm')
+    print(f'Wellenlänge (Mittel): {lambda_r} ± {delta_lambda_r} nm')
+
     ax.set(xlabel='Ordnung $n$', ylabel='$\\sin(\\alpha)$')
     ax.xaxis.set_major_locator(MaxNLocator(integer=True))
     ax.tick_params(which='both', direction='in')
@@ -51,4 +52,4 @@ def calculate_wavelength(n, d, z, g):
     ax.legend()
     ax.grid()
 
-    return
+    return lambda_bar, delta_lambda_bar
