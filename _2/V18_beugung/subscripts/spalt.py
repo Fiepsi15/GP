@@ -25,7 +25,7 @@ def wall_single(n, lamb, z, d):
     b = lamb * z / kappa
     d_b = b * d_kappa / kappa
     b_r, db_r = sci_round(b * 1e6, d_b * 1e6)
-    print(f'Spaltbreite (wall): {b_r} ± {db_r} µm')
+    print(f'Spaltbreite (wand): {b_r} ± {db_r} µm')
 
     return b, d_b
 
@@ -54,10 +54,3 @@ def lens(b, g, B, delta_b, delta_g, delta_B):
 
     return G
 
-
-def visible_spectrum(z, g, d1, d2):
-    alpha1 = np.arctan(d1 / z)
-    alpha2 = np.arctan(d2 / z)
-
-    spectrum = np.array([np.sin(alpha1) / g, np.sin(alpha2) / g])
-    print(spectrum * 1e9)

@@ -1,7 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
-from _2.V18_beugung.subscripts.gitter import calculate_wavelength as get_lambda
-from _2.V18_beugung.subscripts.spalt import camera, wall, lens, visible_spectrum
+from _2.V18_beugung.subscripts.gitter import calculate_wavelength, visible_spectrum
+from _2.V18_beugung.subscripts.spalt import camera, wall, lens
 
 data_directory = '_2/V18_beugung/daten/'
 
@@ -24,7 +24,7 @@ g = 80 * 1e3 # linien pro m
 delta_d = 1e-3
 delta_z = 1e-3
 
-lamb, delta_lamb = get_lambda(n, d_i, z_i, g)
+lamb, delta_lamb = calculate_wavelength(n, d_i, z_i, g, np.full_like(d_i, delta_d), np.full_like(z_i, delta_z))
 
 camera(0.5771e3, lamb, 515e-3, delta_lamb, delta_z)
 n, d_0 = np.loadtxt(data_directory + 'spaltbeugung_0.csv', delimiter=',', skiprows=1).transpose()
@@ -38,6 +38,6 @@ wall(n, lamb, z_i, d_i)
 
 lens(1.134, 132e-3, 1.5e-3, 1e-3, 1e-3, 0.5e-3)
 
-visible_spectrum(999e-3, g, 31e-3, 56e-3)
+visible_spectrum(999e-3, g, 31e-3, 56e-3, delta_z, delta_d / 2, delta_d / 2)
 
 plt.show()
