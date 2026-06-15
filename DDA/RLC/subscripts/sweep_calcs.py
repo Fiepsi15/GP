@@ -242,50 +242,50 @@ def sweep(Capacitance, Aquisition_rate, data_directory):
     plt.grid()
     plt.show()
 
-    fig, ax = plt.subplots(2, 2, figsize=(10, 8))
-    fig.subplots_adjust(hspace=0.3, wspace=0.2, left=0.1, right=0.95, bottom=0.1)
+    fig, ax = plt.subplots(3, 1, figsize=(7, 9))
+    fig.subplots_adjust(hspace=0.4, left=0.15, right=0.95, bottom=0.075)
     fig.suptitle(f'Getriebene Schwingung mit $C = {Capacitance} \\mathrm{'{'} \\mu F{'}'}$ und ${Aquisition_rate} \\mathrm{'{'} Hz{'}'}$ sampling Rate')
 
     # Stromstärke
-    ax[0, 0].plot(smoothed_frequency, smoothed_I, color='red', label='Gemessen')
-    ax[0, 0].plot([nu_0_phase, nu_0_phase], [smoothed_I[i_0] * 0.8, smoothed_I[i_0] * 1.2], color='green', linestyle='--', label='Resonanzfrequenz')
-    ax[0, 0].plot(smoothed_frequency, theo_curr, color='blue', label='Theoriekurve')
-    ax[0, 0].fill_between(smoothed_frequency, theo_curr + d_theo_curr, theo_curr - d_theo_curr, color='blue', alpha=0.2)
+    ax[0].plot(smoothed_frequency, smoothed_I, color='red', label='Gemessen')
+    ax[0].plot([nu_0_phase, nu_0_phase], [smoothed_I[i_0] * 0.8, smoothed_I[i_0] * 1.2], color='green', linestyle='--', label='Resonanzfrequenz')
+    ax[0].plot(smoothed_frequency, theo_curr, color='blue', label='Theoriekurve')
+    ax[0].fill_between(smoothed_frequency, theo_curr + d_theo_curr, theo_curr - d_theo_curr, color='blue', alpha=0.2)
     #ax[0, 0].plot(smoothed_frequency, exp_curr, color='green', label='exp. param.')
-    ax[0, 0].plot([smoothed_frequency[i_minus], smoothed_frequency[i_plus]], [I_hm for _ in range(2)], color='black', ls='--', label='FWHM')
-    ax[0, 0].set(ylabel='$I_R / \\mathrm{A}$', title='a) Stromstärke')
+    ax[0].plot([smoothed_frequency[i_minus], smoothed_frequency[i_plus]], [I_hm for _ in range(2)], color='black', ls='--', label='FWHM')
+    ax[0].set(ylabel='$I_R / \\mathrm{A}$', title='a) Stromstärke')
 
     # Impedanz
-    ax[0, 1].plot(smoothed_frequency, smoothed_Z, color='red', label='Gemessen')
-    ax[0, 1].plot(smoothed_frequency, theo_imp, color='blue', label='Theoriekurve')
-    ax[0, 1].fill_between(smoothed_frequency, theo_imp + d_theo_imp, theo_imp - d_theo_imp, color='blue', alpha=0.2)
+    ax[1].plot(smoothed_frequency, smoothed_Z, color='red', label='Gemessen')
+    ax[1].plot(smoothed_frequency, theo_imp, color='blue', label='Theoriekurve')
+    ax[1].fill_between(smoothed_frequency, theo_imp + d_theo_imp, theo_imp - d_theo_imp, color='blue', alpha=0.2)
     #ax[0, 1].plot(smoothed_frequency, exp_imp_param, color='green', label='exp. param.')
     #ax[0, 1].fill_between(smoothed_frequency, exp_imp_param + d_exp_imp, exp_imp_param - d_exp_imp, color='green',
     #                      alpha=0.2)
-    ax[0, 1].plot([nu_0_phase, nu_0_phase], [0, smoothed_Z[i_0] * 2], color='green', linestyle='--', label='Resonanzfrequenz')
-    ax[0, 1].set(ylabel='$|Z| / \\mathrm{\\Omega}$', title='b) Impedanz')
+    ax[1].plot([nu_0_phase, nu_0_phase], [0, smoothed_Z[i_0] * 2], color='green', linestyle='--', label='Resonanzfrequenz')
+    ax[1].set(ylabel='$|Z| / \\mathrm{\\Omega}$', title='b) Impedanz')
 
     # Phasendifferenz
-    ax[1, 0].plot(smoothed_frequency, smoothed_phase_diff, color='red', label='Gemessen')
-    ax[1, 0].plot(smoothed_frequency, theo_phase, color='blue', label='Theoriekurve')
+    ax[2].plot(smoothed_frequency, smoothed_phase_diff, color='red', label='Gemessen')
+    ax[2].plot(smoothed_frequency, theo_phase, color='blue', label='Theoriekurve')
     #ax[1, 0].fill_between(smoothed_frequency, theo_phase + d_theo_phase, theo_phase - d_theo_phase, color='blue', alpha=0.2)
     #ax[1, 0].plot(smoothed_frequency, exp_phase, color='green', label='exp. param.')
-    ax[1, 0].plot([nu_0_phase, nu_0_phase], [-0.5, 0.5], color='green', linestyle='--', label='Resonanzfrequenz')
-    ax[1, 0].plot(smoothed_frequency, np.zeros_like(smoothed_frequency), color='black', ls='-.', label='Nulllinie')
-    ax[1, 0].set(ylabel='$\\Delta \\varphi / \\mathrm{rad}$', ylim=(-np.pi / 2, np.pi / 2), title='c) Phasenverschiebung')
+    ax[2].plot([nu_0_phase, nu_0_phase], [-0.5, 0.5], color='green', linestyle='--', label='Resonanzfrequenz')
+    ax[2].plot(smoothed_frequency, np.zeros_like(smoothed_frequency), color='black', ls='-.', label='Nulllinie')
+    ax[2].set(ylabel='$\\Delta \\varphi / \\mathrm{rad}$', ylim=(-np.pi / 2, np.pi / 2), title='c) Phasenverschiebung')
 
     # Frequenz
-    ax[1, 1].plot(compressed_time, smoothed_frequency, color='orange', label='Gemessen')
-    ax[1, 1].set(ylabel='$f / \\mathrm{Hz}$', ylim=(0, 260), title='d) Frequenz')
+    #ax[1, 1].plot(compressed_time, smoothed_frequency, color='orange', label='Gemessen')
+    #ax[1, 1].set(ylabel='$f / \\mathrm{Hz}$', ylim=(0, 260), title='d) Frequenz')
 
-    for a in ax:
-        for x in a:
-            x.legend()
-            x.grid()
-            x.minorticks_on()
-            x.tick_params(direction='in', which='both')
-            x.set(xlabel='$f / \\mathrm{Hz}$')
-    ax[1, 1].set_xlabel('$t / \\mathrm{s}$')
+    for x in ax:
+        #for x in a:
+        x.legend()
+        x.grid()
+        x.minorticks_on()
+        x.tick_params(direction='in', which='both')
+        x.set(xlabel='$f / \\mathrm{Hz}$')
+    #ax[1, 1].set_xlabel('$t / \\mathrm{s}$')
     plt.show()
 
     # Bode Plot
