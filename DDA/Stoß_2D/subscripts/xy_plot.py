@@ -1,18 +1,30 @@
 import numpy as np
-from matplotlib import pyplot as plt
+from matplotlib import pyplot as plt, figure
+
+
+def single(r, pre, post, p_label, p_marker, p_color1, p_color2, ax, no_col=False):
+    r_pre, r_post = r[:, pre[0]:pre[1] + 1], r[:, post[0] - 1:post[1]]
+
+    ax.plot(r_pre[0], r_pre[1], label=p_label, color=p_color1, marker=p_marker)
+    if no_col:
+        return
+    ax.plot(r_post[0], r_post[1], label=f'{p_label} nach dem Stoß', color=p_color2, marker=p_marker)
 
 
 def plot(r1, r2, pre, post):
-    r1_pre, r1_post = r1[:, pre[0]:pre[1] + 1], r1[:, post[0] - 1:post[1]]
-    r2_pre, r2_post = r2[:, pre[0]:pre[1] + 1], r2[:, post[0] - 1:post[1]]
-
     fig, ax = plt.subplots()
     fig.suptitle('Positionen der Massen')
 
-    ax.plot(r1_pre[0], r1_pre[1], label='M1', color='red', marker='v')
-    ax.plot(r2_pre[0], r2_pre[1], label='M2', color='blue', marker='^')
-    ax.plot(r1_post[0], r1_post[1], label='M1 nach dem Stoß', color='orange', marker='v')
-    ax.plot(r2_post[0], r2_post[1], label='M2 nach dem Stoß', color='green', marker='^')
+    label = 'M1'
+    marker = 'v'
+    color1, color2 = 'red', 'orange'
+    single(r1, pre, post, label, marker, color1, color2, ax)
+
+    label = 'M2'
+    marker = '^'
+    color1, color2 = 'blue', 'green'
+    single(r2, pre, post, label, marker, color1, color2, ax)
+
     ax.tick_params(axis='both', which='major', direction='in')
     ax.set(xlabel='$x/\\mathrm{m}$', ylabel='$y/\\mathrm{m}$')
     ax.minorticks_on()
@@ -23,13 +35,14 @@ def plot(r1, r2, pre, post):
 
 
 def plot1(r, pre, post):
-    r1_pre, r1_post = r[:, pre[0]:pre[1] + 1], r[:, post[0] - 1:post[1]]
-
     fig, ax = plt.subplots()
     fig.suptitle('Positionen der Masse')
 
-    ax.plot(r1_pre[0], r1_pre[1], label='M1', color='red', marker='v')
-    ax.plot(r1_post[0], r1_post[1], label='M1 nach dem Stoß', color='orange', marker='v')
+    label = 'M1'
+    marker = 'v'
+    color1, color2 = 'red', 'orange'
+    single(r, pre, post, label, marker, color1, color2, ax)
+
     ax.tick_params(axis='both', which='major', direction='in')
     ax.set(xlabel='$x/\\mathrm{m}$', ylabel='$y/\\mathrm{m}$')
     ax.minorticks_on()
@@ -39,20 +52,62 @@ def plot1(r, pre, post):
     plt.show()
 
 
-def plot3(r1, r2, r3, pre, post):
-    r1_pre, r1_post = r1[:, pre[0]:pre[1] + 1], r1[:, post[0] - 1:post[1]]
-    r2_pre, r2_post = r2[:, pre[0]:pre[1] + 1], r2[:, post[0] - 1:post[1]]
-    r3_pre, r3_post = r3[:, pre[0]:pre[1] + 1], r3[:, post[0] - 1:post[1]]
-
+def plot2_hantel(r1, r2, m1, m2, pre, post):
     fig, ax = plt.subplots()
-    fig.suptitle('Positionen der Massen')
+    fig.suptitle('Positionen der Massen und des Schwerpunkts')
 
-    ax.plot(r1_pre[0], r1_pre[1], label='M1 (Hantel) vor dem Stoß', color='red', marker='v')
-    ax.plot(r2_pre[0], r2_pre[1], label='M2 (Hantel) vor dem Stoß', color='blue', marker='^')
-    ax.plot(r3_pre[0], r3_pre[1], label='M3 vor dem Stoß', color='green', marker='^')
-    ax.plot(r1_post[0], r1_post[1], label='M1 (Hantel) nach dem Stoß', color='orange', marker='v')
-    ax.plot(r2_post[0], r2_post[1], label='M2 (Hantel) nach dem Stoß', color='purple', marker='^')
-    ax.plot(r3_post[0], r3_post[1], label='M3 nach dem Stoß', color='black', marker='^')
+    label = 'M1'
+    marker = 'v'
+    color1, color2 = 'red', 'red'
+    single(r1, pre, post, label, marker, color1, color2, ax, no_col=True)
+
+    label = 'M2'
+    marker = '^'
+    color1, color2 = 'blue', 'blue'
+    single(r2, pre, post, label, marker, color1, color2, ax, no_col=True)
+
+    r3 = (r1 * m1 + r2 * m2) / (m1 + m2)
+
+    label = 'Schwerpunkt'
+    marker = 'o'
+    color1, color2 = 'green', 'green'
+    single(r3, pre, post, label, marker, color1, color2, ax, no_col=True)
+
+    ax.tick_params(axis='both', which='major', direction='in')
+    ax.set(xlabel='$x/\\mathrm{m}$', ylabel='$y/\\mathrm{m}$')
+    ax.minorticks_on()
+    ax.legend()
+    ax.grid()
+
+    plt.show()
+
+
+def plot3_hantel(r1, r2, r3, m1, m2, pre, post):
+    fig, ax = plt.subplots(figsize=(7, 5))
+    fig.suptitle('Positionen der Massen und des Schwerpunkts')
+
+    label = 'M1 (Hantel)'
+    marker = 'v'
+    color1, color2 = 'red', 'orange'
+    single(r1, pre, post, label, marker, color1, color2, ax)
+
+    label = 'M2 (Hantel)'
+    marker = '^'
+    color1, color2 = 'blue', 'purple'
+    single(r2, pre, post, label, marker, color1, color2, ax)
+
+    label = 'M3'
+    marker = '>'
+    color1, color2 = 'green', 'black'
+    single(r3, pre, post, label, marker, color1, color2, ax)
+
+    r4 = (r1 * m1 + r2 * m2) / (m1 + m2)
+
+    label = 'Schwerpunkt'
+    marker = 'o'
+    color1, color2 = 'teal', 'cyan'
+    single(r4, pre, post, label, marker, color1, color2, ax)
+
     ax.tick_params(axis='both', which='major', direction='in')
     ax.set(xlabel='$x/\\mathrm{m}$', ylabel='$y/\\mathrm{m}$')
     ax.minorticks_on()

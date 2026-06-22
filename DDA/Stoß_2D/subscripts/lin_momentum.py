@@ -16,10 +16,28 @@ def testprint(p_pre_m, delta_p_pre, p_post_m, delta_p_post):
     return
 
 
+def testprint_s(K_pre_m, delta_K_pre, K_post_m, delta_K_post):
+    p_pre_x_r, d_p_pre_x_r = sci_round(K_pre_m, delta_K_pre)
+    print(f'Pre: K = {p_pre_x_r} +- {d_p_pre_x_r}')
+    p_post_x_r, d_p_post_x_r = sci_round(K_post_m, delta_K_post)
+    print(f'Post: K = {p_post_x_r} +- {d_p_post_x_r}')
+
+
 def mean_std(p, axis=0):
     mean = np.mean(p, axis=axis)
     std = np.std(p, axis=axis) / np.sqrt(len(p))
     return mean, std
+
+
+def single(p, pre, post):
+    p = p.transpose()
+    p_abs = np.sqrt(p[:,0] ** 2 + p[:,1] ** 2)
+    p_pre, p_post = p_abs[pre[0]:pre[1]], p_abs[post[0]:post[1]]
+
+    p_pre_m, delta_p_pre = mean_std(p_pre, axis=0)
+    p_post_m, delta_p_post = mean_std(p_post, axis=0)
+
+    testprint_s(p_pre_m, delta_p_pre, p_post_m, delta_p_post)
 
 
 def test_momentum(p1, p2, pre, post, p3=None):
