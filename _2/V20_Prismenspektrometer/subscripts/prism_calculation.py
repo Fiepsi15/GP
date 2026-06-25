@@ -60,6 +60,13 @@ def calculate_n(delta_min, epsilon=60):
     return n, delta_n
 
 
+def print_ab(a, b):
+    ar = sci_round(a[0], a[1])
+    br = sci_round(b[0], b[1])
+    print(f'a = {ar[0]} ± {ar[1]}')
+    print(f'b = {br[0]} ± {br[1]}')
+
+
 def get_lambda_of_n(wavelength, delta_min, epsilon=60):
     def model(x, a, b):
         return a + b / x ** 2
@@ -67,6 +74,7 @@ def get_lambda_of_n(wavelength, delta_min, epsilon=60):
     n = calculate_n(delta_min, epsilon)
     popt, pcov = optimize.curve_fit(model, wavelength, n[0], sigma=n[1], absolute_sigma=True)
     a, b = zip(popt, np.sqrt(np.diag(pcov)))
+    print_ab(a, b)
 
     def n_of(wavelength):
         n = a[0] + b[0] / wavelength ** 2
@@ -109,10 +117,10 @@ def get_spectrum_of_minimum_deflection(lambda_of_n, delta_min, epsilon=60, lamp 
     fig, ax = plt.subplots(figsize=(6, 1.5))
     fig.subplots_adjust(bottom=0.3, top=0.82)
 
-    for wavelength, delta_wavelength in np.array(wavelength).transpose():
-        ax.plot([wavelength, wavelength], [0, 1], color=wavelength_to_rgb(wavelength)) #plt.get_cmap('Spectral')(1 - (wavelength - 400) / (700 - 400)))
-        ax.fill_betweenx([0, 1], [wavelength-delta_wavelength, wavelength-delta_wavelength], [wavelength+delta_wavelength, wavelength+delta_wavelength], color=wavelength_to_rgb(wavelength), alpha=0.2)
-        w_r, dw_r = sci_round(wavelength, delta_wavelength)
+    for wavelength_s, delta_wavelength in np.array(wavelength).transpose():
+        ax.plot([wavelength_s, wavelength_s], [0, 1], color=wavelength_to_rgb(wavelength_s)) #plt.get_cmap('Spectral')(1 - (wavelength - 400) / (700 - 400)))
+        ax.fill_betweenx([0, 1], [wavelength_s - delta_wavelength, wavelength_s - delta_wavelength], [wavelength_s + delta_wavelength, wavelength_s + delta_wavelength], color=wavelength_to_rgb(wavelength_s), alpha=0.2)
+        w_r, dw_r = sci_round(wavelength_s, delta_wavelength)
         print(f'lambda = {w_r} +- {dw_r}')
 
     ax.plot([], [], label='Spektrallinien', color='orange')
@@ -122,3 +130,5 @@ def get_spectrum_of_minimum_deflection(lambda_of_n, delta_min, epsilon=60, lamp 
     ax.tick_params(axis='y', which='both', left=False, labelleft=False)
     ax.minorticks_on()
     ax.legend(loc='upper right')
+
+    return wavelength
