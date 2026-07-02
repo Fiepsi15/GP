@@ -1,7 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 from _2.V22_Fresnelformeln.subscripts.maluskurve import calculate_polarization
-from _2.V22_Fresnelformeln.subscripts.fresnel import transmission_an_duenner_glasplatte
+from _2.V22_Fresnelformeln.subscripts.fresnel import transmission_an_duenner_glasplatte, fresnel_rechnung
 
 
 def spannungsunsicherheit(Spannung, verstaerkung, digits):
@@ -24,6 +24,16 @@ Photospannung = np.array([Photospannung, delta_spannung])
 
 calculate_polarization(Pol_winkel, Photospannung)
 
+# Fresnel Formeln
 transmission_an_duenner_glasplatte()
+
+_, reflexion_p, reflexion_s = np.loadtxt(directory + 'fresnel_reflexion.csv', skiprows=1, delimiter=',', unpack=True)
+
+theta, transmission_p, transmission_s = np.loadtxt(directory + 'fresnel_transmission.csv', skiprows=1, delimiter=',', unpack=True)
+reflexion_p = reflexion_p / 10
+referenz_p = 109 # mV
+referenz_s = 114 # mV
+
+fresnel_rechnung(theta, reflexion_p, reflexion_s, transmission_p, transmission_s, referenz_p, referenz_s)
 
 plt.show()
