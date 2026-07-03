@@ -25,14 +25,30 @@ Photospannung = np.array([Photospannung, delta_spannung])
 calculate_polarization(Pol_winkel, Photospannung)
 
 # Fresnel Formeln
-transmission_an_duenner_glasplatte()
+# transmission_an_duenner_glasplatte()
 
 _, reflexion_p, reflexion_s = np.loadtxt(directory + 'fresnel_reflexion.csv', skiprows=1, delimiter=',', unpack=True)
 
 theta, transmission_p, transmission_s = np.loadtxt(directory + 'fresnel_transmission.csv', skiprows=1, delimiter=',', unpack=True)
 reflexion_p = reflexion_p / 10
+
 referenz_p = 109 # mV
+delta = spannungsunsicherheit(referenz_p, 1, 1e-3)
+referenz_p = np.array([referenz_p, delta])
+
 referenz_s = 114 # mV
+delta = spannungsunsicherheit(referenz_s, 1, 1e-3)
+referenz_s = np.array([referenz_s, delta])
+
+theta = np.array([theta - 0.3, np.full_like(theta, 0.1)])
+delta = spannungsunsicherheit(reflexion_p, 10, 1e-3)
+reflexion_p = np.array([reflexion_p, delta])
+delta = spannungsunsicherheit(reflexion_s, 1, 1e-3)
+reflexion_s = np.array([reflexion_s, delta])
+delta = spannungsunsicherheit(transmission_p, 1, 1e-3)
+transmission_p = np.array([transmission_p, delta])
+delta = spannungsunsicherheit(transmission_s, 1, 1e-3)
+transmission_s = np.array([transmission_s, delta])
 
 fresnel_rechnung(theta, reflexion_p, reflexion_s, transmission_p, transmission_s, referenz_p, referenz_s)
 
