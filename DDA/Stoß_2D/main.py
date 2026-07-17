@@ -249,7 +249,7 @@ post = (19, 35)
 data = np.loadtxt(data_dir + '3-5-1-FreieBewegungHantel1.txt', skiprows=3, delimiter=';', converters=conv).transpose()
 
 time, r1, v1, p1, K1, r2, v2, p2, K2 = extract(data)
-# print(data.shape)
+print(data.shape)
 
 pre = (5, 15)
 post = (60, 70)
@@ -269,7 +269,7 @@ pre, post = (0, 70), (70, 69)
 data = np.loadtxt(data_dir + '3-5-1-FreieBewegungHantel2.txt', skiprows=3, delimiter=';', converters=conv).transpose()
 
 time, r1, v1, p1, K1, r2, v2, p2, K2 = extract(data)
-# print(data.shape)
+print(data.shape)
 
 pre = (5, 15)
 post = (65, 75)
