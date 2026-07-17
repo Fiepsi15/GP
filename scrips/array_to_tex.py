@@ -52,7 +52,7 @@ def array_to_tex(array, error, quantities_and_units, caption='Table 1', label='T
             s += f'& {j + 1} '
         s += '\\\\\n\\hline\n'
         for j in range(quant_len):
-            s += quantities_and_units[0][j] + '/' + quantities_and_units[1][j] + ' '
+            s += '$' + quantities_and_units[0][j] + '/\\mathrm{' + quantities_and_units[1][j] + '}$ '
             for k in range(row_len):
                 k = k + row_len * i
                 if k == list_len:
