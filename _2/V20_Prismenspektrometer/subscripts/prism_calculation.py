@@ -67,7 +67,7 @@ def print_ab(a, b):
     print(f'b = {br[0]} ± {br[1]}')
 
 
-def get_lambda_of_n(wavelength, delta_min, epsilon=60):
+def get_lambda_of_n(wavelength, delta_min, epsilon=60, plabel=''):
     def model(x, a, b):
         return a + b / x ** 2
 
@@ -99,7 +99,7 @@ def get_lambda_of_n(wavelength, delta_min, epsilon=60):
     ax.plot(x, n_of(x)[0], label='Ausgleichskurve $n(\\lambda)$', color='red')
     ax.fill_between(x, n_of(x)[0] + n_of(x)[1], n_of(x)[0] - n_of(x)[1], label='Unsicherheit', color='red', alpha=0.2)
     ax.set(xlabel='Wellenlänge $\\lambda\\,[\\mathrm{nm}]$', ylabel='Brechungsindex $n\\,(\\lambda)$',
-           title='Brechungsindex in Abhängigkeit der Wellenlänge')
+           title=f'Prisma {plabel}')
     ax.tick_params(axis='both', which='both', direction='in')
     ax.minorticks_on()
     ax.legend()

@@ -40,8 +40,13 @@ def Hg_prism(dir, i, theta_0):
     delta_min = decimal_deg(
         prism1[2], prism1[3], np.full_like(wavelength, delta_angle),
         theta_0)  # (grad, minuten, unsicherheit in min, theta_0) → (grad, unsicherheit in grad)
+    label = ''
+    if i == 1:
+        label = 'I'
+    elif i == 3:
+        label = 'III'
 
-    return prism.get_lambda_of_n(wavelength, delta_min)
+    return prism.get_lambda_of_n(wavelength, delta_min, plabel=label)
 
 
 def make_spectrum(dir, lambda_of_n, lamp, prism_num, theta_0, hg=False):
