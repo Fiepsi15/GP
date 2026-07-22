@@ -40,9 +40,8 @@ def test(daten:np.ndarray, masse, L, b, d, l_ges):
     plt.grid()
 
     plt.show()
-    peak_pos, _ = signal.find_peaks(Pxx_den, prominence=0.001)
-    omega = f[peak_pos][0]
+    peak_pos, _ = signal.find_peaks(Pxx_den, prominence=0.0001)
+    omega = f[peak_pos[-1]] * 2 * np.pi
     print(omega)
 
     print(E_mod(1, L, mu, I, omega) / 1e9)
-    print(E_mod(1, L, mu, I, 50) / 1e9)

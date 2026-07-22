@@ -34,7 +34,7 @@ def run(staerke, metall, einspannlaenge):
     dyn.test(mess_daten[1], masse=parameter['m'], L=L, b=parameter['b'], d=parameter['d'], l_ges=parameter['l_ges'])
 
 
-run('', 'Kupfer', 191)
+run('dünn', 'Alu', 268)
 
 #test_daten = np.loadtxt(f'{data_dir_dyn}/Duenner-Alu-232.txt', skiprows=4, unpack=True, delimiter='\t')
 #
