@@ -16,7 +16,7 @@ def calculate_angular_velocity(data):
 
     omegas = []
     for i in range(mags_per_cycle, len(flanks), mags_per_cycle):
-        omegas.append(1 / (time[flanks[i]] - time[flanks[i - mags_per_cycle]]) * 1/mags_per_cycle)
+        omegas.append(2 * np.pi / (time[flanks[i]] - time[flanks[i - mags_per_cycle]]))
 
     angular_velocity = np.mean(omegas)
     angular_velocity_err = np.std(omegas) / np.sqrt(len(omegas))
