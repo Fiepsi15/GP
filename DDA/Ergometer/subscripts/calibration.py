@@ -26,10 +26,14 @@ def linreg(p_voltage, p_force):
     popt, pcov = optimize.curve_fit(model, x, y)#, sigma=y_err, absolute_sigma=True)
     a, b = popt
     delta_a, delta_b = np.sqrt(np.diag(pcov))
+    U_0 = - b / a, np.sqrt((delta_b / a) ** 2 + (b / a ** 2 * delta_a) ** 2)
+
 
     fig, ax = plt.subplots()
     a_r, da_r = sci_round(a, delta_a)
     b_r, db_r = sci_round(b, delta_b)
+    U_0_r = sci_round(U_0[0], U_0[1])
+    print(f'U_0 = {U_0_r[0]} +- {U_0_r[1]}')
 
     plt.errorbar(x, y, xerr=p_voltage[1], fmt='o', capsize=2, color='blue', label='Messwerte')
     ax.plot(x, model(x, a, b), color='red', label=f'Fit: $F = ({a_r}\\pm{da_r})\\,$' + '$\\mathrm{N / V}\\times U$' + f'$ \\;+\\; ({b_r} \\pm {db_r})$' + '$\\mathrm{N}$')

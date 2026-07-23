@@ -58,15 +58,26 @@ def force_regression(ang_vel, force):
 
     ar, dar = sci_round(a, delta_a)
     t = np.linspace(np.min(x), np.max(x), 100)
-    fig, ax = plt.subplots()
+    res = y - model(x, a)
+    fig, (ax, ax_res) = plt.subplots(2, 1, sharex=True, height_ratios=(4, 1), figsize=(6, 5))
+    fig.subplots_adjust(hspace=0.1)
     ax.errorbar(x, y, xerr=ang_vel[1], yerr=y_err, fmt='o', capsize=2, color='blue', label='Messwerte')
     ax.plot(t, model(t, a), color='red', label=f'Fit: $F = ({ar}\\pm{dar})\\,$' + '$\\mathrm{N s}\\times \\omega$')
     ax.fill_between(t, model(t, a - delta_a), model(t, a + delta_a), color='red', alpha=0.2, label='Unsicherheit')
-    ax.set(xlabel='Winkelgeschwindigkeit [1/s]', ylabel='Kraft [N]', title='Kraft-Winkelgeschwindigkeit')
+    ax.set(ylabel='Kraft [N]', title='Kraft-Winkelgeschwindigkeit')
     ax.tick_params(which='both', direction='in')
     ax.minorticks_on()
     ax.legend()
     ax.grid()
+
+    max_res = np.max(abs(res))
+    ax_res.errorbar(x, y - model(x, a), xerr=ang_vel[1], yerr=y_err, fmt='o', capsize=2, color='green', label='Residuen')
+    ax_res.set(xlabel='Winkelgeschwindigkeit [1/s]', ylabel='Residuen [N]', ylim=(-max_res * 1.5, max_res * 1.5))
+    ax_res.tick_params(which='both', direction='in')
+    ax_res.minorticks_on()
+    ax_res.legend()
+    ax_res.grid()
+
 
     return a, delta_a
 
@@ -84,15 +95,25 @@ def power_regression(ang_vel, power):
 
     ar, dar = sci_round(a, delta_a)
     t = np.linspace(np.min(x), np.max(x), 100)
-    fig, ax = plt.subplots()
+    res = y - model(x, a)
+    fig, (ax, ax_res) = plt.subplots(2, 1, sharex=True, height_ratios=(4, 1), figsize=(6, 5))
+    fig.subplots_adjust(hspace=0.1)
     ax.errorbar(x, y, xerr=ang_vel[1], yerr=y_err, fmt='o', capsize=2, color='blue', label='Messwerte')
     ax.plot(t, model(t, a), color='red', label=f'Fit: $P = ({ar}\\pm{dar})\\,$' + '$\\mathrm{W s^2}\\times \\omega^2$')
     ax.fill_between(t, model(t, a - delta_a), model(t, a + delta_a), color='red', alpha=0.2, label='Unsicherheit')
-    ax.set(xlabel='Winkelgeschwindigkeit [1/s]', ylabel='Leistung [W]', title='Leistung-Winkelgeschwindigkeit')
+    ax.set(ylabel='Leistung [W]', title='Leistung-Winkelgeschwindigkeit')
     ax.tick_params(which='both', direction='in')
     ax.minorticks_on()
     ax.legend()
     ax.grid()
+
+    max_res = np.max(abs(res))
+    ax_res.errorbar(x, res, xerr=ang_vel[1], yerr=y_err, fmt='o', capsize=2, color='green', label='Residuen')
+    ax_res.tick_params(which='both', direction='in')
+    ax_res.set(xlabel='Winkelgeschwindigkeit [1/s]', ylabel='Residuen [W]', ylim=(-max_res * 1.5, max_res * 1.5))
+    ax_res.minorticks_on()
+    ax_res.legend()
+    ax_res.grid()
 
     return a, delta_a
 
@@ -130,10 +151,10 @@ def analyze_student(data_dir, cal_factor, cal_offset, student_numbers):
     force = np.array(force).transpose()
     power = np.array(power).transpose()
 
-    # Plotting
-    fig, ax = plt.subplots()
-    for data_set in data:
-        ax.plot(data_set[0], data_set[2])
+    ## Plotting
+    #fig, ax = plt.subplots()
+    #for data_set in data:
+    #    ax.plot(data_set[0], data_set[2])
 
     force_regression(angular_velocity, force)
 
