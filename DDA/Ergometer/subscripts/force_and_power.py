@@ -156,8 +156,13 @@ def analyze_student(data_dir, cal_factor, cal_offset, student_numbers):
     #for data_set in data:
     #    ax.plot(data_set[0], data_set[2])
 
-    force_regression(angular_velocity, force)
+    beta = force_regression(angular_velocity, force)
 
-    power_regression(angular_velocity, power)
+    gamma = power_regression(angular_velocity, power)
+
+    gamma_2 = beta[0] * d * r1 / r2, beta[1] * d * r1 / r2
+    gamma_r = sci_round(gamma[0], gamma[1])
+    gamma_2_r = sci_round(gamma_2[0], gamma_2[1])
+    print(f'Gamma = {gamma_r[0]} +- {gamma_r[1]}, \nGamma aus beta = {gamma_2_r[0]} +- {gamma_2_r[1]}')
 
     plt.show()
