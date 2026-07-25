@@ -11,7 +11,10 @@ Datenbank_statisch = {'Kupfer': {'l_ges': 200e-3, 'b': 20e-3, 'd': 0.5e-3, 'm': 
 
 
 def Traegheitsmoment(b, d):
-    return b * d ** 3 / 12
+    I = b[0] * d[0] ** 3 / 12
+    dI = np.sqrt((d[0] ** 3 / 12 * b[1]) ** 2
+                 + (b[0] * d[0] ** 2 / 4 * d[1]) ** 2)
+    return I, dI
 
 
 def model(px, pa, pb):
@@ -43,7 +46,7 @@ def regression(daten):
     da, db = np.sqrt(np.diag(pcov))
     a_r = sci_round(a, da)
 
-    print(f'Fit: a = {a_r[0]} +- {a_r[1]}')
+    #print(f'Fit: a = {a_r[0]} +- {a_r[1]}')
 
     fig, ax = plt.subplots()
     # ax.errorbar(x, y, xerr=force[1], yerr=y_err, label='Messwerte', fmt='o', color='blue', capsize=5)
@@ -75,7 +78,47 @@ def alu(data_dir, strength_list):
     daten[:, 0] = daten[:, 0] / 1000
     daten[:, 1] = daten[:, 1] * (5 / 1024)
 
-    print(daten, '\n')
+    a_list = []
+    for reihe in daten:
+        a = regression(reihe)
+        a_list.append(a)
+    a_list = np.array(a_list)
+
+    E_list = []
+    s = 'dünn'
+    for i in range(2):
+        for j in range(2):
+            parameter = Datenbank_statisch[f'Alu_{s}']
+            L = parameter['l_ges'], 1e-3
+            breite = parameter['b'], 0.5e-3
+            dicke = parameter['d'], 0.05e-3
+            I = Traegheitsmoment(breite, dicke)
+            E = get_E_from_factor(a_list[2 * i + j], L, I)
+            E_list.append(E)
+        s = 'dick'
+    E_list = np.array(E_list) / 1e9
+
+    for E in E_list:
+        E_r = sci_round(E[0], E[1])
+        print(f'E_mod = {E_r[0]} +- {E_r[1]} GPa')
+
+    plt.show()
+    return
+
+
+def stahl(data_dir, strength_list):
+    daten = []
+    for strength in strength_list:
+        daten_reihe_vor = np.loadtxt(f'{data_dir}/Stahl_{strength}mum.csv', skiprows=4, delimiter=',', unpack=True,
+                                     max_rows=10)
+        daten_reihe_rueck = np.loadtxt(f'{data_dir}/Stahl_{strength}mum.csv', skiprows=17, delimiter=',', unpack=True,
+                                       max_rows=10)
+        daten.append(daten_reihe_vor)
+        daten.append(daten_reihe_rueck)
+    daten = np.array(daten)
+
+    daten[:, 0] = daten[:, 0] / 1000
+    daten[:, 1] = daten[:, 1] * (5 / 1024)
 
     a_list = []
     for reihe in daten:
@@ -83,24 +126,71 @@ def alu(data_dir, strength_list):
         a_list.append(a)
     a_list = np.array(a_list)
 
-    E_thin = []
+    E_list = []
     s = 'dünn'
     for i in range(2):
         for j in range(2):
-            parameter = Datenbank_statisch[f'Alu_{s}']
-            L = parameter['l_ges']
-            breite = parameter['b']
-            dicke = parameter['d']
+            parameter = Datenbank_statisch[f'Stahl_{s}']
+            L = parameter['l_ges'], 1e-3
+            breite = parameter['b'], 0.5e-3
+            dicke = parameter['d'], 0.05e-3
             I = Traegheitsmoment(breite, dicke)
-            L = L, 1e-3
-            I = I, 0.1 * I
             E = get_E_from_factor(a_list[2 * i + j], L, I)
-            E_thin.append(E)
+            E_list.append(E)
         s = 'dick'
-    E_thin = np.array(E_thin) / 1e9
+    E_list = np.array(E_list) / 1e9
 
-    for E in E_thin:
+    for E in E_list:
         E_r = sci_round(E[0], E[1])
         print(f'E_mod = {E_r[0]} +- {E_r[1]} GPa')
 
     plt.show()
+    return
+
+
+def kupfer(data_dir):
+    daten_vor = np.loadtxt(f'{data_dir}/Cu_500mum.csv', skiprows=4, delimiter=',', unpack=True, max_rows=10)
+    daten_nach = np.loadtxt(f'{data_dir}/Cu_500mum.csv', skiprows=17, delimiter=',', unpack=True, max_rows=10)
+    daten = np.array([daten_vor, daten_nach])
+
+    daten[:, 0] = daten[:, 0] / 1000
+    daten[:, 1] = daten[:, 1] * (5 / 1024)
+
+    a_list = []
+    for reihe in daten:
+        a = regression(reihe)
+        a_list.append(a)
+    a_list = np.array(a_list)
+
+    E_list = []
+    for i in range(2):
+        parameter = Datenbank_statisch[f'Kupfer']
+        L = parameter['l_ges'], 1e-3
+        breite = parameter['b'], 0.5e-3
+        dicke = parameter['d'], 0.05e-3
+        I = Traegheitsmoment(breite, dicke)
+        E = get_E_from_factor(a_list[i], L, I)
+        E_list.append(E)
+    E_list = np.array(E_list) / 1e9
+
+    for E in E_list:
+        E_r = sci_round(E[0], E[1])
+        print(f'E_mod = {E_r[0]} +- {E_r[1]} GPa')
+
+    plt.show()
+
+    return
+
+
+def analyze(data_dir, metall, strength_list):
+    print(f'\nMetall: {metall}')
+    if metall == 'Alu':
+        alu(data_dir, strength_list)
+        return
+    if metall == 'Stahl':
+        stahl(data_dir, strength_list)
+        return
+    kupfer(data_dir)
+    return
+
+

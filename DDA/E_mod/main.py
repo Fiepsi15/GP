@@ -18,5 +18,8 @@ data_dir_stat = 'DDA/E_mod/daten/statisch'
 #laengen = [255, 191, 133]
 #kupfer(laengen, data_dir_dyn)
 
-strength_list = [1, 2]
-statisch.alu(data_dir_stat, strength_list)
+strength_list = [1, 2] # mm
+statisch.analyze(data_dir_stat, 'Alu', strength_list)
+strength_list = [550, 1000] # mu m
+statisch.analyze(data_dir_stat, 'Stahl', strength_list)
+statisch.analyze(data_dir_stat, 'Kupfer', [])
