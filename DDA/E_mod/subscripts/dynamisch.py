@@ -57,9 +57,9 @@ def test(daten: np.ndarray, masse, L_einsp, b, d, l_ges, sampling_rate):
     f, Pxx_den = signal.welch(daten, fs=sampling_rate, nperseg=1024)
     plt.semilogy(f, Pxx_den)
     plt.ylim([0.5e-4, 1])
-    plt.xlim([-1, 50])
-    plt.xlabel('frequency [Hz]')
-    plt.ylabel('PSD [V**2/Hz]')
+    plt.xlim([0, 50])
+    plt.xlabel('Frequenz $\\mathrm{[Hz]}$')
+    plt.ylabel('$\\mathrm{PSD}$')
     plt.grid()
 
     peak_pos, _ = signal.find_peaks(Pxx_den, prominence=0.0001)
