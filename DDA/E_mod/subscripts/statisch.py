@@ -40,7 +40,7 @@ def regression(daten):
 
     x = force
     y = distance
-    y_err = np.full_like(distance, 0.01e-3)
+    y_err = np.full_like(distance, 1e-3 / 200)
     popt, pcov = optimize.curve_fit(model, x, y) # , sigma=y_err, absolute_sigma=True)
     a, b = popt
     da, db = np.sqrt(np.diag(pcov))
@@ -55,13 +55,13 @@ def regression(daten):
     ax.fill_between(x, (model(x, a, b) + delta_model(x, (a, da), (b, db))) * 1e3,
                     (model(x, a, b) - delta_model(x, (a, da), (b, db))) * 1e3, label='Unsicherheit', alpha=0.2,
                     color='red')
-    ax.set(xlabel='$F\\, \\mathrm{[N]}$', ylabel='$d\\, \\mathrm{[mm]}$')
+    ax.set(xlabel='$F\\, \\mathrm{[N]}$', ylabel='$d\\, \\mathrm{[mm]}$', title='Biegung eines Balkens')
     ax.tick_params(which='both', direction='in')
     ax.minorticks_on()
     ax.legend()
     ax.grid()
 
-    return a, da
+    return a, da, ax
 
 
 def alu(data_dir, strength_list):

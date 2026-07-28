@@ -63,6 +63,11 @@ def attenuation(daten):
     def model(t, p_V0, p_gamma):
         return p_V0 * np.exp(-p_gamma * t)
 
+    def delta_model(t, p_U0, p_gamma):
+        delta = np.sqrt((np.exp(-p_gamma[0] * t) * p_U0[1]) ** 2
+                        + (p_U0[0] * t * np.exp(-p_gamma[0] * t) * p_gamma[1]) ** 2)
+        return delta
+
     time = daten[0]
     spannung = daten[1]
 
@@ -81,13 +86,33 @@ def attenuation(daten):
     print(f'Attenuation: {gamma_r[0]} +- {gamma_r[1]}')
 
     fig, ax = plt.subplots()
-    ax.plot(time, envelope, color='green', label='Daten')
-    ax.plot(time, model(time, V0, gamma), color='red', label='Fit')
+    ax.plot(time, envelope, color='green', label='Messdaten')
+    ax.plot(time, model(time, V0, gamma), color='red', label='Fit nach $A(t) = A_0 \\cdot \\exp(- \\delta \\cdot t)$')
+    ax.fill_between(time, model(time, V0, gamma) + delta_model(time, (V0, d_V0), (gamma, d_gamma)), model(time, V0, gamma) - delta_model(time, (V0, d_V0), (gamma, d_gamma)), color='red', alpha=0.2, label='Unsicherheit')
+    ax.set(xlabel='Zeit $\\mathrm{[s]}$', ylabel='Spannung $\\mathrm{[V]}$', title='Einhüllende Funktion')
+    ax.tick_params(which='both', direction='in')
+    ax.minorticks_on()
     #ax.plot(time, spannung, color='red')
     ax.legend()
     ax.grid()
 
     return (gamma, d_gamma), (V0, d_V0)
+
+
+def plot(daten):
+    daten = daten[:, :int(len(daten[0])/4)]
+    time = daten[0]
+    spannung = daten[1]
+
+    fig, ax = plt.subplots()
+    ax.plot(time, spannung, color='red', label='Messdaten')
+    ax.set(xlabel='Zeit $\\mathrm{[s]}$', ylabel='Spannung $\\mathrm{[V]}$', title='Balkenschwingung')
+    ax.tick_params(which='both', direction='in')
+    ax.minorticks_on()
+    ax.legend()
+    ax.grid()
+
+    return
 
 
 def test(daten: np.ndarray, masse, L_einsp, b, d, l_ges, sampling_rate):
@@ -105,31 +130,30 @@ def test(daten: np.ndarray, masse, L_einsp, b, d, l_ges, sampling_rate):
     daten = daten[:, start:]
     shift = np.mean(daten[1])
     daten[1] = daten[1] - shift
+    plot(daten)
 
     f, Pxx_den = signal.welch(daten[1], fs=sampling_rate, nperseg=1024)
-    plt.semilogy(f, Pxx_den)
-    #plt.ylim([0, 1])
-    #plt.xlim([0, 50])
-    plt.title(f'{d[0]} bei {L_einsp[0]} mm')
-    plt.xlabel('Frequenz $\\mathrm{[Hz]}$')
-    plt.ylabel('$\\mathrm{PSD}$')
-    plt.grid()
+    fig, ax = plt.subplots()
+    ax.semilogy(f, Pxx_den, color='blue')
+    #ax.ylim([0, 1])
+    #ax.xlim([0, 50])
+    ax.set(title=f'Leistungsdichtespektrum der Balkenschwingung', xlabel='Frequenz $\\mathrm{[Hz]}$', ylabel='$\\mathrm{PSD}$')
+    ax.tick_params(which='both', direction='in')
+    ax.minorticks_on()
+    ax.grid()
 
     attenuation(daten)
 
-    peak_pos, _ = signal.find_peaks(Pxx_den, prominence=1e-7)#0.0001)
-    omega = []
-    for i in range(1,4):
-        omega.append(f[peak_pos[i]] * 2 * np.pi)
+    peak_pos, _ = signal.find_peaks(Pxx_den, prominence=0.0001)
+    omega = f[peak_pos[-1]] * 2 * np.pi
     d_omega = 2 * np.pi * sampling_rate / len(daten[1])
-    #omega = np.array(omega), d_omega
+    omega = np.array(omega), d_omega
     # print(f'omega = {omega}')
 
-    for i in range(3):
-        E = E_mod(i, L_einsp, mu, I, (omega[i], d_omega))
-        E_r = sci_round(E[0]/1e9, E[1]/1e9)
+    E = E_mod(1, L_einsp, mu, I, omega)
+    E_r = sci_round(E[0]/1e9, E[1]/1e9)
 
-        print(f'{L_einsp[0]}: E_{i} = ({E_r[0]} +- {E_r[1]}) GPa')
+    print(f'{L_einsp[0]}: E = ({E_r[0]} +- {E_r[1]}) GPa')
 
     return E
 
@@ -161,7 +185,7 @@ def run(staerke, metall, einspannlaenge, data_dir):
     E = test(mess_daten, masse=parameter['m'], L_einsp=L, b=parameter['b'], d=parameter['d'],
              l_ges=parameter['l_ges'], sampling_rate=sampling_rate)
 
-    plt.title(f'{metall} {staerke} bei  {einspannlaenge} mm')
+    #plt.title(f'{metall} {staerke} bei  {einspannlaenge} mm')
     plt.show()
 
     return E
