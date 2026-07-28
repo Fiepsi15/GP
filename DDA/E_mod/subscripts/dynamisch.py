@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import optimize, signal
+from scrips.tools import sci_round
 
 Datenbank = {'Kupfer': {'l_ges': 319.5e-3, 'b': 20e-3, 'd': 0.5e-3, 'm': 27.17e-3},
              'Stahl_dünn': {'l_ges': 300.5e-3, 'b': 20e-3, 'd': 0.55e-3, 'm': 26.59e-3},
@@ -26,8 +27,17 @@ def find_sampling_rate(file):
     return int(rate)
 
 
+def find_start_index(daten):
+    for i in range(len(daten)):
+        if daten[i] * daten[i + 1] < 0:
+            return i
+
+
 def Traegheitsmoment(b, d):
-    return b * d ** 3 / 12
+    I = b[0] * d[0] ** 3 / 12
+    dI = np.sqrt((d[0] ** 3 / 12 * b[1]) ** 2
+                 + (b[0] * d[0] ** 2 / 4 * d[1]) ** 2)
+    return I, dI
 
 
 def get_c(n):
@@ -42,31 +52,85 @@ def get_c(n):
 
 def E_mod(n, L, mu, I, omega):
     c = get_c(n)
-    beta = c * np.pi / L
-    E = mu * omega ** 2 / (I * beta ** 4)
-    return E
+    beta = c * np.pi / L[0]
+    E = mu[0] * omega[0] ** 2 / (I[0] * beta ** 4)
+    delta_E = np.sqrt((E * mu[1] / mu[0]) ** 2 + (4 * E * L[1] / L[0]) ** 2
+                      + (2 * E * omega[1] / omega[0]) ** 2 + (E * I[1] / I[0]) ** 2)
+    return E, delta_E
+
+
+def attenuation(daten):
+    def model(t, p_V0, p_gamma):
+        return p_V0 * np.exp(-p_gamma * t)
+
+    time = daten[0]
+    spannung = daten[1]
+
+    spannung_ana = signal.hilbert(spannung)
+    envelope = np.abs(spannung_ana)
+    start, end = int(0.0 * len(envelope)), int(0.98 * len(envelope))
+    time, envelope = time[start:end], envelope[start:end]
+
+    popt, pcov = optimize.curve_fit(model, time, envelope)
+    V0, gamma = popt
+    d_V0, d_gamma = np.sqrt(np.diag(pcov))
+
+    V0r = sci_round(V0, d_V0)
+    gamma_r = sci_round(gamma, d_gamma)
+
+    print(f'Attenuation: {gamma_r[0]} +- {gamma_r[1]}')
+
+    fig, ax = plt.subplots()
+    ax.plot(time, envelope, color='green', label='Daten')
+    ax.plot(time, model(time, V0, gamma), color='red', label='Fit')
+    #ax.plot(time, spannung, color='red')
+    ax.legend()
+    ax.grid()
+
+    return (gamma, d_gamma), (V0, d_V0)
 
 
 def test(daten: np.ndarray, masse, L_einsp, b, d, l_ges, sampling_rate):
+    L_einsp = L_einsp, 1e-3
+    b = b, 0.5e-3
+    d = d, 0.05e-3
+    masse = masse, 0.01e-3
+    l_ges = l_ges, 0.5e-3
     I = Traegheitsmoment(b, d)
-    mu = masse / l_ges
+    mu = masse[0] / l_ges[0], np.sqrt((masse[1] / l_ges[0]) ** 2 + (masse[0] / l_ges[0] ** 2 * l_ges[1]) ** 2)
 
-    shift = np.mean(daten)
-    daten = daten - shift
+    shift = np.mean(daten[1])
+    daten[1] = daten[1] - shift
+    start = find_start_index(daten[1])
+    daten = daten[:, start:]
+    shift = np.mean(daten[1])
+    daten[1] = daten[1] - shift
 
-    f, Pxx_den = signal.welch(daten, fs=sampling_rate, nperseg=1024)
+    f, Pxx_den = signal.welch(daten[1], fs=sampling_rate, nperseg=1024)
     plt.semilogy(f, Pxx_den)
-    plt.ylim([0.5e-4, 1])
-    plt.xlim([0, 50])
+    #plt.ylim([0, 1])
+    #plt.xlim([0, 50])
+    plt.title(f'{d[0]} bei {L_einsp[0]} mm')
     plt.xlabel('Frequenz $\\mathrm{[Hz]}$')
     plt.ylabel('$\\mathrm{PSD}$')
     plt.grid()
 
-    peak_pos, _ = signal.find_peaks(Pxx_den, prominence=0.0001)
-    omega = f[peak_pos[-1]] * 2 * np.pi
+    attenuation(daten)
+
+    peak_pos, _ = signal.find_peaks(Pxx_den, prominence=1e-7)#0.0001)
+    omega = []
+    for i in range(1,4):
+        omega.append(f[peak_pos[i]] * 2 * np.pi)
+    d_omega = 2 * np.pi * sampling_rate / len(daten[1])
+    #omega = np.array(omega), d_omega
     # print(f'omega = {omega}')
 
-    E = E_mod(1, L_einsp, mu, I, omega)
+    for i in range(3):
+        E = E_mod(i, L_einsp, mu, I, (omega[i], d_omega))
+        E_r = sci_round(E[0]/1e9, E[1]/1e9)
+
+        print(f'{L_einsp[0]}: E_{i} = ({E_r[0]} +- {E_r[1]}) GPa')
+
     return E
 
 
@@ -94,7 +158,7 @@ def run(staerke, metall, einspannlaenge, data_dir):
     L = einspannlaenge / 1e3
     sampling_rate = find_sampling_rate(fp)
 
-    E = test(mess_daten[1], masse=parameter['m'], L_einsp=L, b=parameter['b'], d=parameter['d'],
+    E = test(mess_daten, masse=parameter['m'], L_einsp=L, b=parameter['b'], d=parameter['d'],
              l_ges=parameter['l_ges'], sampling_rate=sampling_rate)
 
     plt.title(f'{metall} {staerke} bei  {einspannlaenge} mm')
@@ -113,7 +177,6 @@ def alu(staerken, data_dir):
         E_mods.append(E_mods_s)
     E_mods = np.array(E_mods)
 
-    print(E_mods / 1e9)
     return
 
 
@@ -127,7 +190,6 @@ def stahl(staerken, data_dir):
         E_mods.append(E_mods_s)
     E_mods = np.array(E_mods)
 
-    print(E_mods / 1e9)
     return
 
 
@@ -138,5 +200,4 @@ def kupfer(laengen, data_dir):
         E_mods.append(E)
     E_mods = np.array(E_mods)
 
-    print(E_mods / 1e9)
     return

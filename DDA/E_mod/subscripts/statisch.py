@@ -40,8 +40,8 @@ def regression(daten):
 
     x = force
     y = distance
-    # y_err = distance[1]
-    popt, pcov = optimize.curve_fit(model, x, y)  # , sigma=y_err, absolute_sigma=True)
+    y_err = np.full_like(distance, 0.01e-3)
+    popt, pcov = optimize.curve_fit(model, x, y) # , sigma=y_err, absolute_sigma=True)
     a, b = popt
     da, db = np.sqrt(np.diag(pcov))
     a_r = sci_round(a, da)
@@ -49,8 +49,8 @@ def regression(daten):
     #print(f'Fit: a = {a_r[0]} +- {a_r[1]}')
 
     fig, ax = plt.subplots()
-    # ax.errorbar(x, y, xerr=force[1], yerr=y_err, label='Messwerte', fmt='o', color='blue', capsize=5)
-    ax.errorbar(x, y * 1e3, label='Messwerte', fmt='o', color='blue', capsize=5)
+    ax.errorbar(x, y * 1e3, xerr=np.full_like(force, 2.34 * 5 / 1024), yerr=y_err * 1e3, label='Messwerte', fmt='o', color='blue', capsize=5)
+    #ax.errorbar(x, y * 1e3, label='Messwerte', fmt='o', color='blue', capsize=5)
     ax.plot(x, model(x, a, b) * 1e3, label='Fit: $w = a \\cdot F$', color='red')
     ax.fill_between(x, (model(x, a, b) + delta_model(x, (a, da), (b, db))) * 1e3,
                     (model(x, a, b) - delta_model(x, (a, da), (b, db))) * 1e3, label='Unsicherheit', alpha=0.2,

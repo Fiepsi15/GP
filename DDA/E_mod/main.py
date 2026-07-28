@@ -8,7 +8,7 @@ data_dir_stat = 'DDA/E_mod/daten/statisch'
 
 print('Alu')
 strk_lng = [[['dünn', 268], ['dünn', 232]], [['dick', 260], ['dick', 233]]]
-dynamisch.alu(strk_lng, data_dir_dyn)
+#dynamisch.alu(strk_lng, data_dir_dyn)
 
 print('\nStahl')
 strk_lng = [[['dünn', 255], ['dünn', 199], ['dünn', 151]], [['dick', 267], ['dick', 239], ['dick', 208]]]
@@ -16,10 +16,10 @@ dynamisch.stahl(strk_lng, data_dir_dyn)
 
 print('\nKupfer')
 laengen = [255, 191, 133]
-dynamisch.kupfer(laengen, data_dir_dyn)
+#dynamisch.kupfer(laengen, data_dir_dyn)
 
 strength_list = [1, 2] # mm
-statisch.analyze(data_dir_stat, 'Alu', strength_list)
+#statisch.analyze(data_dir_stat, 'Alu', strength_list)
 strength_list = [550, 1000] # mu m
-statisch.analyze(data_dir_stat, 'Stahl', strength_list)
-statisch.analyze(data_dir_stat, 'Kupfer', [])
+#statisch.analyze(data_dir_stat, 'Stahl', strength_list)
+#statisch.analyze(data_dir_stat, 'Kupfer', [])
