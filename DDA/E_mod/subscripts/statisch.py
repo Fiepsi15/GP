@@ -51,11 +51,11 @@ def regression(daten):
     fig, ax = plt.subplots()
     ax.errorbar(x, y * 1e3, xerr=np.full_like(force, 2.34 * 5 / 1024), yerr=y_err * 1e3, label='Messwerte', fmt='o', color='blue', capsize=5)
     #ax.errorbar(x, y * 1e3, label='Messwerte', fmt='o', color='blue', capsize=5)
-    ax.plot(x, model(x, a, b) * 1e3, label='Fit: $w = a \\cdot F$', color='red')
+    ax.plot(x, model(x, a, b) * 1e3, label='Fit: $w = a \\cdot F + w_0$', color='red')
     ax.fill_between(x, (model(x, a, b) + delta_model(x, (a, da), (b, db))) * 1e3,
                     (model(x, a, b) - delta_model(x, (a, da), (b, db))) * 1e3, label='Unsicherheit', alpha=0.2,
                     color='red')
-    ax.set(xlabel='$F\\, \\mathrm{[N]}$', ylabel='$d\\, \\mathrm{[mm]}$', title='Biegung eines Balkens')
+    ax.set(xlabel='$F\\, \\mathrm{[N]}$', ylabel='$w\\, \\mathrm{[mm]}$', title='Biegung eines Balkens')
     ax.tick_params(which='both', direction='in')
     ax.minorticks_on()
     ax.legend()
